@@ -1,9 +1,13 @@
 ---
 title: hexo-use
 date: 2023-05-09 22:03:50
+categories:
+- 工具
 tags:
+- hexo
 ---
-创建新文章
+
+## 创建新文章
 hexo new <>
 
 git
