@@ -164,7 +164,7 @@ code:
 
 highlight:
   on: true # true开启代码高亮，开启需要关闭博客 _config.yml 中的 highlight
-  lineNum: false # true显示行号
+  lineNum: true # true显示行号
   copy: true # 复制功能
   theme: atom-light
   overflow-y: auto
