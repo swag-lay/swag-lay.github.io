@@ -11,23 +11,8 @@ blog_path: /
 link:
   theme: color # 链接样式，color: 彩色图标  white: 黑白图标
   items:
-    rss: /atom.xml
-    github: https://github.com/yelog
-    facebook: https://www.facebook.com/faker.tops
-    twitter:
-    linkedin:
-    instagram: https://www.facebook.com/faker.tops
-    reddit: https://www.reddit.com/user/yelog/
-    weibo: http://weibo.com/u/2307534817
-    jianshu: https://www.jianshu.com/u/ff56736de7cf
-    zhihu: https://www.zhihu.com/people/jaytp/activities
-    csdn:
-    oschina: https://my.oschina.net/yelog
-    juejin:
-    email: jaytp@qq.com
-    qq: 872336115
-    kugou: https://www.kugou.com/
-    neteasemusic: https://music.163.com/#/user/home?id=88151013
+    leetcode: https://leetcode.cn/
+
 
 ##########多作者模式############
 author:
@@ -42,9 +27,7 @@ category:
   num: true # 分类显示文章数
   sub: true # 开启多级分类
   sort:
-    - 读书
     - 工具
-    - 大前端
     - 后端
     - 数据库
     - 运维
@@ -64,11 +47,11 @@ shortcutKey: true
 # 左下角自定义菜单
 menu:
   about:  # '关于' 按钮
-    on: true # 是否显示
+    on: false # 是否显示
     url: /about  # 跳转链接
     type: 1 # 跳转类型 1：站内异步跳转 2：当前页面跳转 3：打开新的tab页
   friend: # '友链' 按钮
-    on: true # 是否展示
+    on: false # 是否展示
   menus: # 添加的其他菜单写在 menus 下，如下三个菜单：动态菜单1、动态菜单2、动态菜单3
     相册:
       on: false
@@ -86,7 +69,7 @@ menu:
 # 文末声明
 article_txt: 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com
 
-bottom_text: ©2016-2020 Yelog
+bottom_text: ©2023 Mhen
 # 自定义页面最下方的站点版权信息
 # 如果不填，则自定义为 ©2017 author (这个author为hexo根目录_config.yml中配置的)
 
@@ -97,10 +80,10 @@ miit:
   url: http://beian.miit.gov.cn/ # 默认链接为 http://beian.miit.gov.cn/
 
 
-reward: true
+reward: false
 # true 开启打赏功能
 
-searchAll: false
+searchAll: true
 # true 启用全文搜索
 # 开启此功能需要下面操作：
 # 1. 在 hexo 根目录 执行 npm install hexo-generator-search --save 安装插件
@@ -113,7 +96,7 @@ searchAll: false
 copyright: false
 # Copyright info. of post | 文末版权信息
 
-word_count: false
+word_count: true
 # true 开启字数统计
 # 开启此功能需要安装插件 ：在 hexo根目录 执行npm i hexo-wordcount --save
 
@@ -128,7 +111,7 @@ visit_counter:
 ##########自定义样式设置##############
 # Table of contents | 文章目录
 toc:
-  max_depth: 3  # 1 - 6 (h1-h6) 目录最大级数
+  max_depth: 6  # 1 - 6 (h1-h6) 目录最大级数
 
 #文章列表 鼠标移上去的样式, 为空时使用默认效果
 article_list:
@@ -222,9 +205,6 @@ mermaid:
 
 ##############################
 
-# 友情链接
-friends:
-  叶落阁: http://yelog.org/
 
 ##########评论设置#############
 comment:

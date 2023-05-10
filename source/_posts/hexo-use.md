@@ -3,6 +3,7 @@ title: hexo-use
 date: 2023-05-09 22:03:50
 categories:
 - 工具
+- hexo
 tags:
 - hexo
 ---
