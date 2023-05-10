@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Mybatis:MapperXML文件报错(Unable to resolve table &#39;limit&#39;)</title>
+      <link href="/2023/05/10/MybatisMapperXML%E6%96%87%E4%BB%B6%E6%8A%A5%E9%94%99/"/>
+      <url>/2023/05/10/MybatisMapperXML%E6%96%87%E4%BB%B6%E6%8A%A5%E9%94%99/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Mybatis-MapperXML文件报错-Unable-to-resolve-table-‘limit’"><a href="#Mybatis-MapperXML文件报错-Unable-to-resolve-table-‘limit’" class="headerlink" title="Mybatis:MapperXML文件报错(Unable to resolve table ‘limit’)"></a>Mybatis:MapperXML文件报错(Unable to resolve table ‘limit’)</h1><p>在使用<where><if></if></where>时报错</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id=<span class="string">&quot;selectBySearch&quot;</span> parameterType=<span class="string">&quot;life.mhe.community.dto.QuestionQueryDTO&quot;</span> resultMap=<span class="string">&quot;BaseResultMap&quot;</span>&gt;</span><br><span class="line">        select * <span class="keyword">from</span> question</span><br><span class="line">        &lt;where&gt;</span><br><span class="line">            <span class="language-xml"><span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">&quot;search!=null&quot;</span>&gt;</span></span></span><br><span class="line"><span class="language-xml">                 title regexp #&#123;search&#125;</span></span><br><span class="line"><span class="language-xml">            <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span></span><br><span class="line">        &lt;/where&gt;</span><br><span class="line">        order by gmt_create desc limit #&#123;page&#125;,#&#123;size&#125;</span><br><span class="line">    &lt;/select&gt;</span><br></pre></td></tr></table></figure><h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>起初将where和if交换位置依旧报错</p><p>类似问题：</p><p>[]: <a href="https://stackoverflow.com/questions/60575770/">https://stackoverflow.com/questions/60575770/</a></p><p>最终将标签<where>改为where关键字解决</p><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">where</span><br><span class="line">            &lt;<span class="keyword">if</span> test=<span class="string">&quot;search!=null&quot;</span>&gt;</span><br><span class="line">                 title regexp #&#123;search&#125;</span><br><span class="line">            &lt;/<span class="keyword">if</span>&gt;</span><br><span class="line">        order by gmt_create desc limit #&#123;page&#125;,#&#123;size&#125;</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> Mybatis </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> bug </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>leetcode-最长回文子串</title>
       <link href="/2023/05/10/leetcode-%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2/"/>
       <url>/2023/05/10/leetcode-%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2/</url>
