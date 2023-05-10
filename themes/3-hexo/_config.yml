@@ -167,6 +167,7 @@ highlight:
   lineNum: false # true显示行号
   copy: true # 复制功能
   theme: atom-light
+  overflow-y: auto
 # 代码高亮主题,效果可以查看 https://highlightjs.org/static/demo/
 # 支持主题：
 # sublime : 参考sublime的高亮主题
