@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>hexo-use | mhen</title>
-  <meta name="keywords" content=" hexo ">
-  <meta name="description" content="hexo-use | mhen">
+  <title>git-learning | mhen</title>
+  <meta name="keywords" content=" git ">
+  <meta name="description" content="git-learning | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="git命令学习初始化文件夹 git init  添加新文件 git add . git add filename git add -am  git commit -am 的作用是将所有已经被 Git 管理的文件添加到暂存区并提交这些变更，并且可以通过 -m 参数指定提交消息。需要注意的是，如果有新文件或未被 Git 管理的文件需要添加到仓库中，还需要使用 git add 命令将它们添加到暂存区中。">
 <meta property="og:type" content="article">
@@ -313,9 +313,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-hexo-use" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-git-learning" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">hexo-use</h1>
+        <h1 class="article-title">git-learning</h1>
     
     <div class="article-meta">
         
@@ -327,7 +327,7 @@
             
             <a  data-rel="工具">工具</a> > 
             
-            <a  data-rel="工具&lt;---&gt;hexo">hexo</a>
+            <a  data-rel="工具&lt;---&gt;git">git</a>
             
         </span>
         
@@ -335,19 +335,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">hexo</a>
+            <a class="color4">git</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-05-10 13:26:32'>2023-05-09 22:03</time>
+            Created At : <time class="date" title='Updated At: 2023-05-10 18:41:07'>2023-05-10 18:14</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:35</span>
+        <span>Count:314</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -366,7 +366,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%96%B0%E6%96%87%E7%AB%A0"><span class="toc-text">创建新文章</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#git%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A0"><span class="toc-text">git命令学习</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -382,9 +382,53 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="创建新文章"><a href="#创建新文章" class="headerlink" title="创建新文章"></a>创建新文章</h2><p>hexo new &lt;&gt;</p>
-<p>git<br>git add .<br>git commit -m “”<br>git push origin public</p>
-<p>发布网站并推送静态文件到master分支<br>hexo g -d</p>
+        <h1 id="git命令学习"><a href="#git命令学习" class="headerlink" title="git命令学习"></a>git命令学习</h1><p>初始化文件夹</p>
+<pre><code class="shell">git init
+</code></pre>
+<p>添加新文件</p>
+<pre><code class="shell">git add .
+git add filename
+git add -am
+</code></pre>
+<p><code>git commit -am</code> 的作用是将所有已经被 Git 管理的文件添加到暂存区并提交这些变更，并且可以通过 <code>-m</code> 参数指定提交消息。需要注意的是，如果有新文件或未被 Git 管理的文件需要添加到仓库中，还需要使用 <code>git add</code> 命令将它们添加到暂存区中。</p>
+<p>提交版本</p>
+<pre><code class="shell">git commit -m &quot;说明&quot;
+</code></pre>
+<p>在本地的git仓库添加远程仓库</p>
+<pre><code class="shell">git remote add origin [url]
+</code></pre>
+<p>发布版本</p>
+<pre><code class="shell">git push origin master
+</code></pre>
+<p>origin其实就是远程仓库地址，master就是分支。在.git文件夹中的config都可以修改。</p>
+<p>拉去到本地仓库</p>
+<ul>
+<li><p>默认合并</p>
+<pre><code class="shell">git pull
+</code></pre>
+</li>
+<li><p>非默认</p>
+<pre><code class="shell">git pull [url]
+</code></pre>
+</li>
+</ul>
+<p>创建分支</p>
+<pre><code class="shell">git branch (name)
+</code></pre>
+<p>切换分支</p>
+<pre><code class="shell">git checkout (name)
+</code></pre>
+<p>创建分支并切换到该分支</p>
+<pre><code class="shell">git checkout -b (name)
+</code></pre>
+<p>删除分支</p>
+<pre><code class="shell">git branch -d (name)
+</code></pre>
+<p>合并分支</p>
+<pre><code class="shell">git merge (name)
+</code></pre>
+<p>将(name)分支合并到当前所在分支，此处通常当分支&#x2F;测试分支有了独立内容，希望合并的时候，也就是测试正确的时候合并到当前分支。</p>
+<p>合并完后一般删除分支</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com </span>

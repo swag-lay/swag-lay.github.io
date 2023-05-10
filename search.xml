@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>git-learning</title>
+      <link href="/2023/05/10/git-learning/"/>
+      <url>/2023/05/10/git-learning/</url>
+      
+        <content type="html"><![CDATA[<h1 id="git命令学习"><a href="#git命令学习" class="headerlink" title="git命令学习"></a>git命令学习</h1><p>初始化文件夹</p><pre><code class="shell">git init</code></pre><p>添加新文件</p><pre><code class="shell">git add .git add filenamegit add -am</code></pre><p><code>git commit -am</code> 的作用是将所有已经被 Git 管理的文件添加到暂存区并提交这些变更，并且可以通过 <code>-m</code> 参数指定提交消息。需要注意的是，如果有新文件或未被 Git 管理的文件需要添加到仓库中，还需要使用 <code>git add</code> 命令将它们添加到暂存区中。</p><p>提交版本</p><pre><code class="shell">git commit -m &quot;说明&quot;</code></pre><p>在本地的git仓库添加远程仓库</p><pre><code class="shell">git remote add origin [url]</code></pre><p>发布版本</p><pre><code class="shell">git push origin master</code></pre><p>origin其实就是远程仓库地址，master就是分支。在.git文件夹中的config都可以修改。</p><p>拉去到本地仓库</p><ul><li><p>默认合并</p><pre><code class="shell">git pull</code></pre></li><li><p>非默认</p><pre><code class="shell">git pull [url]</code></pre></li></ul><p>创建分支</p><pre><code class="shell">git branch (name)</code></pre><p>切换分支</p><pre><code class="shell">git checkout (name)</code></pre><p>创建分支并切换到该分支</p><pre><code class="shell">git checkout -b (name)</code></pre><p>删除分支</p><pre><code class="shell">git branch -d (name)</code></pre><p>合并分支</p><pre><code class="shell">git merge (name)</code></pre><p>将(name)分支合并到当前所在分支，此处通常当分支&#x2F;测试分支有了独立内容，希望合并的时候，也就是测试正确的时候合并到当前分支。</p><p>合并完后一般删除分支</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具 </category>
+          
+          <category> git </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> git </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Mybatis:MapperXML文件报错(Unable to resolve table &#39;limit&#39;)</title>
       <link href="/2023/05/10/MybatisMapperXML%E6%96%87%E4%BB%B6%E6%8A%A5%E9%94%99/"/>
       <url>/2023/05/10/MybatisMapperXML%E6%96%87%E4%BB%B6%E6%8A%A5%E9%94%99/</url>
