@@ -125,3 +125,34 @@ git merge (name)
 git reset HEAD
 ```
 
+
+
+合并到上一次commit中
+
+```shell
+git add .
+git commit --amend
+```
+
+
+
+## git error
+
+- ssh: connect to host github.com port 22: Connection timed out fatal: Could not read from remote repository. Please make sure you have the correct access rights and the repository exists.
+
+  解决方法：
+
+  1. 修改.git文件中的config文件将origin的url换为http地址
+
+  2. 修改端口号
+
+     ```shell
+     cd ~/.ssh
+     vim congfig
+     ```
+
+     
+
+  
+
+  
