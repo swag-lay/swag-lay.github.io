@@ -48,6 +48,7 @@ git remote add origin [url]
 
 ```shell
 git push origin master
+git push --set-upstream origin [branch]
 ```
 
 origin其实就是远程仓库地址，master就是分支。在.git文件夹中的config都可以修改。
@@ -68,7 +69,13 @@ origin其实就是远程仓库地址，master就是分支。在.git文件夹中�
   git pull [url]
   ```
 
+-  拉取所有分支
 
+  ```shell
+  git fetch
+  ```
+
+  
 
 创建分支
 
@@ -108,6 +115,13 @@ git branch -d (name)
 git merge (name)
 ```
 
-将(name)分支合并到当前所在分支，此处通常当分支/测试分支有了独立内容，希望合并的时候，也就是测试正确的时候合并到当前分支。
+将(name)分支合并到当前所在分支，此处通常当分支/测试分支有了独立内容，希望合并的时候，也就是测试正确的时候合并到当前分支。合并完后一般删除分支
 
-合并完后一般删除分支
+
+
+撤回到某个版本（在还没push之前）
+
+```shell
+git reset HEAD
+```
+
