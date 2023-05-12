@@ -4,11 +4,42 @@
   
     
     <entry>
+      <title>debug-skill</title>
+      <link href="/2023/05/12/debug-skill/"/>
+      <url>/2023/05/12/debug-skill/</url>
+      
+        <content type="html"><![CDATA[<h1 id="idea中利用条件判断快速定位列表元素"><a href="#idea中利用条件判断快速定位列表元素" class="headerlink" title="idea中利用条件判断快速定位列表元素"></a>idea中利用条件判断快速定位列表元素</h1><p>例如在发布问题默认用户时，假设首先通过页面控制台得到question.id&#x3D;&#x3D;3</p><p>我们此时找到QuestionService中 list方法，</p><pre><code class="java">for (Question question : questions) &#123;            User user = userMapper.selectByPrimaryKey(question.getCreator());            QuestionDTO questionDTO = new QuestionDTO();            BeanUtils.copyProperties(question, questionDTO);            questionDTO.setUser(user);            questionDTOList.add(questionDTO);        &#125;</code></pre><p>在第二句中打上断点，并加入condition如下图</p><p><img src="F:\swag-lay.github.io\source_posts\images\image-20230512124224225.png" alt="image-20230512124224225"></p><p>即可直接在id为3时调试bug</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 工具 </category>
+          
+          <category> idea </category>
+          
+          <category> debug </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> debug </tag>
+            
+            <tag> idea </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>git-learning</title>
       <link href="/2023/05/10/git-learning/"/>
       <url>/2023/05/10/git-learning/</url>
       
-        <content type="html"><![CDATA[<h1 id="git命令学习"><a href="#git命令学习" class="headerlink" title="git命令学习"></a>git命令学习</h1><p>初始化文件夹</p><pre><code class="shell">git init</code></pre><p>添加新文件</p><pre><code class="shell">git add .git add filenamegit add -am</code></pre><p><code>git commit -am</code> 的作用是将所有已经被 Git 管理的文件添加到暂存区并提交这些变更，并且可以通过 <code>-m</code> 参数指定提交消息。需要注意的是，如果有新文件或未被 Git 管理的文件需要添加到仓库中，还需要使用 <code>git add</code> 命令将它们添加到暂存区中。</p><p>提交版本</p><pre><code class="shell">git commit -m &quot;说明&quot;</code></pre><p>在本地的git仓库添加远程仓库</p><pre><code class="shell">git remote add origin [url]</code></pre><p>发布版本</p><pre><code class="shell">git push origin master</code></pre><p>origin其实就是远程仓库地址，master就是分支。在.git文件夹中的config都可以修改。</p><p>拉去到本地仓库</p><ul><li><p>默认合并</p><pre><code class="shell">git pull</code></pre></li><li><p>非默认</p><pre><code class="shell">git pull [url]</code></pre></li></ul><p>创建分支</p><pre><code class="shell">git branch (name)</code></pre><p>切换分支</p><pre><code class="shell">git checkout (name)</code></pre><p>创建分支并切换到该分支</p><pre><code class="shell">git checkout -b (name)</code></pre><p>删除分支</p><pre><code class="shell">git branch -d (name)</code></pre><p>合并分支</p><pre><code class="shell">git merge (name)</code></pre><p>将(name)分支合并到当前所在分支，此处通常当分支&#x2F;测试分支有了独立内容，希望合并的时候，也就是测试正确的时候合并到当前分支。</p><p>合并完后一般删除分支</p>]]></content>
+        <content type="html"><![CDATA[<h1 id="git命令学习"><a href="#git命令学习" class="headerlink" title="git命令学习"></a>git命令学习</h1><p>初始化文件夹</p><pre><code class="shell">git init</code></pre><p>添加新文件</p><pre><code class="shell">git add .git add filenamegit add -am</code></pre><p><code>git commit -am</code> 的作用是将所有已经被 Git 管理的文件添加到暂存区并提交这些变更，并且可以通过 <code>-m</code> 参数指定提交消息。需要注意的是，如果有新文件或未被 Git 管理的文件需要添加到仓库中，还需要使用 <code>git add</code> 命令将它们添加到暂存区中。</p><p>提交版本</p><pre><code class="shell">git commit -m &quot;说明&quot;</code></pre><p>在本地的git仓库添加远程仓库</p><pre><code class="shell">git remote add origin [url]</code></pre><p>发布版本</p><pre><code class="shell">git push origin mastergit push --set-upstream origin [branch]</code></pre><p>origin其实就是远程仓库地址，master就是分支。在.git文件夹中的config都可以修改。</p><p>拉去到本地仓库</p><ul><li><p>默认合并</p><pre><code class="shell">git pull</code></pre></li><li><p>非默认</p><pre><code class="shell">git pull [url]</code></pre></li><li><p>拉取所有分支</p></li></ul><pre><code class="shell">git fetch</code></pre><p>创建分支</p><pre><code class="shell">git branch (name)</code></pre><p>切换分支</p><pre><code class="shell">git checkout (name)</code></pre><p>创建分支并切换到该分支</p><pre><code class="shell">git checkout -b (name)</code></pre><p>删除分支</p><pre><code class="shell">git branch -d (name)</code></pre><p>合并分支</p><pre><code class="shell">git merge (name)</code></pre><p>将(name)分支合并到当前所在分支，此处通常当分支&#x2F;测试分支有了独立内容，希望合并的时候，也就是测试正确的时候合并到当前分支。合并完后一般删除分支</p><p>撤回到某个版本（在还没push之前）</p><pre><code class="shell">git reset HEAD</code></pre><p>合并到上一次commit中</p><pre><code class="shell">git add .git commit --amend</code></pre><h2 id="git-error"><a href="#git-error" class="headerlink" title="git error"></a>git error</h2><ul><li><p>ssh: connect to host github.com port 22: Connection timed out fatal: Could not read from remote repository. Please make sure you have the correct access rights and the repository exists.</p><p>解决方法：</p><ol><li><p>修改.git文件中的config文件将origin的url换为http地址</p></li><li><p>修改端口号</p><pre><code class="shell">cd ~/.sshvim congfig</code></pre></li></ol></li></ul>]]></content>
       
       
       <categories>
