@@ -28,7 +28,7 @@ for (Question question : questions) {
 
 在第二句中打上断点，并加入condition如下图
 
-![image-20230512124224225](/images/image-20230512124224225.png)
+![image-20230512124224225](../images/image-20230512124224225.png)
 
 即可直接在id为3时调试bug
 
