@@ -8,7 +8,7 @@
       <link href="/2023/05/12/debug-skill/"/>
       <url>/2023/05/12/debug-skill/</url>
       
-        <content type="html"><![CDATA[<h1 id="idea中利用条件判断快速定位列表元素"><a href="#idea中利用条件判断快速定位列表元素" class="headerlink" title="idea中利用条件判断快速定位列表元素"></a>idea中利用条件判断快速定位列表元素</h1><p>例如在发布问题默认用户时，假设首先通过页面控制台得到question.id&#x3D;&#x3D;3</p><p>我们此时找到QuestionService中 list方法，</p><pre><code class="java">for (Question question : questions) &#123;            User user = userMapper.selectByPrimaryKey(question.getCreator());            QuestionDTO questionDTO = new QuestionDTO();            BeanUtils.copyProperties(question, questionDTO);            questionDTO.setUser(user);            questionDTOList.add(questionDTO);        &#125;</code></pre><p>在第二句中打上断点，并加入condition如下图</p><p><img src="F:\swag-lay.github.io\source_posts\images\image-20230512124224225.png" alt="image-20230512124224225"></p><p>即可直接在id为3时调试bug</p>]]></content>
+        <content type="html"><![CDATA[<h1 id="idea中利用条件判断快速定位列表元素"><a href="#idea中利用条件判断快速定位列表元素" class="headerlink" title="idea中利用条件判断快速定位列表元素"></a>idea中利用条件判断快速定位列表元素</h1><p>例如在发布问题默认用户时，假设首先通过页面控制台得到question.id&#x3D;&#x3D;3</p><p>我们此时找到QuestionService中 list方法，</p><pre><code class="java">for (Question question : questions) &#123;            User user = userMapper.selectByPrimaryKey(question.getCreator());            QuestionDTO questionDTO = new QuestionDTO();            BeanUtils.copyProperties(question, questionDTO);            questionDTO.setUser(user);            questionDTOList.add(questionDTO);        &#125;</code></pre><p>在第二句中打上断点，并加入condition如下图</p><p><img src="/images/image-20230512124224225.png" alt="image-20230512124224225"></p><p>即可直接在id为3时调试bug</p>]]></content>
       
       
       <categories>
