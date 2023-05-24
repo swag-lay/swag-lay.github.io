@@ -2,10 +2,10 @@
 title: jvm-learn
 date: 2023-05-23 16:32:08
 categories:
--- java
--- jvm
+- java
+- jvm
 tags:
--- jvm
+- jvm
 ---
 
 # Java内存区域
