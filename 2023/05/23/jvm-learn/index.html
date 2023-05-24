@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>debug-skill | mhen</title>
-  <meta name="keywords" content=" debug , idea ">
-  <meta name="description" content="debug-skill | mhen">
+  <title>jvm-learn | mhen</title>
+  <meta name="keywords" content=" jvm ">
+  <meta name="description" content="jvm-learn | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="Java内存区域运行数据区域JDK1.7  JDK1.8  JVM回收JDK1.7   新生代 老生代 永久代  JDK1.8   新生代 老生代 元空间  常见面试题如果判断一个常量为废弃常量JDK1.7之前运行时常量池逻辑包含字符串常量池存放在方法区，此时hotspot对方法区的实现为永久代 JDK1.7字符串常量池被从方法区拿到了堆中，这里没有提高运行时常量池，也就是说字符串常量池被单独拿到">
 <meta property="og:type" content="article">
@@ -418,9 +418,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-debug-skill" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-jvm-learn" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">debug-skill</h1>
+        <h1 class="article-title">jvm-learn</h1>
     
     <div class="article-meta">
         
@@ -430,11 +430,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="工具">工具</a> > 
+            <a  data-rel="java">java</a> > 
             
-            <a  data-rel="工具&lt;---&gt;idea">idea</a> > 
-            
-            <a  data-rel="工具&lt;---&gt;idea&lt;---&gt;debug">debug</a>
+            <a  data-rel="java&lt;---&gt;jvm">jvm</a>
             
         </span>
         
@@ -442,21 +440,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color1">debug</a>
-            
-            <a class="color5">idea</a>
+            <a class="color4">jvm</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-05-13 15:46:55'>2023-05-12 12:35</time>
+            Created At : <time class="date" title='Updated At: 2023-05-24 13:19:40'>2023-05-23 16:32</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:109</span>
+        <span>Count:418</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -475,7 +471,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#idea%E4%B8%AD%E5%88%A9%E7%94%A8%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD%E5%BF%AB%E9%80%9F%E5%AE%9A%E4%BD%8D%E5%88%97%E8%A1%A8%E5%85%83%E7%B4%A0"><span class="toc-text">idea中利用条件判断快速定位列表元素</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F"><span class="toc-text">Java内存区域</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F"><span class="toc-text">运行数据区域</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM%E5%9B%9E%E6%94%B6"><span class="toc-text">JVM回收</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-text">常见面试题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%AA%E5%B8%B8%E9%87%8F%E4%B8%BA%E5%BA%9F%E5%BC%83%E5%B8%B8%E9%87%8F"><span class="toc-text">如果判断一个常量为废弃常量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%AA%E7%B1%BB%E6%98%AF%E6%97%A0%E7%94%A8%E7%9A%84%E7%B1%BB"><span class="toc-text">如果判断一个类是无用的类</span></a></li></ol></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -491,19 +487,35 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="idea中利用条件判断快速定位列表元素"><a href="#idea中利用条件判断快速定位列表元素" class="headerlink" title="idea中利用条件判断快速定位列表元素"></a>idea中利用条件判断快速定位列表元素</h1><p>例如在发布问题默认用户时，假设首先通过页面控制台得到question.id&#x3D;&#x3D;3</p>
-<p>我们此时找到QuestionService中 list方法，</p>
-<pre><code class="java">for (Question question : questions) &#123;
-            User user = userMapper.selectByPrimaryKey(question.getCreator());
-            QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(question, questionDTO);
-            questionDTO.setUser(user);
-            questionDTOList.add(questionDTO);
-        &#125;
-</code></pre>
-<p>在第二句中打上断点，并加入condition如下图</p>
-<p><img src="/../images/image-20230512124224225.png" alt="image-20230512124224225"></p>
-<p>即可直接在id为3时调试bug</p>
+        <h1 id="Java内存区域"><a href="#Java内存区域" class="headerlink" title="Java内存区域"></a>Java内存区域</h1><h2 id="运行数据区域"><a href="#运行数据区域" class="headerlink" title="运行数据区域"></a>运行数据区域</h2><p>JDK1.7</p>
+<p><img src="/../images/image-20230523163329596.png" alt="image-20230523163329596"></p>
+<p>JDK1.8</p>
+<p><img src="/../images%5Cimage-20230523163752233.png" alt="image-20230523163752233"></p>
+<h1 id="JVM回收"><a href="#JVM回收" class="headerlink" title="JVM回收"></a>JVM回收</h1><p>JDK1.7</p>
+<p><img src="/../images%5Cjdk1.7%E5%A0%86%E7%BB%93%E6%9E%84.png" alt="image-20230523163752233"></p>
+<ul>
+<li>新生代</li>
+<li>老生代</li>
+<li>永久代</li>
+</ul>
+<p>JDK1.8</p>
+<p><img src="/..%5Cimages%5Cimage-20230523164208008.png" alt="image-20230523164208008"></p>
+<ul>
+<li>新生代</li>
+<li>老生代</li>
+<li>元空间</li>
+</ul>
+<h3 id="常见面试题"><a href="#常见面试题" class="headerlink" title="常见面试题"></a>常见面试题</h3><h4 id="如果判断一个常量为废弃常量"><a href="#如果判断一个常量为废弃常量" class="headerlink" title="如果判断一个常量为废弃常量"></a>如果判断一个常量为废弃常量</h4><p>JDK1.7之前运行时常量池逻辑包含字符串常量池存放在方法区，此时hotspot对方法区的实现为永久代</p>
+<p>JDK1.7字符串常量池被从方法区拿到了堆中，这里没有提高运行时常量池，也就是说字符串常量池被单独拿到了堆，运行常量池剩下的东西还在方法区，也就是永久代</p>
+<p>JDK1.8 hotspot移除永久代用元空间代替，这个时候字符串常量池还在堆中，运行时常量池还在方法区，但方法区的实现从永生代变为了元空间。</p>
+<p>假设字符串常量池中存在字符“abc”，如果当前没有任何String对象引用该常量，就说明此常量是废弃常量，如果此时发生内存回收的话而且有必要的话，“abc”就会被清楚</p>
+<h4 id="如果判断一个类是无用的类"><a href="#如果判断一个类是无用的类" class="headerlink" title="如果判断一个类是无用的类"></a>如果判断一个类是无用的类</h4><p>满足三个条件</p>
+<ol>
+<li>该类所有的实例都已经被回收，也就是Java堆中不存在该类的任何实例</li>
+<li>加载该类的classLoader被回收</li>
+<li>该类对应的java.lang.Class对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法</li>
+</ol>
+<p>如果满足上述条件虚拟机可以对类进行回收，但并不是像对象一样不使用了就必然被回收</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com </span>

@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>jvm-learn</title>
+      <link href="/2023/05/23/jvm-learn/"/>
+      <url>/2023/05/23/jvm-learn/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Java内存区域"><a href="#Java内存区域" class="headerlink" title="Java内存区域"></a>Java内存区域</h1><h2 id="运行数据区域"><a href="#运行数据区域" class="headerlink" title="运行数据区域"></a>运行数据区域</h2><p>JDK1.7</p><p><img src="/../images/image-20230523163329596.png" alt="image-20230523163329596"></p><p>JDK1.8</p><p><img src="/../images%5Cimage-20230523163752233.png" alt="image-20230523163752233"></p><h1 id="JVM回收"><a href="#JVM回收" class="headerlink" title="JVM回收"></a>JVM回收</h1><p>JDK1.7</p><p><img src="/../images%5Cjdk1.7%E5%A0%86%E7%BB%93%E6%9E%84.png" alt="image-20230523163752233"></p><ul><li>新生代</li><li>老生代</li><li>永久代</li></ul><p>JDK1.8</p><p><img src="/..%5Cimages%5Cimage-20230523164208008.png" alt="image-20230523164208008"></p><ul><li>新生代</li><li>老生代</li><li>元空间</li></ul><h3 id="常见面试题"><a href="#常见面试题" class="headerlink" title="常见面试题"></a>常见面试题</h3><h4 id="如果判断一个常量为废弃常量"><a href="#如果判断一个常量为废弃常量" class="headerlink" title="如果判断一个常量为废弃常量"></a>如果判断一个常量为废弃常量</h4><p>JDK1.7之前运行时常量池逻辑包含字符串常量池存放在方法区，此时hotspot对方法区的实现为永久代</p><p>JDK1.7字符串常量池被从方法区拿到了堆中，这里没有提高运行时常量池，也就是说字符串常量池被单独拿到了堆，运行常量池剩下的东西还在方法区，也就是永久代</p><p>JDK1.8 hotspot移除永久代用元空间代替，这个时候字符串常量池还在堆中，运行时常量池还在方法区，但方法区的实现从永生代变为了元空间。</p><p>假设字符串常量池中存在字符“abc”，如果当前没有任何String对象引用该常量，就说明此常量是废弃常量，如果此时发生内存回收的话而且有必要的话，“abc”就会被清楚</p><h4 id="如果判断一个类是无用的类"><a href="#如果判断一个类是无用的类" class="headerlink" title="如果判断一个类是无用的类"></a>如果判断一个类是无用的类</h4><p>满足三个条件</p><ol><li>该类所有的实例都已经被回收，也就是Java堆中不存在该类的任何实例</li><li>加载该类的classLoader被回收</li><li>该类对应的java.lang.Class对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法</li></ol><p>如果满足上述条件虚拟机可以对类进行回收，但并不是像对象一样不使用了就必然被回收</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> java </category>
+          
+          <category> jvm </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> jvm </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>debug-skill</title>
       <link href="/2023/05/12/debug-skill/"/>
       <url>/2023/05/12/debug-skill/</url>
