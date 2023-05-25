@@ -6,23 +6,21 @@
   <meta name="keywords" content=" hexo ">
   <meta name="description" content="hexo-use | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="Java内存区域运行数据区域JDK1.7  JDK1.8  JVM回收JDK1.7   新生代 老生代 永久代  JDK1.8   新生代 老生代 元空间  常见面试题如果判断一个常量为废弃常量JDK1.7之前运行时常量池逻辑包含字符串常量池存放在方法区，此时hotspot对方法区的实现为永久代 JDK1.7字符串常量池被从方法区拿到了堆中，这里没有提高运行时常量池，也就是说字符串常量池被单独拿到">
+<meta name="description" content="类加载类的生命周期 类加载过程上图中的加载-&gt;连接-&gt;初始化，连接过程又分为三步：验证-&gt;准备-&gt;解析  加载  通过类名获取此类的二进制字节流  将字节流代表的静态存储结构转换为方法区的运行时数据结构  在内存中生成一个代表该类的class对象，作为方法区这些数据的访问入口     每个java类都有一个引用指向加载它的ClassLoader。但是数组类不是通过Class">
 <meta property="og:type" content="article">
-<meta property="og:title" content="jvm-learn">
-<meta property="og:url" content="http://example.com/2023/05/23/jvm-learn/index.html">
+<meta property="og:title" content="jvm-class-loading-process">
+<meta property="og:url" content="http://example.com/2023/05/24/jvm-class-loading-process/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="Java内存区域运行数据区域JDK1.7  JDK1.8  JVM回收JDK1.7   新生代 老生代 永久代  JDK1.8   新生代 老生代 元空间  常见面试题如果判断一个常量为废弃常量JDK1.7之前运行时常量池逻辑包含字符串常量池存放在方法区，此时hotspot对方法区的实现为永久代 JDK1.7字符串常量池被从方法区拿到了堆中，这里没有提高运行时常量池，也就是说字符串常量池被单独拿到">
+<meta property="og:description" content="类加载类的生命周期 类加载过程上图中的加载-&gt;连接-&gt;初始化，连接过程又分为三步：验证-&gt;准备-&gt;解析  加载  通过类名获取此类的二进制字节流  将字节流代表的静态存储结构转换为方法区的运行时数据结构  在内存中生成一个代表该类的class对象，作为方法区这些数据的访问入口     每个java类都有一个引用指向加载它的ClassLoader。但是数组类不是通过Class">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/images/image-20230523163329596.png">
-<meta property="og:image" content="http://example.com/images%5Cimage-20230523163752233.png">
-<meta property="og:image" content="http://example.com/images%5Cjdk1.7%E5%A0%86%E7%BB%93%E6%9E%84.png">
-<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20230523164208008.png">
-<meta property="article:published_time" content="2023-05-23T08:32:08.000Z">
-<meta property="article:modified_time" content="2023-05-24T05:19:40.876Z">
+<meta property="og:image" content="http://example.com/..%5Cimages%5C68747470733a2f2f6f73732e6a61766167756964652e636e2f6769746875622f6a61766167756964652f6a6176612f6a766d2f6c6966656379636c652d6f662d612d636c6173732e706e67">
+<meta property="og:image" content="http://example.com/..%5Cimages%5C68747470733a2f2f6f73732e6a61766167756964652e636e2f6769746875622f6a61766167756964652f6a6176612f6a766d2f636c6173732d6c6f6164696e672d70726f636573732d766572696669636174696f6e2e706e67">
+<meta property="article:published_time" content="2023-05-24T07:56:37.000Z">
+<meta property="article:modified_time" content="2023-05-24T08:22:12.619Z">
 <meta property="article:author" content="mhen">
-<meta property="article:tag" content="jvm">
+<meta property="article:tag" content="类加载">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/images/image-20230523163329596.png">
+<meta name="twitter:image" content="http://example.com/..%5Cimages%5C68747470733a2f2f6f73732e6a61766167756964652e636e2f6769746875622f6a61766167756964652f6a6176612f6a766d2f6c6966656379636c652d6f662d612d636c6173732e706e67">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -96,7 +94,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(6)</small>
+                <small>(7)</small>
             
         </div>
     </li>
@@ -194,7 +192,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         java
-                        <small>(1)</small>
+                        <small>(2)</small>
                         
                     </div>
                     
@@ -205,7 +203,7 @@
                                         
                                         jvm
                                         
-                                            <small>(1
+                                            <small>(2
                                                 )</small>
                                         
                                     </div>
@@ -263,8 +261,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="6">
-<input type="hidden" id="yelog_site_word_count" value="1.4k">
+<input type="hidden" id="yelog_site_posts_number" value="7">
+<input type="hidden" id="yelog_site_word_count" value="2k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -312,6 +310,10 @@
             </li>
         
             <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>类加载</a>
+            </li>
+        
+            <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>bug</a>
             </li>
         
@@ -345,6 +347,15 @@
     </div>
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="All java jvm "
+           href="/2023/05/24/jvm-class-loading-process/"
+           data-tag="类加载"
+           data-author="" >
+            <span class="post-title" title="jvm-class-loading-process">jvm-class-loading-process</span>
+            <span class="post-date" title="2023-05-24 15:56:37">2023/05/24</span>
+        </a>
         
         
         <a  class="All java jvm "

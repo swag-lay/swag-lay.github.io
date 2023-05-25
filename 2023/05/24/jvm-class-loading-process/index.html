@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>mhen</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="mhen">
+  <title>jvm-class-loading-process | mhen</title>
+  <meta name="keywords" content=" 类加载 ">
+  <meta name="description" content="jvm-class-loading-process | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="类加载类的生命周期 类加载过程上图中的加载-&gt;连接-&gt;初始化，连接过程又分为三步：验证-&gt;准备-&gt;解析  加载  通过类名获取此类的二进制字节流  将字节流代表的静态存储结构转换为方法区的运行时数据结构  在内存中生成一个代表该类的class对象，作为方法区这些数据的访问入口     每个java类都有一个引用指向加载它的ClassLoader。但是数组类不是通过Class">
 <meta property="og:type" content="article">
@@ -60,7 +60,7 @@
 
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/"
    class="avatar_target">
@@ -427,12 +427,62 @@
         </div>
     </div>
 </aside>
-<div id="post" class="index">
+<div id="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-jvm-class-loading-process" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Why-Blog"><span class="toc-text">Why Blog</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E5%8D%9A%E5%AE%A2%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">对博客的理解</span></a></li></ol></li></ol>
+        <h1 class="article-title">jvm-class-loading-process</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="java">java</a> > 
+            
+            <a  data-rel="java&lt;---&gt;jvm">jvm</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color4">类加载</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2023-05-24 16:22:12'>2023-05-24 15:56</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>Count:557</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="toc-text">类加载</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-text">类的生命周期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B"><span class="toc-text">类加载过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B1%BB%E5%8D%B8%E8%BD%BD"><span class="toc-text">类卸载</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -445,22 +495,68 @@
     }
 </style>
 </div>
-            <h1 id="Why-Blog"><a href="#Why-Blog" class="headerlink" title="Why Blog"></a>Why Blog</h1><h2 id="对博客的理解"><a href="#对博客的理解" class="headerlink" title="对博客的理解"></a>对博客的理解</h2><p>喜欢写Blog的人，会经历三个阶段。</p>
-<blockquote>
-<p>第一阶段，刚接触Blog，觉得很新鲜，试着选择一个免费空间来写。</p>
-</blockquote>
-<blockquote>
-<p>第二阶段，发现免费空间限制太多，就自己购买域名和空间，搭建独立博客。</p>
-</blockquote>
-<blockquote>
-<p>第三阶段，觉得独立博客的管理太麻烦，最好在保留控制权的前提下，让别人来管，自己只负责写文章。</p>
-</blockquote>
-<p>我们每个人的在网络上产生的数据越来越多，这些信息是我们在互联网上存在过的痕迹，值得我们认真对待。但是它们被分散分布在各个网站上。很多时候我们很难将它们聚合在一起，而且各个网站的信息排布方式也没有办法自由控制，所以我们需要一个可以由自己主宰的空间——博客。</p>
-<p>通过博客，我们可以记录自己的生活和成长的轨迹。它不像 Twitter 那样碎片化，也不像 Facebook 那样关系化，它是私人的空间。</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h1><h2 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h2><p><img src="/..%5Cimages%5C68747470733a2f2f6f73732e6a61766167756964652e636e2f6769746875622f6a61766167756964652f6a6176612f6a766d2f6c6966656379636c652d6f662d612d636c6173732e706e67" alt="img"></p>
+<h2 id="类加载过程"><a href="#类加载过程" class="headerlink" title="类加载过程"></a>类加载过程</h2><p>上图中的加载-&gt;连接-&gt;初始化，连接过程又分为三步：验证-&gt;准备-&gt;解析</p>
+<ul>
+<li><p>加载</p>
+<ol>
+<li><p>通过类名获取此类的二进制字节流</p>
+</li>
+<li><p>将字节流代表的静态存储结构转换为方法区的运行时数据结构</p>
+</li>
+<li><p>在内存中生成一个代表该类的class对象，作为方法区这些数据的访问入口</p>
+</li>
+</ol>
+</li>
+</ul>
+<p>每个java类都有一个引用指向加载它的ClassLoader。但是数组类不是通过ClassLoader创建的，而是JVM在需要的时候自动创建的，数组类通过getClassLoader()方法获取ClassLoader的时候和该数组的元素类型的ClassLoader是一致的。非数组类的加载阶段是可控性最强的阶段，这一步我们可以去完成还可以自定义类加载器去控制字节流的获取方式（重写一个类加载器的loadClass()）。加载阶段和连接阶段的部分动作是交叉进行的，加载阶段尚未结束，连接阶段就有可能开始了。</p>
+<ul>
+<li><p>连接</p>
+<ol>
+<li><p>验证</p>
+<p>确保Class文件的字节流中包含的信息符合所有约束条件，保证信息被当作代码运行后不会危害虚拟机自身的安全。</p>
+<p><img src="/..%5Cimages%5C68747470733a2f2f6f73732e6a61766167756964652e636e2f6769746875622f6a61766167756964652f6a6176612f6a766d2f636c6173732d6c6f6164696e672d70726f636573732d766572696669636174696f6e2e706e67" alt="img"></p>
+</li>
+<li><p>准备</p>
+<p>正式为类变量分配内存并设置类变量初始值的阶段</p>
+</li>
+<li><p>解析</p>
+<p>虚拟机将常量池内的符号引用替换为直接引用的过程</p>
+</li>
+</ol>
+</li>
+<li><p>初始化</p>
+<p>是执行初始化方法<clinit>()方法的过程，是类加载的最后一步，这一步JVM才开始真正执行类中定义的Java程序代码（字节码）</p>
+<h2 id="类卸载"><a href="#类卸载" class="headerlink" title="类卸载"></a>类卸载</h2><p>卸载类即该类的Class对象被GC</p>
+<p>三个条件：</p>
+<ol>
+<li>该类的而所有实例对象被GC，也就是是堆中不存在该类的实例对象</li>
+<li>该类在任何地方被引用</li>
+<li>该类的类加载器的实例被GC</li>
+</ol>
+<p>因此，在JVM的生命周期中，由jvm自带的类加载器加载的类是不会被卸载的，但是由我们自定义的类加载器加载的类是可能被卸载的。</p>
+</li>
+</ul>
 
-        </article>
-        
-        
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 jaytp@qq.com </span>
+    </div>
+</article>
+
+
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">
@@ -469,11 +565,11 @@
 <p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
 
     </div>
-</div>
-<div class="full-toc">
-    <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
 <a class="" id="rocket" ></a>
 
+    </div>
 </div>
 
 </body>
