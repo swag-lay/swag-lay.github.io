@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>hexo-use | mhen</title>
-  <meta name="keywords" content=" hexo ">
-  <meta name="description" content="hexo-use | mhen">
+  <title>constructTree | mhen</title>
+  <meta name="keywords" content=" construct ">
+  <meta name="description" content="constructTree | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="三种遍历方式构造二叉树的通解不同之处一：寻找当前根节点 前+中 当前根节点为pre[pre_start]，找出它在中序中的位置，然后把左右子树分开。  中+后 当前根节点为post[post_end]，找出它在中序中的位置，然后把左右子树分开。  前+后 当前根节点为pre[pre_start]，并在他在后序中的位置为post_end；左子树的根节点为pre[pre_start+1]，因此只要找到">
 <meta property="og:type" content="article">
@@ -439,9 +439,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-hexo-use" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-constructTree" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">hexo-use</h1>
+        <h1 class="article-title">constructTree</h1>
     
     <div class="article-meta">
         
@@ -451,9 +451,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="工具">工具</a> > 
-            
-            <a  data-rel="工具&lt;---&gt;hexo">hexo</a>
+            <a  data-rel="leetcode">leetcode</a>
             
         </span>
         
@@ -461,19 +459,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">hexo</a>
+            <a class="color5">construct</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-05-11 14:22:35'>2023-05-09 22:03</time>
+            Created At : <time class="date" title='Updated At: 2023-06-12 12:52:48'>2023-06-12 12:35</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:35</span>
+        <span>Count:858</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -492,7 +490,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%96%B0%E6%96%87%E7%AB%A0"><span class="toc-text">创建新文章</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E7%A7%8D%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F%E6%9E%84%E9%80%A0%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%80%9A%E8%A7%A3"><span class="toc-text">三种遍历方式构造二叉树的通解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E5%90%8C%E4%B9%8B%E5%A4%84%E4%B8%80%EF%BC%9A%E5%AF%BB%E6%89%BE%E5%BD%93%E5%89%8D%E6%A0%B9%E8%8A%82%E7%82%B9"><span class="toc-text">不同之处一：寻找当前根节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E5%90%8C%E4%B9%8B%E5%A4%84%E4%BA%8C%EF%BC%9A%E5%B7%A6%E5%8F%B3%E9%81%8D%E5%8E%86%E8%8C%83%E5%9B%B4"><span class="toc-text">不同之处二：左右遍历范围</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%EF%BC%9A"><span class="toc-text">代码：</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -508,9 +506,101 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="创建新文章"><a href="#创建新文章" class="headerlink" title="创建新文章"></a>创建新文章</h2><p>hexo new &lt;&gt;</p>
-<p>git<br>git add .<br>git commit -m “”<br>git push origin public</p>
-<p>发布网站并推送静态文件到master分支<br>hexo g -d</p>
+        <h1 id="三种遍历方式构造二叉树的通解"><a href="#三种遍历方式构造二叉树的通解" class="headerlink" title="三种遍历方式构造二叉树的通解"></a>三种遍历方式构造二叉树的通解</h1><h2 id="不同之处一：寻找当前根节点"><a href="#不同之处一：寻找当前根节点" class="headerlink" title="不同之处一：寻找当前根节点"></a>不同之处一：寻找当前根节点</h2><ul>
+<li><p>前+中</p>
+<p>当前根节点为pre[pre_start]，找出它在中序中的位置，然后把左右子树分开。</p>
+</li>
+<li><p>中+后</p>
+<p>当前根节点为post[post_end]，找出它在中序中的位置，然后把左右子树分开。</p>
+</li>
+<li><p>前+后</p>
+<p>当前根节点为pre[pre_start]，并在他在后序中的位置为post_end；左子树的根节点为pre[pre_start+1]，因此只要找到他在后序中的位置就可以分开左右子树</p>
+</li>
+</ul>
+<h2 id="不同之处二：左右遍历范围"><a href="#不同之处二：左右遍历范围" class="headerlink" title="不同之处二：左右遍历范围"></a>不同之处二：左右遍历范围</h2><ul>
+<li>前+中<br>中序遍历中，我们知道 左子树：[inorder_start,index-1], 右子树：[index+1, inorder_end]<br>在前序遍历中，左子树起始位置为pre_start+1,左子树一共有(index-1 - inorder_start)个，因此左子树：[pre_start+1, pre_start+1 + (index-1 - inorder_start)]<br>右子树起始位置为左子树终止位置+1，终止位置为pre_end，因此右子树：[ pre_start+1 + (index-1 - inorder_start) + 1, pre_end]</li>
+<li>中+后<br>中序遍历中，我们知道 左子树：[inorder_start,index-1], 右子树：[index+1, inorder_end]<br>在后序遍历中，左子树起始位置为post_start，左子树一共有(index-1 - inorder_start)个，因此左子树：[post_start, post_start + (index-1 - inorder_start)]<br>右子树的终止位置为post_end - 1,右子树一共有(inorder_end - (index+1))个,因此右子树:[post_end - 1 - (inorder_end - (index+1)), post_end - 1]</li>
+<li>前+后<br>后序遍历中，我们知道 左子树：[post_start,index], 右子树：[index+1, post_end-1]<br>在前序遍历中，左子树起始位置为pre_start+1,左子树个数一共有(index - post_start)个，因此左子树：[pre_start+1, pre_start+1 + (index - post_start)]<br>右子树起始位置为左子树终止位置+1，终止位置为pre_end，因此右子树：[ pre_start+1 + (index - post_start) + 1, pre_end]</li>
+</ul>
+<h2 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h2><pre><code class="java">//从前序和中序遍历序列构造二叉树
+class Solution &#123;
+    private Map&lt;Integer,Integer&gt; indexMap;
+    int rootIndex=0;
+    public TreeNode myBuildTree(int[] preorder,int[] inorder,int preorderLeft,int preorderRight)&#123;
+        if(preorderLeft&lt;=preorderRight)&#123;
+            int rootVal=preorder[rootIndex++];
+            TreeNode root=new TreeNode(rootVal);
+            root.left=myBuildTree(preorder,inorder,preorderLeft,indexMap.get(rootVal)-1);
+            root.right=myBuildTree(preorder,inorder,indexMap.get(rootVal)+1,preorderRight);
+            return root;
+        &#125;else&#123;
+            return null;
+        &#125;
+    &#125;
+    public TreeNode buildTree(int[] preorder, int[] inorder) &#123;
+        int n=preorder.length;
+        indexMap=new HashMap&lt;&gt;();
+        for(int i=0;i&lt;n;i++)&#123;
+            indexMap.put(inorder[i],i);
+        &#125;
+        return myBuildTree(preorder,inorder,0,n-1);
+    &#125;
+&#125;
+
+//从中序和后序遍历序列构造二叉树
+class Solution &#123;
+    Map&lt;Integer,Integer&gt; map=new HashMap&lt;&gt;();
+    public TreeNode buildTree(int[] inorder, int[] postorder) &#123;
+        int n=inorder.length;
+        for(int i=0;i&lt;n;i++)&#123;
+            map.put(inorder[i],i);
+        &#125;
+        return myBuildTree(inorder,postorder,0,n-1,0,n-1);
+    &#125;
+    public TreeNode myBuildTree(int[] inorder,int[] postorder,int inorderLeft,int inorderRight,int postorderLeft,int postorderRight)&#123;
+        if (postorderLeft &gt; postorderRight) &#123;
+            return null;
+        &#125;
+
+        int postorderRoot = postorderRight;
+        // 在中序遍历中定位根节点
+        int inorderRoot = map.get(postorder[postorderRoot]);
+        
+        // 先把根节点建立出来
+        TreeNode root = new TreeNode(postorder[postorderRoot]);
+        // 得到左子树中的节点数目
+        int size_left_subtree = inorderRoot - inorderLeft;
+        
+        root.left = myBuildTree(inorder, postorder, inorderLeft,inorderRoot-1, postorderLeft, postorderLeft+size_left_subtree-1);
+        
+        root.right = myBuildTree(inorder, postorder, inorderRoot+1, inorderRight, postorderLeft+size_left_subtree, postorderRight-1);
+        return root;
+    &#125;
+&#125;
+
+//从前序和后序遍历构造二叉树
+class Solution &#123;
+    Map&lt;Integer,Integer&gt; map=new HashMap&lt;&gt;();
+    public TreeNode constructFromPrePost(int[] preorder, int[] postorder) &#123;
+        int n=postorder.length;
+        for(int i=0;i&lt;n;i++)&#123;
+            map.put(postorder[i],i);
+        &#125;
+        return myBuildTree(preorder,postorder,0,n-1,0,n-1);
+    &#125;
+    public TreeNode myBuildTree(int[] preorder,int[] postorder,int preorderL,int preorderR,int postorderL,int postorderR)&#123;
+        if(preorderL&gt;postorderR)&#123;
+            return null;
+        &#125;
+        TreeNode root=new TreeNode(preorder[preorderL]);
+        int leftSize=map.get(preorder[preorderL+1])-postorderL+1;
+        root.left=myBuildTree(preorder,postorder,preorderL+1,preorderL+leftSize,postorderL,postorderL+leftSize-1);
+        root.right=myBuildTree(preorder,postorder,preorderL+leftSize+1,preorderR,postorderL+leftSize,postorderR-1);
+        return root;
+
+    &#125;
+&#125;
+</code></pre>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
