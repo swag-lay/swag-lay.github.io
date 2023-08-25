@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>git-learning | mhen</title>
-  <meta name="keywords" content=" git ">
-  <meta name="description" content="git-learning | mhen">
+  <title>mysql-ddl | mhen</title>
+  <meta name="keywords" content=" Mysql ">
+  <meta name="description" content="mysql-ddl | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql-dcl">
@@ -494,9 +494,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-git-learning" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-mysql-ddl" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">git-learning</h1>
+        <h1 class="article-title">mysql-ddl</h1>
     
     <div class="article-meta">
         
@@ -506,9 +506,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="工具">工具</a> > 
-            
-            <a  data-rel="工具&lt;---&gt;git">git</a>
+            <a  data-rel="数据库">数据库</a>
             
         </span>
         
@@ -516,19 +514,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color4">git</a>
+            <a class="color1">Mysql</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-05-11 17:54:14'>2023-05-10 18:14</time>
+            Created At : <time class="date" title='Updated At: 2023-08-25 18:13:57'>2023-08-25 16:41</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:418</span>
+        <span>Count:369</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -547,7 +545,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#git%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A0"><span class="toc-text">git命令学习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#git-error"><span class="toc-text">git error</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-ddl"><span class="toc-text">mysql数据库基本操作-ddl</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="toc-text">对数据库的常用操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%A1%A8%E7%BB%93%E6%9E%84%E7%9A%84%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="toc-text">对表结构的常用操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%A1%A8"><span class="toc-text">创建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E8%A1%A8"><span class="toc-text">修改表</span></a></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -563,78 +561,140 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="git命令学习"><a href="#git命令学习" class="headerlink" title="git命令学习"></a>git命令学习</h1><p>初始化文件夹</p>
-<pre><code class="shell">git init
+        <h1 id="mysql数据库基本操作-ddl"><a href="#mysql数据库基本操作-ddl" class="headerlink" title="mysql数据库基本操作-ddl"></a>mysql数据库基本操作-ddl</h1><h2 id="对数据库的常用操作"><a href="#对数据库的常用操作" class="headerlink" title="对数据库的常用操作"></a>对数据库的常用操作</h2><table>
+<thead>
+<tr>
+<th>功能</th>
+<th>sql</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>查看所有的数据库</td>
+<td>show databases;</td>
+</tr>
+<tr>
+<td>创建数据库</td>
+<td>create database [if not exists] mydb [charset&#x3D;utf8];</td>
+</tr>
+<tr>
+<td>切换数据库</td>
+<td>use mydb;</td>
+</tr>
+<tr>
+<td>删除数据库</td>
+<td>drop database [if exists] mydb;</td>
+</tr>
+</tbody></table>
+<h2 id="对表结构的常用操作"><a href="#对表结构的常用操作" class="headerlink" title="对表结构的常用操作"></a>对表结构的常用操作</h2><h3 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h3><pre><code class="mysql">create table 表名(
+    字段名1 类型[(宽度)] [约束条件] [comment &#39;字段说明&#39;],
+    字段名2 类型[(宽度)] [约束条件] [comment &#39;字段说明&#39;],
+    ...
+)[表的一些设置];
 </code></pre>
-<p>添加新文件</p>
-<pre><code class="shell">git add .
-git add filename
-git add -am
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p>常用</p>
+<table>
+<thead>
+<tr>
+<th>tinyint</th>
+<th>1byte</th>
+<th>(-128,127)</th>
+<th>(0,255)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>smallint</td>
+<td>2</td>
+<td>(-32768,32767)</td>
+<td>(0,65535)</td>
+</tr>
+<tr>
+<td>mediumint</td>
+<td>3</td>
+<td>(-8388608,8388607)</td>
+<td>(0,16777215)</td>
+</tr>
+<tr>
+<td>int&#x2F;integer</td>
+<td>4</td>
+<td>(-2147483648,2147483647)</td>
+<td>(0,4294967295)</td>
+</tr>
+<tr>
+<td>bigint</td>
+<td>8</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>float</td>
+<td>4</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>double</td>
+<td>8</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>decimal</td>
+<td></td>
+<td>依赖与M和D的值</td>
+<td>依赖与M和D的值</td>
+</tr>
+<tr>
+<td>vachar</td>
+<td>0-65532</td>
+<td>变长字符串</td>
+<td></td>
+</tr>
+<tr>
+<td>char</td>
+<td>0-255</td>
+<td>定长字符串</td>
+<td></td>
+</tr>
+<tr>
+<td>date（日期值）</td>
+<td>3</td>
+<td>1000-01-01至9999-12-31</td>
+<td>YYYY-MM-DD</td>
+</tr>
+<tr>
+<td>time（时间值或持续时间）</td>
+<td>3</td>
+<td>-838:59:59至838:59:59</td>
+<td>HH:MM:SS</td>
+</tr>
+<tr>
+<td>datetime</td>
+<td>8</td>
+<td></td>
+<td>YYYY-MM-DD HH:MM:SS</td>
+</tr>
+</tbody></table>
+<h3 id="修改表"><a href="#修改表" class="headerlink" title="修改表"></a>修改表</h3><p>添加字段</p>
+<pre><code class="mysql">alter table 表名 add 字段名1 类型[(宽度)] [约束条件] [comment &#39;字段说明&#39;];
 </code></pre>
-<p><code>git commit -am</code> 的作用是将所有已经被 Git 管理的文件添加到暂存区并提交这些变更，并且可以通过 <code>-m</code> 参数指定提交消息。需要注意的是，如果有新文件或未被 Git 管理的文件需要添加到仓库中，还需要使用 <code>git add</code> 命令将它们添加到暂存区中。</p>
-<p>提交版本</p>
-<pre><code class="shell">git commit -m &quot;说明&quot;
+<p>修改数据类型</p>
+<pre><code class="mysql">alter table 表名 modify 字段名 新数据类型（长度）;
 </code></pre>
-<p>在本地的git仓库添加远程仓库</p>
-<pre><code class="shell">git remote add origin [url]
+<p>修改字段名和字段类型</p>
+<pre><code class="mysql">alter table 表名 change 旧字段名 新字段名 类型（长度） [comment &#39;字段说明&#39;] [约束];
 </code></pre>
-<p>发布版本</p>
-<pre><code class="shell">git push origin master
-git push --set-upstream origin [branch]
+<p>删除字段</p>
+<pre><code class="mysql">alter table 表名 drop 字段名;
 </code></pre>
-<p>origin其实就是远程仓库地址，master就是分支。在.git文件夹中的config都可以修改。</p>
-<p>拉去到本地仓库</p>
-<ul>
-<li><p>默认合并</p>
-<pre><code class="shell">git pull
+<p>修改表名</p>
+<pre><code class="mysql">alter table 表名 rename to 表名;
 </code></pre>
-</li>
-<li><p>非默认</p>
-<pre><code class="shell">git pull [url]
+<p>删除表</p>
+<pre><code class="mysql">drop table [if exists] 表名;
 </code></pre>
-</li>
-<li><p>拉取所有分支</p>
-</li>
-</ul>
-<pre><code class="shell">git fetch
+<p>删除指定表，并重新创建该表</p>
+<pre><code class="mysql">truncate table 表名
 </code></pre>
-<p>创建分支</p>
-<pre><code class="shell">git branch (name)
-</code></pre>
-<p>切换分支</p>
-<pre><code class="shell">git checkout (name)
-</code></pre>
-<p>创建分支并切换到该分支</p>
-<pre><code class="shell">git checkout -b (name)
-</code></pre>
-<p>删除分支</p>
-<pre><code class="shell">git branch -d (name)
-</code></pre>
-<p>合并分支</p>
-<pre><code class="shell">git merge (name)
-</code></pre>
-<p>将(name)分支合并到当前所在分支，此处通常当分支&#x2F;测试分支有了独立内容，希望合并的时候，也就是测试正确的时候合并到当前分支。合并完后一般删除分支</p>
-<p>撤回到某个版本（在还没push之前）</p>
-<pre><code class="shell">git reset HEAD
-</code></pre>
-<p>合并到上一次commit中</p>
-<pre><code class="shell">git add .
-git commit --amend
-</code></pre>
-<h2 id="git-error"><a href="#git-error" class="headerlink" title="git error"></a>git error</h2><ul>
-<li><p>ssh: connect to host github.com port 22: Connection timed out fatal: Could not read from remote repository. Please make sure you have the correct access rights and the repository exists.</p>
-<p>解决方法：</p>
-<ol>
-<li><p>修改.git文件中的config文件将origin的url换为http地址</p>
-</li>
-<li><p>修改端口号</p>
-<pre><code class="shell">cd ~/.ssh
-vim congfig
-</code></pre>
-</li>
-</ol>
-</li>
-</ul>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>

@@ -4,6 +4,94 @@
   
     
     <entry>
+      <title>mysql-dcl</title>
+      <link href="/2023/08/25/mysql-dcl/"/>
+      <url>/2023/08/25/mysql-dcl/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>mysql-dql</title>
+      <link href="/2023/08/25/mysql-dql/"/>
+      <url>/2023/08/25/mysql-dql/</url>
+      
+        <content type="html"><![CDATA[<h1 id="mysql基本操作-dql"><a href="#mysql基本操作-dql" class="headerlink" title="mysql基本操作-dql"></a>mysql基本操作-dql</h1><p>dpl：data query language，用来查询数据库中表的记录。</p><p>语法：</p><pre><code class="mysql">select     字段列表from    表名列表where    条件列表group by    分组字段列表having    分组后条件列表order by    排序字段列表limit    分页参数</code></pre><ul><li><p>基本查询</p><pre><code class="mysql">select 字段列表 from 表名;select * from 表名;select 字段1[as 别名]... from 表名;select distinct 字段列表 from 表名;#去除重复操作</code></pre></li><li><p>条件查询（where）</p></li><li><p>聚合函数（count，max，min，avg，sum）</p><p>将一列数据作为一个整体，进行纵向计算（null值不参与聚合函数的运算）</p><pre><code class="mysql">select 聚合函数(字段列表) from 表名;</code></pre></li><li><p>分组查询（group by）</p><pre><code class="mysql">select 字段列表 from 表名 [where 条件] group by 分组字段名 [having 分组后过滤条件];</code></pre><p>where和having区别</p><p>执行时机不同：where是分组之前进行过滤，不满足where条件，不参与分组；而having是分组之后对结果进行过滤。</p><p>判断条件不同：where不能对聚合函数进行判断，而having可以。</p></li><li><p>排序查询（order by）</p><pre><code class="mysql">select 字段列表 from 表名 order by 字段1 排序方式,字段2 排序方式;# asc 升序，desc 降序</code></pre></li><li><p>分页查询（limit）</p><pre><code>select 字段列表 from 表名 limit 起始索引,查询记录数;</code></pre></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>mysql-dml</title>
+      <link href="/2023/08/25/mysql-dml/"/>
+      <url>/2023/08/25/mysql-dml/</url>
+      
+        <content type="html"><![CDATA[<h1 id="mysql数据库基本操作-dml"><a href="#mysql数据库基本操作-dml" class="headerlink" title="mysql数据库基本操作-dml"></a>mysql数据库基本操作-dml</h1><p>dml：data manipulation language，用来对数据库中表的数据记录进行增删改操作</p><h2 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h2><pre><code class="mysql">给指定字段添加数据insert into 表名 (字段名1,字段名2) values (值1,值2,...);给全部字段添加数据insert into 表名 values ();批量添加数据insert into 表名 () values (),();insert into 表名 values (),();</code></pre><p>注意：</p><ul><li>字段顺序和值的顺序一一对应</li><li>字符串和日期型数据应该包含在引号中</li><li>数据大小在字段的规定范围中</li></ul><h2 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h2><pre><code class="mysql">update 表名 set 字段名1=值1 [where 条件];</code></pre><h2 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h2><pre><code class="mysql">delete from 表名 [where 条件];</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>mysql-ddl</title>
+      <link href="/2023/08/25/mysql-ddl/"/>
+      <url>/2023/08/25/mysql-ddl/</url>
+      
+        <content type="html"><![CDATA[<h1 id="mysql数据库基本操作-ddl"><a href="#mysql数据库基本操作-ddl" class="headerlink" title="mysql数据库基本操作-ddl"></a>mysql数据库基本操作-ddl</h1><h2 id="对数据库的常用操作"><a href="#对数据库的常用操作" class="headerlink" title="对数据库的常用操作"></a>对数据库的常用操作</h2><table><thead><tr><th>功能</th><th>sql</th></tr></thead><tbody><tr><td>查看所有的数据库</td><td>show databases;</td></tr><tr><td>创建数据库</td><td>create database [if not exists] mydb [charset&#x3D;utf8];</td></tr><tr><td>切换数据库</td><td>use mydb;</td></tr><tr><td>删除数据库</td><td>drop database [if exists] mydb;</td></tr></tbody></table><h2 id="对表结构的常用操作"><a href="#对表结构的常用操作" class="headerlink" title="对表结构的常用操作"></a>对表结构的常用操作</h2><h3 id="创建表"><a href="#创建表" class="headerlink" title="创建表"></a>创建表</h3><pre><code class="mysql">create table 表名(    字段名1 类型[(宽度)] [约束条件] [comment &#39;字段说明&#39;],    字段名2 类型[(宽度)] [约束条件] [comment &#39;字段说明&#39;],    ...)[表的一些设置];</code></pre><h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p>常用</p><table><thead><tr><th>tinyint</th><th>1byte</th><th>(-128,127)</th><th>(0,255)</th></tr></thead><tbody><tr><td>smallint</td><td>2</td><td>(-32768,32767)</td><td>(0,65535)</td></tr><tr><td>mediumint</td><td>3</td><td>(-8388608,8388607)</td><td>(0,16777215)</td></tr><tr><td>int&#x2F;integer</td><td>4</td><td>(-2147483648,2147483647)</td><td>(0,4294967295)</td></tr><tr><td>bigint</td><td>8</td><td></td><td></td></tr><tr><td>float</td><td>4</td><td></td><td></td></tr><tr><td>double</td><td>8</td><td></td><td></td></tr><tr><td>decimal</td><td></td><td>依赖与M和D的值</td><td>依赖与M和D的值</td></tr><tr><td>vachar</td><td>0-65532</td><td>变长字符串</td><td></td></tr><tr><td>char</td><td>0-255</td><td>定长字符串</td><td></td></tr><tr><td>date（日期值）</td><td>3</td><td>1000-01-01至9999-12-31</td><td>YYYY-MM-DD</td></tr><tr><td>time（时间值或持续时间）</td><td>3</td><td>-838:59:59至838:59:59</td><td>HH:MM:SS</td></tr><tr><td>datetime</td><td>8</td><td></td><td>YYYY-MM-DD HH:MM:SS</td></tr></tbody></table><h3 id="修改表"><a href="#修改表" class="headerlink" title="修改表"></a>修改表</h3><p>添加字段</p><pre><code class="mysql">alter table 表名 add 字段名1 类型[(宽度)] [约束条件] [comment &#39;字段说明&#39;];</code></pre><p>修改数据类型</p><pre><code class="mysql">alter table 表名 modify 字段名 新数据类型（长度）;</code></pre><p>修改字段名和字段类型</p><pre><code class="mysql">alter table 表名 change 旧字段名 新字段名 类型（长度） [comment &#39;字段说明&#39;] [约束];</code></pre><p>删除字段</p><pre><code class="mysql">alter table 表名 drop 字段名;</code></pre><p>修改表名</p><pre><code class="mysql">alter table 表名 rename to 表名;</code></pre><p>删除表</p><pre><code class="mysql">drop table [if exists] 表名;</code></pre><p>删除指定表，并重新创建该表</p><pre><code class="mysql">truncate table 表名</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Mysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>constructTree</title>
       <link href="/2023/06/12/constructTree/"/>
       <url>/2023/06/12/constructTree/</url>

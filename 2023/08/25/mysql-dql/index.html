@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>git-learning | mhen</title>
-  <meta name="keywords" content=" git ">
-  <meta name="description" content="git-learning | mhen">
+  <title>mysql-dql | mhen</title>
+  <meta name="keywords" content=" mysql ">
+  <meta name="description" content="mysql-dql | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mysql-dcl">
@@ -494,9 +494,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-git-learning" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-mysql-dql" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">git-learning</h1>
+        <h1 class="article-title">mysql-dql</h1>
     
     <div class="article-meta">
         
@@ -506,9 +506,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="工具">工具</a> > 
-            
-            <a  data-rel="工具&lt;---&gt;git">git</a>
+            <a  data-rel="数据库">数据库</a>
             
         </span>
         
@@ -516,19 +514,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color4">git</a>
+            <a class="color1">mysql</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-05-11 17:54:14'>2023-05-10 18:14</time>
+            Created At : <time class="date" title='Updated At: 2023-08-25 19:20:29'>2023-08-25 18:32</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:418</span>
+        <span>Count:321</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -547,7 +545,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#git%E5%91%BD%E4%BB%A4%E5%AD%A6%E4%B9%A0"><span class="toc-text">git命令学习</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#git-error"><span class="toc-text">git error</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-dql"><span class="toc-text">mysql基本操作-dql</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -563,76 +561,52 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="git命令学习"><a href="#git命令学习" class="headerlink" title="git命令学习"></a>git命令学习</h1><p>初始化文件夹</p>
-<pre><code class="shell">git init
+        <h1 id="mysql基本操作-dql"><a href="#mysql基本操作-dql" class="headerlink" title="mysql基本操作-dql"></a>mysql基本操作-dql</h1><p>dpl：data query language，用来查询数据库中表的记录。</p>
+<p>语法：</p>
+<pre><code class="mysql">select 
+    字段列表
+from
+    表名列表
+where
+    条件列表
+group by
+    分组字段列表
+having
+    分组后条件列表
+order by
+    排序字段列表
+limit
+    分页参数
 </code></pre>
-<p>添加新文件</p>
-<pre><code class="shell">git add .
-git add filename
-git add -am
-</code></pre>
-<p><code>git commit -am</code> 的作用是将所有已经被 Git 管理的文件添加到暂存区并提交这些变更，并且可以通过 <code>-m</code> 参数指定提交消息。需要注意的是，如果有新文件或未被 Git 管理的文件需要添加到仓库中，还需要使用 <code>git add</code> 命令将它们添加到暂存区中。</p>
-<p>提交版本</p>
-<pre><code class="shell">git commit -m &quot;说明&quot;
-</code></pre>
-<p>在本地的git仓库添加远程仓库</p>
-<pre><code class="shell">git remote add origin [url]
-</code></pre>
-<p>发布版本</p>
-<pre><code class="shell">git push origin master
-git push --set-upstream origin [branch]
-</code></pre>
-<p>origin其实就是远程仓库地址，master就是分支。在.git文件夹中的config都可以修改。</p>
-<p>拉去到本地仓库</p>
 <ul>
-<li><p>默认合并</p>
-<pre><code class="shell">git pull
+<li><p>基本查询</p>
+<pre><code class="mysql">select 字段列表 from 表名;
+select * from 表名;
+select 字段1[as 别名]... from 表名;
+select distinct 字段列表 from 表名;#去除重复操作
 </code></pre>
 </li>
-<li><p>非默认</p>
-<pre><code class="shell">git pull [url]
+<li><p>条件查询（where）</p>
+</li>
+<li><p>聚合函数（count，max，min，avg，sum）</p>
+<p>将一列数据作为一个整体，进行纵向计算（null值不参与聚合函数的运算）</p>
+<pre><code class="mysql">select 聚合函数(字段列表) from 表名;
 </code></pre>
 </li>
-<li><p>拉取所有分支</p>
+<li><p>分组查询（group by）</p>
+<pre><code class="mysql">select 字段列表 from 表名 [where 条件] group by 分组字段名 [having 分组后过滤条件];
+</code></pre>
+<p>where和having区别</p>
+<p>执行时机不同：where是分组之前进行过滤，不满足where条件，不参与分组；而having是分组之后对结果进行过滤。</p>
+<p>判断条件不同：where不能对聚合函数进行判断，而having可以。</p>
 </li>
-</ul>
-<pre><code class="shell">git fetch
-</code></pre>
-<p>创建分支</p>
-<pre><code class="shell">git branch (name)
-</code></pre>
-<p>切换分支</p>
-<pre><code class="shell">git checkout (name)
-</code></pre>
-<p>创建分支并切换到该分支</p>
-<pre><code class="shell">git checkout -b (name)
-</code></pre>
-<p>删除分支</p>
-<pre><code class="shell">git branch -d (name)
-</code></pre>
-<p>合并分支</p>
-<pre><code class="shell">git merge (name)
-</code></pre>
-<p>将(name)分支合并到当前所在分支，此处通常当分支&#x2F;测试分支有了独立内容，希望合并的时候，也就是测试正确的时候合并到当前分支。合并完后一般删除分支</p>
-<p>撤回到某个版本（在还没push之前）</p>
-<pre><code class="shell">git reset HEAD
-</code></pre>
-<p>合并到上一次commit中</p>
-<pre><code class="shell">git add .
-git commit --amend
-</code></pre>
-<h2 id="git-error"><a href="#git-error" class="headerlink" title="git error"></a>git error</h2><ul>
-<li><p>ssh: connect to host github.com port 22: Connection timed out fatal: Could not read from remote repository. Please make sure you have the correct access rights and the repository exists.</p>
-<p>解决方法：</p>
-<ol>
-<li><p>修改.git文件中的config文件将origin的url换为http地址</p>
-</li>
-<li><p>修改端口号</p>
-<pre><code class="shell">cd ~/.ssh
-vim congfig
+<li><p>排序查询（order by）</p>
+<pre><code class="mysql">select 字段列表 from 表名 order by 字段1 排序方式,字段2 排序方式;# asc 升序，desc 降序
 </code></pre>
 </li>
-</ol>
+<li><p>分页查询（limit）</p>
+<pre><code>select 字段列表 from 表名 limit 起始索引,查询记录数;
+</code></pre>
 </li>
 </ul>
 
