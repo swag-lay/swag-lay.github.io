@@ -3,17 +3,20 @@
 <head>
   <meta charset="utf-8">
   <title>mysql-dcl | mhen</title>
-  <meta name="keywords" content="">
+  <meta name="keywords" content=" mysql ">
   <meta name="description" content="mysql-dcl | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="事务事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。 事务操作查看&#x2F;设置事务提交方式 select @@autocommit; set @@autocommit&#x3D;0;#设置为手动改提交  提交事务 commit;  回滚事务 rollback；  开启事务 start transaction">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mysql-dcl">
-<meta property="og:url" content="http://example.com/2023/08/25/mysql-dcl/index.html">
+<meta property="og:title" content="transaction_sql">
+<meta property="og:url" content="http://example.com/2023/08/28/transaction-sql/index.html">
 <meta property="og:site_name" content="mhen">
+<meta property="og:description" content="事务事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。 事务操作查看&#x2F;设置事务提交方式 select @@autocommit; set @@autocommit&#x3D;0;#设置为手动改提交  提交事务 commit;  回滚事务 rollback；  开启事务 start transaction">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-08-25T10:32:55.000Z">
-<meta property="article:modified_time" content="2023-08-25T10:32:55.401Z">
+<meta property="article:published_time" content="2023-08-28T09:00:31.000Z">
+<meta property="article:modified_time" content="2023-08-28T10:07:02.546Z">
 <meta property="article:author" content="mhen">
+<meta property="article:tag" content="mysql">
 <meta name="twitter:card" content="summary">
 
 
@@ -88,7 +91,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(12)</small>
+                <small>(16)</small>
             
         </div>
     </li>
@@ -169,7 +172,7 @@
                     <div data-rel="数据库">
                         
                         数据库
-                        <small>(3)</small>
+                        <small>(8)</small>
                         
                     </div>
                     
@@ -269,8 +272,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="12">
-<input type="hidden" id="yelog_site_word_count" value="3.9k">
+<input type="hidden" id="yelog_site_posts_number" value="16">
+<input type="hidden" id="yelog_site_word_count" value="6k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -369,9 +372,45 @@
     <nav id="title-list-nav">
         
         
-        <a  class="All "
+        <a  class="All 数据库 "
+           href="/2023/08/28/transaction-sql/"
+           data-tag="mysql"
+           data-author="" >
+            <span class="post-title" title="transaction_sql">transaction_sql</span>
+            <span class="post-date" title="2023-08-28 17:00:31">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 "
+           href="/2023/08/28/select-tables/"
+           data-tag="mysql"
+           data-author="" >
+            <span class="post-title" title="select_tables">select_tables</span>
+            <span class="post-date" title="2023-08-28 13:53:25">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 "
+           href="/2023/08/28/constraint/"
+           data-tag="mysql"
+           data-author="" >
+            <span class="post-title" title="constraint">constraint</span>
+            <span class="post-date" title="2023-08-28 12:25:25">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 "
+           href="/2023/08/28/mysql-funs/"
+           data-tag="mysql"
+           data-author="" >
+            <span class="post-title" title="mysql-funs">mysql-funs</span>
+            <span class="post-date" title="2023-08-28 09:19:42">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 "
            href="/2023/08/25/mysql-dcl/"
-           data-tag=""
+           data-tag="mysql"
            data-author="" >
             <span class="post-title" title="mysql-dcl">mysql-dcl</span>
             <span class="post-date" title="2023-08-25 18:32:55">2023/08/25</span>
@@ -502,16 +541,31 @@
         
         
         
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="数据库">数据库</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color1">mysql</a>
+            
+        </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-08-25 18:32:55'>2023-08-25 18:32</time>
+            Created At : <time class="date" title='Updated At: 2023-08-28 09:19:00'>2023-08-25 18:32</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:0</span>
+        <span>Count:197</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -530,7 +584,7 @@
     
     <div class="toc-ref">
     
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-dcl"><span class="toc-text">数据库基本操作-dcl</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%A1%E7%90%86%E7%94%A8%E6%88%B7"><span class="toc-text">管理用户</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6"><span class="toc-text">权限控制</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -546,7 +600,30 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h1 id="数据库基本操作-dcl"><a href="#数据库基本操作-dcl" class="headerlink" title="数据库基本操作-dcl"></a>数据库基本操作-dcl</h1><p>dcl：data control language，数据控制语言，用来管理数据库用户，控制数据库的访问权限。</p>
+<h2 id="管理用户"><a href="#管理用户" class="headerlink" title="管理用户"></a>管理用户</h2><p>查询用户</p>
+<pre><code class="mysql">use mysql；select * from user；
+</code></pre>
+<p>创建用户</p>
+<pre><code class="mysql">create user &#39;用户名&#39;@&#39;主机名&#39; identified by &#39;密码&#39;；
+</code></pre>
+<p>修改用户密码</p>
+<pre><code class="mysql">alter user &#39;用户名&#39;@&#39;主机名&#39; identified with mysql_native_password by &#39;新密码&#39;;
+</code></pre>
+<p>删除用户</p>
+<pre><code class="mysql">drop user &#39;用户名&#39;@&#39;主机名&#39;;
+</code></pre>
+<p>注意：主机名可以用%</p>
+<h2 id="权限控制"><a href="#权限控制" class="headerlink" title="权限控制"></a>权限控制</h2><p>查询权限</p>
+<pre><code class="msyql">show grants for &#39;用户名&#39;@&#39;主机名&#39;;
+</code></pre>
+<p>授予权限</p>
+<pre><code class="mysql">grant 权限列表 on 数据库名.表名 to &#39;用户名&#39;@&#39;主机名&#39;;
+</code></pre>
+<p>撤销权限</p>
+<pre><code class="mysql">revoke 权限列表 on 数据库名.表名 to &#39;用户名&#39;@&#39;主机名&#39;;
+</code></pre>
+
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
     </div>

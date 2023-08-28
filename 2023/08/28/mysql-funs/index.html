@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>mysql-dml | mhen</title>
+  <title>mysql-funs | mhen</title>
   <meta name="keywords" content=" mysql ">
-  <meta name="description" content="mysql-dml | mhen">
+  <meta name="description" content="mysql-funs | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="事务事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。 事务操作查看&#x2F;设置事务提交方式 select @@autocommit; set @@autocommit&#x3D;0;#设置为手动改提交  提交事务 commit;  回滚事务 rollback；  开启事务 start transaction">
 <meta property="og:type" content="article">
@@ -533,9 +533,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-mysql-dml" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-mysql-funs" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">mysql-dml</h1>
+        <h1 class="article-title">mysql-funs</h1>
     
     <div class="article-meta">
         
@@ -560,12 +560,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-08-25 18:32:28'>2023-08-25 18:14</time>
+            Created At : <time class="date" title='Updated At: 2023-08-28 09:22:43'>2023-08-28 09:19</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:165</span>
+        <span>Count:376</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -584,7 +584,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-dml"><span class="toc-text">mysql数据库基本操作-dml</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E6%95%B0%E6%8D%AE"><span class="toc-text">添加数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE"><span class="toc-text">修改数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="toc-text">删除数据</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql%E4%B8%AD%E7%9A%84%E5%87%BD%E6%95%B0"><span class="toc-text">mysql中的函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%87%BD%E6%95%B0"><span class="toc-text">字符串函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E5%80%BC%E5%87%BD%E6%95%B0"><span class="toc-text">数值函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A5%E6%9C%9F%E5%87%BD%E6%95%B0"><span class="toc-text">日期函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81%E7%A8%8B%E5%87%BD%E6%95%B0"><span class="toc-text">流程函数</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -600,26 +600,33 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="mysql数据库基本操作-dml"><a href="#mysql数据库基本操作-dml" class="headerlink" title="mysql数据库基本操作-dml"></a>mysql数据库基本操作-dml</h1><p>dml：data manipulation language，用来对数据库中表的数据记录进行增删改操作</p>
-<h2 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h2><pre><code class="mysql">给指定字段添加数据
-insert into 表名 (字段名1,字段名2) values (值1,值2,...);
-
-给全部字段添加数据
-insert into 表名 values ();
-
-批量添加数据
-insert into 表名 () values (),();
-insert into 表名 values (),();
+        <h1 id="mysql中的函数"><a href="#mysql中的函数" class="headerlink" title="mysql中的函数"></a>mysql中的函数</h1><h2 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h2><pre><code class="mysql">concat(s1,s2,...,sn) #字符串拼接
+lower(str) 将str转换为小写
+upper(str) 将str转换为大写
+lpad(str,n,pad) 左填充，用字符串pad对str的左边进行填充，达到n个字符串长度
+rpad(str,n,pad) 右填充，用字符串pad对str的右边进行填充，达到n个字符串长度
+trim(str) 去掉字符串头部和尾部的空格
+substring(str,start,len) 返回从字符串str从start位置起len个长度的字符串
 </code></pre>
-<p>注意：</p>
-<ul>
-<li>字段顺序和值的顺序一一对应</li>
-<li>字符串和日期型数据应该包含在引号中</li>
-<li>数据大小在字段的规定范围中</li>
-</ul>
-<h2 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h2><pre><code class="mysql">update 表名 set 字段名1=值1 [where 条件];
+<h2 id="数值函数"><a href="#数值函数" class="headerlink" title="数值函数"></a>数值函数</h2><pre><code class="mysql">ceil(x) 向上取整
+floor(x) 向下取整
+mod(x,y) 返回x/y的模
+rand() 返回0-1内的随机数
+round(x,y) 求参数x的四舍五入的值，保留y位小数
 </code></pre>
-<h2 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h2><pre><code class="mysql">delete from 表名 [where 条件];
+<h2 id="日期函数"><a href="#日期函数" class="headerlink" title="日期函数"></a>日期函数</h2><pre><code class="mysql">curdate() 当前日期
+curtime() 当前时间
+now() 返回当前日期和时间
+year(date) 获取指定date的年份
+month(date) 获取指定date的月份
+day(date) 获取指定date的日期
+date_add(date,interval expr type) 返回一个日期/时间值加上一个时间间隔expr后的时间值
+datediff(date1,date2) 返回起始时间date1和结束时间date2之间的天数
+</code></pre>
+<h2 id="流程函数"><a href="#流程函数" class="headerlink" title="流程函数"></a>流程函数</h2><pre><code class="mysql">if(value,t,t) 如果value为true，则返回t，否则返回f
+ifnull(value1,value2) 如果value1不为空，返回value1，否则返回value2
+case when [val1] then [res1] ...else [default] end 如果val1为true，返回res1，否则返回default默认值
+case [expr] when [val1] then [res1] ...else [default] end 如果expr的值等于val1，返回res1，否则返回default默认值
 </code></pre>
 
       

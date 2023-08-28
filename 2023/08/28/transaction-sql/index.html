@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>mysql-dml | mhen</title>
+  <title>transaction_sql | mhen</title>
   <meta name="keywords" content=" mysql ">
-  <meta name="description" content="mysql-dml | mhen">
+  <meta name="description" content="transaction_sql | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="事务事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。 事务操作查看&#x2F;设置事务提交方式 select @@autocommit; set @@autocommit&#x3D;0;#设置为手动改提交  提交事务 commit;  回滚事务 rollback；  开启事务 start transaction">
 <meta property="og:type" content="article">
@@ -533,9 +533,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-mysql-dml" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-transaction-sql" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">mysql-dml</h1>
+        <h1 class="article-title">transaction_sql</h1>
     
     <div class="article-meta">
         
@@ -560,12 +560,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-08-25 18:32:28'>2023-08-25 18:14</time>
+            Created At : <time class="date" title='Updated At: 2023-08-28 18:07:02'>2023-08-28 17:00</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:165</span>
+        <span>Count:434</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -584,7 +584,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-dml"><span class="toc-text">mysql数据库基本操作-dml</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E6%95%B0%E6%8D%AE"><span class="toc-text">添加数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE"><span class="toc-text">修改数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="toc-text">删除数据</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1"><span class="toc-text">事务</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E6%93%8D%E4%BD%9C"><span class="toc-text">事务操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E5%9B%9B%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-text">事务四大特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E4%BA%8B%E5%8A%A1%E9%97%AE%E9%A2%98"><span class="toc-text">并发事务问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="toc-text">事务隔离级别</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -600,27 +600,68 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="mysql数据库基本操作-dml"><a href="#mysql数据库基本操作-dml" class="headerlink" title="mysql数据库基本操作-dml"></a>mysql数据库基本操作-dml</h1><p>dml：data manipulation language，用来对数据库中表的数据记录进行增删改操作</p>
-<h2 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h2><pre><code class="mysql">给指定字段添加数据
-insert into 表名 (字段名1,字段名2) values (值1,值2,...);
+        <h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。</p>
+<h2 id="事务操作"><a href="#事务操作" class="headerlink" title="事务操作"></a>事务操作</h2><p>查看&#x2F;设置事务提交方式</p>
+<pre><code class="mysql">select @@autocommit;
+set @@autocommit=0;#设置为手动改提交
+</code></pre>
+<p>提交事务</p>
+<pre><code class="mysql">commit;
+</code></pre>
+<p>回滚事务</p>
+<pre><code class="mysql">rollback；
+</code></pre>
+<p>开启事务</p>
+<pre><code class="mysql">start transaction 或 begin;
+</code></pre>
+<h2 id="事务四大特性"><a href="#事务四大特性" class="headerlink" title="事务四大特性"></a>事务四大特性</h2><p>原子性（Atomicity）：事务是不可分割的最小操作单元，要么全部成功，要么全部失败。</p>
+<p>一致性（Consistency）：事务完成时，必须使所有的数据都保存一致状态。</p>
+<p>隔离性（Isolation）：数据库系统提供的隔离机制，保证事务在不受外部并发操作影响的独立环境下允许。</p>
+<p>持久性（Durability）：事务一旦提交或回滚，它对数据库中的数据的改变就是永久的。</p>
+<h2 id="并发事务问题"><a href="#并发事务问题" class="headerlink" title="并发事务问题"></a>并发事务问题</h2><p>脏读：一个事务读到另一个事务还没有提交的数据</p>
+<p>不可重复读：一个事务先后读取同一条记录，但两次读取的数据不同，称为不可重复读</p>
+<p>幻读：一个事务按照条件查询数据时，没有对应的数据行，但是在插入数据时，又发现这行数据已经存在，好像出现了幻读</p>
+<h2 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h2><table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>脏读</th>
+<th>不可重复读</th>
+<th>幻读</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>read uncommitted</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>read committed</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>repeatable read（默认）</td>
+<td>×</td>
+<td>×</td>
+<td>√</td>
+</tr>
+<tr>
+<td>serializable</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
+</tr>
+</tbody></table>
+<pre><code class="mysql">-- 查看事务隔离级别
+select @@transaction_isolation;
 
-给全部字段添加数据
-insert into 表名 values ();
-
-批量添加数据
-insert into 表名 () values (),();
-insert into 表名 values (),();
+-- 设置事务隔离级别
+set [session|global] transaction isolation level &#123;read uncommitted | read committed | repeatabel read | serializable&#125;
 </code></pre>
-<p>注意：</p>
-<ul>
-<li>字段顺序和值的顺序一一对应</li>
-<li>字符串和日期型数据应该包含在引号中</li>
-<li>数据大小在字段的规定范围中</li>
-</ul>
-<h2 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h2><pre><code class="mysql">update 表名 set 字段名1=值1 [where 条件];
-</code></pre>
-<h2 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h2><pre><code class="mysql">delete from 表名 [where 条件];
-</code></pre>
+<p>事务隔离级别越高，数据越安全，但安全越低。</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>

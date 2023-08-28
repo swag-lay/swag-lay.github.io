@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>mysql-dml | mhen</title>
+  <title>select_tables | mhen</title>
   <meta name="keywords" content=" mysql ">
-  <meta name="description" content="mysql-dml | mhen">
+  <meta name="description" content="select_tables | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="事务事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。 事务操作查看&#x2F;设置事务提交方式 select @@autocommit; set @@autocommit&#x3D;0;#设置为手动改提交  提交事务 commit;  回滚事务 rollback；  开启事务 start transaction">
 <meta property="og:type" content="article">
@@ -533,9 +533,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-mysql-dml" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-select-tables" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">mysql-dml</h1>
+        <h1 class="article-title">select_tables</h1>
     
     <div class="article-meta">
         
@@ -560,12 +560,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-08-25 18:32:28'>2023-08-25 18:14</time>
+            Created At : <time class="date" title='Updated At: 2023-08-28 15:51:25'>2023-08-28 13:53</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:165</span>
+        <span>Count:623</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -584,7 +584,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-dml"><span class="toc-text">mysql数据库基本操作-dml</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E6%95%B0%E6%8D%AE"><span class="toc-text">添加数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE"><span class="toc-text">修改数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="toc-text">删除数据</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2"><span class="toc-text">mysql多表查询</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2%E5%88%86%E7%B1%BB"><span class="toc-text">多表查询分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E5%88%86%E7%B1%BB"><span class="toc-text">连接分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E8%BF%9E%E6%8E%A5%EF%BC%9A"><span class="toc-text">内连接：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%96%E8%BF%9E%E6%8E%A5%EF%BC%9A"><span class="toc-text">外连接：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E8%BF%9E%E6%8E%A5%EF%BC%9A"><span class="toc-text">自连接：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="toc-text">子查询</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="toc-text">联合查询</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -600,26 +600,49 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="mysql数据库基本操作-dml"><a href="#mysql数据库基本操作-dml" class="headerlink" title="mysql数据库基本操作-dml"></a>mysql数据库基本操作-dml</h1><p>dml：data manipulation language，用来对数据库中表的数据记录进行增删改操作</p>
-<h2 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h2><pre><code class="mysql">给指定字段添加数据
-insert into 表名 (字段名1,字段名2) values (值1,值2,...);
-
-给全部字段添加数据
-insert into 表名 values ();
-
-批量添加数据
-insert into 表名 () values (),();
-insert into 表名 values (),();
+        <h1 id="mysql多表查询"><a href="#mysql多表查询" class="headerlink" title="mysql多表查询"></a>mysql多表查询</h1><p>概述：各个表结构之间存在着多种联系，基本上分为三种：</p>
+<p>一对多（多对一）：</p>
+<p>​	在多的一方建立外键，指向一的一方的主键（比如部门和员工的关系）</p>
+<p>多对多</p>
+<p>​	建立第三种中间表，中间表至少包含两个外键，分别关联两方主键（例如学生和课程的关系）</p>
+<p>一对一</p>
+<p>​	多用于单边拆分，将一张表的基础字段放在一张表中，其他详细字段放在另一张表中，以提升操作效率</p>
+<p>​	在任意一方加入外键，关联另外一方的主键，并且设置外键为唯一的（unique）</p>
+<h2 id="多表查询分类"><a href="#多表查询分类" class="headerlink" title="多表查询分类"></a>多表查询分类</h2><h3 id="连接分类"><a href="#连接分类" class="headerlink" title="连接分类"></a>连接分类</h3><h4 id="内连接："><a href="#内连接：" class="headerlink" title="内连接："></a>内连接：</h4><p>相当于查询A，B交集部分数据</p>
+<p>隐式内连接</p>
+<pre><code class="mysql">select .. from .. where 条件...;
 </code></pre>
-<p>注意：</p>
-<ul>
-<li>字段顺序和值的顺序一一对应</li>
-<li>字符串和日期型数据应该包含在引号中</li>
-<li>数据大小在字段的规定范围中</li>
-</ul>
-<h2 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h2><pre><code class="mysql">update 表名 set 字段名1=值1 [where 条件];
+<p>显式内连接</p>
+<pre><code>select .. from 表1 [inner] join 表2 on 连接条件;
 </code></pre>
-<h2 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h2><pre><code class="mysql">delete from 表名 [where 条件];
+<h4 id="外连接："><a href="#外连接：" class="headerlink" title="外连接："></a>外连接：</h4><p>左外连接：查询左表所有数据，以及两张表交集部分数据</p>
+<pre><code class="mysql">select .. from 表1 left [outer] join 表2 on .. #相当于查询表1（左表）的所有数据 包含 表1和表2交集部分的数据
+</code></pre>
+<p>右外连接：查询右表所有数据，以及两张表交集部分数据</p>
+<pre><code class="mysql">select .. from .. right [outer] join .. on .. #相当于查询表2（右表）的所有数据 包含 表1和表2交集部分的数据
+</code></pre>
+<h4 id="自连接："><a href="#自连接：" class="headerlink" title="自连接："></a>自连接：</h4><p>当前表与自身的连接查询，自连接必须使用表别名。</p>
+<p>自连接可以用内连接和外连接。</p>
+<pre><code class="mysql">select .. from 表a 别名a join 表a 别名b on 条件 ..;
+</code></pre>
+<h3 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h3><p>sql语句中嵌套select语句，称为嵌套查询，又称子查询</p>
+<pre><code class="mysql">select * from t1 where column1=(select column1 from t2);
+</code></pre>
+<p>子查询外部的语句可以是insert&#x2F;update&#x2F;delete&#x2F;select中的任意一个</p>
+<p>根据子查询结果不同，分为：</p>
+<p>标量子查询（子查询结果为单个值）</p>
+<p>列子查询（子查询结果为一列）</p>
+<p>​	常用操作符：in，not in，any，some ，all</p>
+<p>行子查询（子查询结果为一行）</p>
+<p>​	常用操作符：&#x3D;，&lt;&gt;，in，not in</p>
+<p>表子查询（子查询结果为多行多列）</p>
+<p>​	常用操作符：in</p>
+<p>根据子查询位置，分为：where之后，from之后，select之后</p>
+<h2 id="联合查询"><a href="#联合查询" class="headerlink" title="联合查询"></a>联合查询</h2><p>对于union查询，就是把多次查询的结果合并起来，形成一个新的查询结果集</p>
+<p>union all会把所有的查询直接联合，union会去重</p>
+<pre><code class="mysql">select .. from ..
+union [all]
+select .. from ..;
 </code></pre>
 
       

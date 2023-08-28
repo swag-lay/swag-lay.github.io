@@ -4,13 +4,125 @@
   
     
     <entry>
+      <title>transaction_sql</title>
+      <link href="/2023/08/28/transaction-sql/"/>
+      <url>/2023/08/28/transaction-sql/</url>
+      
+        <content type="html"><![CDATA[<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。</p><h2 id="事务操作"><a href="#事务操作" class="headerlink" title="事务操作"></a>事务操作</h2><p>查看&#x2F;设置事务提交方式</p><pre><code class="mysql">select @@autocommit;set @@autocommit=0;#设置为手动改提交</code></pre><p>提交事务</p><pre><code class="mysql">commit;</code></pre><p>回滚事务</p><pre><code class="mysql">rollback；</code></pre><p>开启事务</p><pre><code class="mysql">start transaction 或 begin;</code></pre><h2 id="事务四大特性"><a href="#事务四大特性" class="headerlink" title="事务四大特性"></a>事务四大特性</h2><p>原子性（Atomicity）：事务是不可分割的最小操作单元，要么全部成功，要么全部失败。</p><p>一致性（Consistency）：事务完成时，必须使所有的数据都保存一致状态。</p><p>隔离性（Isolation）：数据库系统提供的隔离机制，保证事务在不受外部并发操作影响的独立环境下允许。</p><p>持久性（Durability）：事务一旦提交或回滚，它对数据库中的数据的改变就是永久的。</p><h2 id="并发事务问题"><a href="#并发事务问题" class="headerlink" title="并发事务问题"></a>并发事务问题</h2><p>脏读：一个事务读到另一个事务还没有提交的数据</p><p>不可重复读：一个事务先后读取同一条记录，但两次读取的数据不同，称为不可重复读</p><p>幻读：一个事务按照条件查询数据时，没有对应的数据行，但是在插入数据时，又发现这行数据已经存在，好像出现了幻读</p><h2 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h2><table><thead><tr><th>隔离级别</th><th>脏读</th><th>不可重复读</th><th>幻读</th></tr></thead><tbody><tr><td>read uncommitted</td><td>√</td><td>√</td><td>√</td></tr><tr><td>read committed</td><td>×</td><td>√</td><td>√</td></tr><tr><td>repeatable read（默认）</td><td>×</td><td>×</td><td>√</td></tr><tr><td>serializable</td><td>×</td><td>×</td><td>×</td></tr></tbody></table><pre><code class="mysql">-- 查看事务隔离级别select @@transaction_isolation;-- 设置事务隔离级别set [session|global] transaction isolation level &#123;read uncommitted | read committed | repeatabel read | serializable&#125;</code></pre><p>事务隔离级别越高，数据越安全，但安全越低。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>select_tables</title>
+      <link href="/2023/08/28/select-tables/"/>
+      <url>/2023/08/28/select-tables/</url>
+      
+        <content type="html"><![CDATA[<h1 id="mysql多表查询"><a href="#mysql多表查询" class="headerlink" title="mysql多表查询"></a>mysql多表查询</h1><p>概述：各个表结构之间存在着多种联系，基本上分为三种：</p><p>一对多（多对一）：</p><p>​在多的一方建立外键，指向一的一方的主键（比如部门和员工的关系）</p><p>多对多</p><p>​建立第三种中间表，中间表至少包含两个外键，分别关联两方主键（例如学生和课程的关系）</p><p>一对一</p><p>​多用于单边拆分，将一张表的基础字段放在一张表中，其他详细字段放在另一张表中，以提升操作效率</p><p>​在任意一方加入外键，关联另外一方的主键，并且设置外键为唯一的（unique）</p><h2 id="多表查询分类"><a href="#多表查询分类" class="headerlink" title="多表查询分类"></a>多表查询分类</h2><h3 id="连接分类"><a href="#连接分类" class="headerlink" title="连接分类"></a>连接分类</h3><h4 id="内连接："><a href="#内连接：" class="headerlink" title="内连接："></a>内连接：</h4><p>相当于查询A，B交集部分数据</p><p>隐式内连接</p><pre><code class="mysql">select .. from .. where 条件...;</code></pre><p>显式内连接</p><pre><code>select .. from 表1 [inner] join 表2 on 连接条件;</code></pre><h4 id="外连接："><a href="#外连接：" class="headerlink" title="外连接："></a>外连接：</h4><p>左外连接：查询左表所有数据，以及两张表交集部分数据</p><pre><code class="mysql">select .. from 表1 left [outer] join 表2 on .. #相当于查询表1（左表）的所有数据 包含 表1和表2交集部分的数据</code></pre><p>右外连接：查询右表所有数据，以及两张表交集部分数据</p><pre><code class="mysql">select .. from .. right [outer] join .. on .. #相当于查询表2（右表）的所有数据 包含 表1和表2交集部分的数据</code></pre><h4 id="自连接："><a href="#自连接：" class="headerlink" title="自连接："></a>自连接：</h4><p>当前表与自身的连接查询，自连接必须使用表别名。</p><p>自连接可以用内连接和外连接。</p><pre><code class="mysql">select .. from 表a 别名a join 表a 别名b on 条件 ..;</code></pre><h3 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h3><p>sql语句中嵌套select语句，称为嵌套查询，又称子查询</p><pre><code class="mysql">select * from t1 where column1=(select column1 from t2);</code></pre><p>子查询外部的语句可以是insert&#x2F;update&#x2F;delete&#x2F;select中的任意一个</p><p>根据子查询结果不同，分为：</p><p>标量子查询（子查询结果为单个值）</p><p>列子查询（子查询结果为一列）</p><p>​常用操作符：in，not in，any，some ，all</p><p>行子查询（子查询结果为一行）</p><p>​常用操作符：&#x3D;，&lt;&gt;，in，not in</p><p>表子查询（子查询结果为多行多列）</p><p>​常用操作符：in</p><p>根据子查询位置，分为：where之后，from之后，select之后</p><h2 id="联合查询"><a href="#联合查询" class="headerlink" title="联合查询"></a>联合查询</h2><p>对于union查询，就是把多次查询的结果合并起来，形成一个新的查询结果集</p><p>union all会把所有的查询直接联合，union会去重</p><pre><code class="mysql">select .. from ..union [all]select .. from ..;</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>constraint</title>
+      <link href="/2023/08/28/constraint/"/>
+      <url>/2023/08/28/constraint/</url>
+      
+        <content type="html"><![CDATA[<h1 id="mysql约束"><a href="#mysql约束" class="headerlink" title="mysql约束"></a>mysql约束</h1><p>约束是作用于表中字段上的规则，用于限制存储在表中的数据。为了保证数据库中数据的正确，有效性和完整性。</p><table><thead><tr><th>约束</th><th>描述</th><th>关键字</th></tr></thead><tbody><tr><td>非空约束</td><td>限制该字段的数据不能为null</td><td>not null</td></tr><tr><td>唯一约束</td><td>唯一，不重复的</td><td>unique</td></tr><tr><td>主键约束</td><td>唯一标识，要求非空且唯一</td><td>primary key</td></tr><tr><td>默认</td><td></td><td>default</td></tr><tr><td>检查约束（8.0.16之后）</td><td>保证字段值满足某一个条件</td><td>check</td></tr><tr><td>外键约束</td><td>用来让两张表的数据之间建立连接，保证数据的一致性和完整性</td><td>foreign key</td></tr></tbody></table><p>注意：约束是作用于表中字段上的，可以在创建表&#x2F;修改表的时候添加约束。</p><p>外键约束：</p><pre><code class="mysql">create table 表名(    字段名 数据类型,    ...    [constraint] [外键名称] foreign key(外键字段名) references 主表(主表列名));-- 添加外键alter table 表名 add constraint 外键名称 foreign key(外键字段名) references 主表(主表列名);-- 删除外键alter table 表名 drop foreign key 外键名称;</code></pre><p>删除&#x2F;更新行为</p><table><thead><tr><th>行为</th><th>说明</th></tr></thead><tbody><tr><td>no action</td><td>当在父表中删除&#x2F;更新对应记录时，首先检查该记录是否有对应外键，如果有则不允许删除&#x2F;更新。（与restrict一致）</td></tr><tr><td>restrict</td><td>。。。 ，首先检查该记录是否有对应外键，如果有则不允许删除&#x2F;更新。（与no action一致）</td></tr><tr><td>cascade</td><td>。。。，首先检查该记录是否有对应外键，如果有，则也删除&#x2F;更新外键在子表中的记录</td></tr><tr><td>set null</td><td>。。。，首先检查该记录是否有对应外键，如果有则设置子表中该外键为null（这就要求该外键允许曲null）</td></tr><tr><td>set default</td><td>父表有变更时，子表将外键列设置为一个默认的值（Innodb不支持）</td></tr></tbody></table><pre><code class="mysql">alter table 表名 add constraint 外键名称 foreign key (外键名称) references 主表名（主表字段名） on update cascade on delete cascade;</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>mysql-funs</title>
+      <link href="/2023/08/28/mysql-funs/"/>
+      <url>/2023/08/28/mysql-funs/</url>
+      
+        <content type="html"><![CDATA[<h1 id="mysql中的函数"><a href="#mysql中的函数" class="headerlink" title="mysql中的函数"></a>mysql中的函数</h1><h2 id="字符串函数"><a href="#字符串函数" class="headerlink" title="字符串函数"></a>字符串函数</h2><pre><code class="mysql">concat(s1,s2,...,sn) #字符串拼接lower(str) 将str转换为小写upper(str) 将str转换为大写lpad(str,n,pad) 左填充，用字符串pad对str的左边进行填充，达到n个字符串长度rpad(str,n,pad) 右填充，用字符串pad对str的右边进行填充，达到n个字符串长度trim(str) 去掉字符串头部和尾部的空格substring(str,start,len) 返回从字符串str从start位置起len个长度的字符串</code></pre><h2 id="数值函数"><a href="#数值函数" class="headerlink" title="数值函数"></a>数值函数</h2><pre><code class="mysql">ceil(x) 向上取整floor(x) 向下取整mod(x,y) 返回x/y的模rand() 返回0-1内的随机数round(x,y) 求参数x的四舍五入的值，保留y位小数</code></pre><h2 id="日期函数"><a href="#日期函数" class="headerlink" title="日期函数"></a>日期函数</h2><pre><code class="mysql">curdate() 当前日期curtime() 当前时间now() 返回当前日期和时间year(date) 获取指定date的年份month(date) 获取指定date的月份day(date) 获取指定date的日期date_add(date,interval expr type) 返回一个日期/时间值加上一个时间间隔expr后的时间值datediff(date1,date2) 返回起始时间date1和结束时间date2之间的天数</code></pre><h2 id="流程函数"><a href="#流程函数" class="headerlink" title="流程函数"></a>流程函数</h2><pre><code class="mysql">if(value,t,t) 如果value为true，则返回t，否则返回fifnull(value1,value2) 如果value1不为空，返回value1，否则返回value2case when [val1] then [res1] ...else [default] end 如果val1为true，返回res1，否则返回default默认值case [expr] when [val1] then [res1] ...else [default] end 如果expr的值等于val1，返回res1，否则返回default默认值</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>mysql-dcl</title>
       <link href="/2023/08/25/mysql-dcl/"/>
       <url>/2023/08/25/mysql-dcl/</url>
       
-        <content type="html"><![CDATA[]]></content>
+        <content type="html"><![CDATA[<h1 id="数据库基本操作-dcl"><a href="#数据库基本操作-dcl" class="headerlink" title="数据库基本操作-dcl"></a>数据库基本操作-dcl</h1><p>dcl：data control language，数据控制语言，用来管理数据库用户，控制数据库的访问权限。</p><h2 id="管理用户"><a href="#管理用户" class="headerlink" title="管理用户"></a>管理用户</h2><p>查询用户</p><pre><code class="mysql">use mysql；select * from user；</code></pre><p>创建用户</p><pre><code class="mysql">create user &#39;用户名&#39;@&#39;主机名&#39; identified by &#39;密码&#39;；</code></pre><p>修改用户密码</p><pre><code class="mysql">alter user &#39;用户名&#39;@&#39;主机名&#39; identified with mysql_native_password by &#39;新密码&#39;;</code></pre><p>删除用户</p><pre><code class="mysql">drop user &#39;用户名&#39;@&#39;主机名&#39;;</code></pre><p>注意：主机名可以用%</p><h2 id="权限控制"><a href="#权限控制" class="headerlink" title="权限控制"></a>权限控制</h2><p>查询权限</p><pre><code class="msyql">show grants for &#39;用户名&#39;@&#39;主机名&#39;;</code></pre><p>授予权限</p><pre><code class="mysql">grant 权限列表 on 数据库名.表名 to &#39;用户名&#39;@&#39;主机名&#39;;</code></pre><p>撤销权限</p><pre><code class="mysql">revoke 权限列表 on 数据库名.表名 to &#39;用户名&#39;@&#39;主机名&#39;;</code></pre>]]></content>
       
       
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+        </tags>
       
     </entry>
     
@@ -21,7 +133,7 @@
       <link href="/2023/08/25/mysql-dql/"/>
       <url>/2023/08/25/mysql-dql/</url>
       
-        <content type="html"><![CDATA[<h1 id="mysql基本操作-dql"><a href="#mysql基本操作-dql" class="headerlink" title="mysql基本操作-dql"></a>mysql基本操作-dql</h1><p>dpl：data query language，用来查询数据库中表的记录。</p><p>语法：</p><pre><code class="mysql">select     字段列表from    表名列表where    条件列表group by    分组字段列表having    分组后条件列表order by    排序字段列表limit    分页参数</code></pre><ul><li><p>基本查询</p><pre><code class="mysql">select 字段列表 from 表名;select * from 表名;select 字段1[as 别名]... from 表名;select distinct 字段列表 from 表名;#去除重复操作</code></pre></li><li><p>条件查询（where）</p></li><li><p>聚合函数（count，max，min，avg，sum）</p><p>将一列数据作为一个整体，进行纵向计算（null值不参与聚合函数的运算）</p><pre><code class="mysql">select 聚合函数(字段列表) from 表名;</code></pre></li><li><p>分组查询（group by）</p><pre><code class="mysql">select 字段列表 from 表名 [where 条件] group by 分组字段名 [having 分组后过滤条件];</code></pre><p>where和having区别</p><p>执行时机不同：where是分组之前进行过滤，不满足where条件，不参与分组；而having是分组之后对结果进行过滤。</p><p>判断条件不同：where不能对聚合函数进行判断，而having可以。</p></li><li><p>排序查询（order by）</p><pre><code class="mysql">select 字段列表 from 表名 order by 字段1 排序方式,字段2 排序方式;# asc 升序，desc 降序</code></pre></li><li><p>分页查询（limit）</p><pre><code>select 字段列表 from 表名 limit 起始索引,查询记录数;</code></pre></li></ul>]]></content>
+        <content type="html"><![CDATA[<h1 id="mysql基本操作-dql"><a href="#mysql基本操作-dql" class="headerlink" title="mysql基本操作-dql"></a>mysql基本操作-dql</h1><p>dpl：data query language，用来查询数据库中表的记录。</p><p>语法：</p><pre><code class="mysql">select     字段列表from    表名列表where    条件列表group by    分组字段列表having    分组后条件列表order by    排序字段列表limit    分页参数</code></pre><ul><li><p>基本查询</p><pre><code class="mysql">select 字段列表 from 表名;select * from 表名;select 字段1[as 别名]... from 表名;select distinct 字段列表 from 表名;#去除重复操作</code></pre></li><li><p>条件查询（where）</p></li><li><p>聚合函数（count，max，min，avg，sum）</p><p>将一列数据作为一个整体，进行纵向计算（null值不参与聚合函数的运算）</p><pre><code class="mysql">select 聚合函数(字段列表) from 表名;</code></pre></li><li><p>分组查询（group by）</p><pre><code class="mysql">select 字段列表 from 表名 [where 条件] group by 分组字段名 [having 分组后过滤条件];</code></pre><p>where和having区别</p><p>执行时机不同：where是分组之前进行过滤，不满足where条件，不参与分组；而having是分组之后对结果进行过滤。</p><p>判断条件不同：where不能对聚合函数进行判断，而having可以。</p></li><li><p>排序查询（order by）</p><pre><code class="mysql">select 字段列表 from 表名 order by 字段1 排序方式,字段2 排序方式;# asc 升序，desc 降序</code></pre></li><li><p>分页查询（limit）</p><pre><code>select 字段列表 from 表名 limit 起始索引,查询记录数;</code></pre></li></ul><p>dql执行顺序<br>from-&gt;where-&gt;group by-&gt;having-&gt;select-&gt;order by-&gt;limit</p>]]></content>
       
       
       <categories>

@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>mysql-dml | mhen</title>
+  <title>constraint | mhen</title>
   <meta name="keywords" content=" mysql ">
-  <meta name="description" content="mysql-dml | mhen">
+  <meta name="description" content="constraint | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="事务事务是一组操作的集合，它是一个不可分割的工作单位，事务会把所有的操作作为一个整体向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。 事务操作查看&#x2F;设置事务提交方式 select @@autocommit; set @@autocommit&#x3D;0;#设置为手动改提交  提交事务 commit;  回滚事务 rollback；  开启事务 start transaction">
 <meta property="og:type" content="article">
@@ -533,9 +533,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-mysql-dml" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-constraint" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">mysql-dml</h1>
+        <h1 class="article-title">constraint</h1>
     
     <div class="article-meta">
         
@@ -560,12 +560,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-08-25 18:32:28'>2023-08-25 18:14</time>
+            Created At : <time class="date" title='Updated At: 2023-08-28 13:50:17'>2023-08-28 12:25</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:165</span>
+        <span>Count:491</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -584,7 +584,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-dml"><span class="toc-text">mysql数据库基本操作-dml</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E6%95%B0%E6%8D%AE"><span class="toc-text">添加数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE"><span class="toc-text">修改数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="toc-text">删除数据</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql%E7%BA%A6%E6%9D%9F"><span class="toc-text">mysql约束</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -600,26 +600,89 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="mysql数据库基本操作-dml"><a href="#mysql数据库基本操作-dml" class="headerlink" title="mysql数据库基本操作-dml"></a>mysql数据库基本操作-dml</h1><p>dml：data manipulation language，用来对数据库中表的数据记录进行增删改操作</p>
-<h2 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h2><pre><code class="mysql">给指定字段添加数据
-insert into 表名 (字段名1,字段名2) values (值1,值2,...);
+        <h1 id="mysql约束"><a href="#mysql约束" class="headerlink" title="mysql约束"></a>mysql约束</h1><p>约束是作用于表中字段上的规则，用于限制存储在表中的数据。为了保证数据库中数据的正确，有效性和完整性。</p>
+<table>
+<thead>
+<tr>
+<th>约束</th>
+<th>描述</th>
+<th>关键字</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>非空约束</td>
+<td>限制该字段的数据不能为null</td>
+<td>not null</td>
+</tr>
+<tr>
+<td>唯一约束</td>
+<td>唯一，不重复的</td>
+<td>unique</td>
+</tr>
+<tr>
+<td>主键约束</td>
+<td>唯一标识，要求非空且唯一</td>
+<td>primary key</td>
+</tr>
+<tr>
+<td>默认</td>
+<td></td>
+<td>default</td>
+</tr>
+<tr>
+<td>检查约束（8.0.16之后）</td>
+<td>保证字段值满足某一个条件</td>
+<td>check</td>
+</tr>
+<tr>
+<td>外键约束</td>
+<td>用来让两张表的数据之间建立连接，保证数据的一致性和完整性</td>
+<td>foreign key</td>
+</tr>
+</tbody></table>
+<p>注意：约束是作用于表中字段上的，可以在创建表&#x2F;修改表的时候添加约束。</p>
+<p>外键约束：</p>
+<pre><code class="mysql">create table 表名(
+    字段名 数据类型,
+    ...
+    [constraint] [外键名称] foreign key(外键字段名) references 主表(主表列名)
+);
+-- 添加外键
+alter table 表名 add constraint 外键名称 foreign key(外键字段名) references 主表(主表列名);
 
-给全部字段添加数据
-insert into 表名 values ();
-
-批量添加数据
-insert into 表名 () values (),();
-insert into 表名 values (),();
+-- 删除外键
+alter table 表名 drop foreign key 外键名称;
 </code></pre>
-<p>注意：</p>
-<ul>
-<li>字段顺序和值的顺序一一对应</li>
-<li>字符串和日期型数据应该包含在引号中</li>
-<li>数据大小在字段的规定范围中</li>
-</ul>
-<h2 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h2><pre><code class="mysql">update 表名 set 字段名1=值1 [where 条件];
-</code></pre>
-<h2 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h2><pre><code class="mysql">delete from 表名 [where 条件];
+<p>删除&#x2F;更新行为</p>
+<table>
+<thead>
+<tr>
+<th>行为</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>no action</td>
+<td>当在父表中删除&#x2F;更新对应记录时，首先检查该记录是否有对应外键，如果有则不允许删除&#x2F;更新。（与restrict一致）</td>
+</tr>
+<tr>
+<td>restrict</td>
+<td>。。。 ，首先检查该记录是否有对应外键，如果有则不允许删除&#x2F;更新。（与no action一致）</td>
+</tr>
+<tr>
+<td>cascade</td>
+<td>。。。，首先检查该记录是否有对应外键，如果有，则也删除&#x2F;更新外键在子表中的记录</td>
+</tr>
+<tr>
+<td>set null</td>
+<td>。。。，首先检查该记录是否有对应外键，如果有则设置子表中该外键为null（这就要求该外键允许曲null）</td>
+</tr>
+<tr>
+<td>set default</td>
+<td>父表有变更时，子表将外键列设置为一个默认的值（Innodb不支持）</td>
+</tr>
+</tbody></table>
+<pre><code class="mysql">alter table 表名 add constraint 外键名称 foreign key (外键名称) references 主表名（主表字段名） on update cascade on delete cascade;
 </code></pre>
 
       
