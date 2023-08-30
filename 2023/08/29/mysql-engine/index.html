@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>select_tables | mhen</title>
+  <title>mysql-storage-engine | mhen</title>
   <meta name="keywords" content=" mysql ">
-  <meta name="description" content="select_tables | mhen">
+  <meta name="description" content="mysql-storage-engine | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="mysql-索引索引是帮助mysql高效获取数据的数据结构（有序）。这些数据结构以某种方式引用（指向）数据，这也就可以在这些数据结构上是实现高级查找算法，这种数据结构就是索引。 优势：提高数据检索的效率，降低数据的io成本，降低数据库排序的成本，降低cpu的消耗。 缺点：索引列需要空间，降低了更新表的速度。 索引结构B+树相对于B树区别：所有的数据都会出现在叶子节点，叶子节点形成一个单向链表 My">
 <meta property="og:type" content="article">
@@ -551,9 +551,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-select-tables" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-mysql-engine" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">select_tables</h1>
+        <h1 class="article-title">mysql-storage-engine</h1>
     
     <div class="article-meta">
         
@@ -578,12 +578,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-08-28 15:51:25'>2023-08-28 13:53</time>
+            Created At : <time class="date" title='Updated At: 2023-08-29 13:47:59'>2023-08-29 09:37</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:623</span>
+        <span>Count:332</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -602,7 +602,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2"><span class="toc-text">mysql多表查询</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2%E5%88%86%E7%B1%BB"><span class="toc-text">多表查询分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E5%88%86%E7%B1%BB"><span class="toc-text">连接分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E8%BF%9E%E6%8E%A5%EF%BC%9A"><span class="toc-text">内连接：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%96%E8%BF%9E%E6%8E%A5%EF%BC%9A"><span class="toc-text">外连接：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E8%BF%9E%E6%8E%A5%EF%BC%9A"><span class="toc-text">自连接：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="toc-text">子查询</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="toc-text">联合查询</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql-%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-text">mysql-存储引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-text">mysql体系结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-text">存储引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#InnoDB"><span class="toc-text">InnoDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MyISAM"><span class="toc-text">MyISAM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Memory"><span class="toc-text">Memory</span></a></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -618,50 +618,32 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="mysql多表查询"><a href="#mysql多表查询" class="headerlink" title="mysql多表查询"></a>mysql多表查询</h1><p>概述：各个表结构之间存在着多种联系，基本上分为三种：</p>
-<p>一对多（多对一）：</p>
-<p>​	在多的一方建立外键，指向一的一方的主键（比如部门和员工的关系）</p>
-<p>多对多</p>
-<p>​	建立第三种中间表，中间表至少包含两个外键，分别关联两方主键（例如学生和课程的关系）</p>
-<p>一对一</p>
-<p>​	多用于单边拆分，将一张表的基础字段放在一张表中，其他详细字段放在另一张表中，以提升操作效率</p>
-<p>​	在任意一方加入外键，关联另外一方的主键，并且设置外键为唯一的（unique）</p>
-<h2 id="多表查询分类"><a href="#多表查询分类" class="headerlink" title="多表查询分类"></a>多表查询分类</h2><h3 id="连接分类"><a href="#连接分类" class="headerlink" title="连接分类"></a>连接分类</h3><h4 id="内连接："><a href="#内连接：" class="headerlink" title="内连接："></a>内连接：</h4><p>相当于查询A，B交集部分数据</p>
-<p>隐式内连接</p>
-<pre><code class="mysql">select .. from .. where 条件...;
-</code></pre>
-<p>显式内连接</p>
-<pre><code>select .. from 表1 [inner] join 表2 on 连接条件;
-</code></pre>
-<h4 id="外连接："><a href="#外连接：" class="headerlink" title="外连接："></a>外连接：</h4><p>左外连接：查询左表所有数据，以及两张表交集部分数据</p>
-<pre><code class="mysql">select .. from 表1 left [outer] join 表2 on .. #相当于查询表1（左表）的所有数据 包含 表1和表2交集部分的数据
-</code></pre>
-<p>右外连接：查询右表所有数据，以及两张表交集部分数据</p>
-<pre><code class="mysql">select .. from .. right [outer] join .. on .. #相当于查询表2（右表）的所有数据 包含 表1和表2交集部分的数据
-</code></pre>
-<h4 id="自连接："><a href="#自连接：" class="headerlink" title="自连接："></a>自连接：</h4><p>当前表与自身的连接查询，自连接必须使用表别名。</p>
-<p>自连接可以用内连接和外连接。</p>
-<pre><code class="mysql">select .. from 表a 别名a join 表a 别名b on 条件 ..;
-</code></pre>
-<h3 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h3><p>sql语句中嵌套select语句，称为嵌套查询，又称子查询</p>
-<pre><code class="mysql">select * from t1 where column1=(select column1 from t2);
-</code></pre>
-<p>子查询外部的语句可以是insert&#x2F;update&#x2F;delete&#x2F;select中的任意一个</p>
-<p>根据子查询结果不同，分为：</p>
-<p>标量子查询（子查询结果为单个值）</p>
-<p>列子查询（子查询结果为一列）</p>
-<p>​	常用操作符：in，not in，any，some ，all</p>
-<p>行子查询（子查询结果为一行）</p>
-<p>​	常用操作符：&#x3D;，&lt;&gt;，in，not in</p>
-<p>表子查询（子查询结果为多行多列）</p>
-<p>​	常用操作符：in</p>
-<p>根据子查询位置，分为：where之后，from之后，select之后</p>
-<h2 id="联合查询"><a href="#联合查询" class="headerlink" title="联合查询"></a>联合查询</h2><p>对于union查询，就是把多次查询的结果合并起来，形成一个新的查询结果集</p>
-<p>union all会把所有的查询直接联合，union会去重</p>
-<pre><code class="mysql">select .. from ..
-union [all]
-select .. from ..;
-</code></pre>
+        <h1 id="mysql-存储引擎"><a href="#mysql-存储引擎" class="headerlink" title="mysql-存储引擎"></a>mysql-存储引擎</h1><h2 id="mysql体系结构"><a href="#mysql体系结构" class="headerlink" title="mysql体系结构"></a>mysql体系结构</h2><p><img src="/..%5Cimages%5Cimage-mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png" alt="image-20230829093941681"></p>
+<p>连接层，服务层，引擎层，存储层</p>
+<h2 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h2><p>存储引擎是存储数据，建立索引，更新&#x2F;查询数据等技术的实现方式。存储引擎是基于表的，而不是基于库的，所以存储引擎可以被称为表类型。</p>
+<h3 id="InnoDB"><a href="#InnoDB" class="headerlink" title="InnoDB"></a>InnoDB</h3><p>兼顾高可靠性和高性能的通用存储引擎，在mysql5.5之后，InnoDB是默认的存储引擎。</p>
+<p>特点：</p>
+<p>DML操作遵循ACID模型，支持<strong>事务</strong>；</p>
+<p><strong>行级锁</strong>，提高并发访问性能；</p>
+<p>支持外键foreign key约束，保证数据的完整性和正确性。</p>
+<p>文件：</p>
+<p>xxx.ibd：xxx代表的是表名，innoDB引擎的每张表都会对应这样一个表空间文件，存储该表的表结构（frm，sdi），索引和数据。</p>
+<p>参数：innodb_file_per_table</p>
+<h3 id="MyISAM"><a href="#MyISAM" class="headerlink" title="MyISAM"></a>MyISAM</h3><p>mysql早期的默认存储引擎。</p>
+<p>特点：</p>
+<p>不支持事务，不支持外键</p>
+<p>支持表锁，不支持行锁</p>
+<p>访问速度快</p>
+<p>文件：</p>
+<p>xxx.sdi：存储表结构信息</p>
+<p>xxx.MYD：存储数据<br>xxx.MYI：存储索引</p>
+<h3 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h3><p>表数据存储在内存中，由于受到硬件问题，或断电问题的影响，只能将这些表作为临时表或缓存使用</p>
+<p>特点：</p>
+<p>内存存放</p>
+<p>hash索引（默认）</p>
+<p>文件：</p>
+<p>xxx.sdi：存储表结构信息</p>
+<p><img src="/..%5Cimages%5Cimage-%E5%BC%95%E6%93%8E%E7%89%B9%E7%82%B9.png" alt="image-20230829100341545"></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>

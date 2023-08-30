@@ -4,6 +4,56 @@
   
     
     <entry>
+      <title>mysql-index</title>
+      <link href="/2023/08/29/mysql-index/"/>
+      <url>/2023/08/29/mysql-index/</url>
+      
+        <content type="html"><![CDATA[<h1 id="mysql-索引"><a href="#mysql-索引" class="headerlink" title="mysql-索引"></a>mysql-索引</h1><p>索引是帮助mysql<strong>高效获取数据的数据结构（有序）</strong>。这些数据结构以某种方式引用（指向）数据，这也就可以在这些数据结构上是实现高级查找算法，这种数据结构就是索引。</p><p>优势：提高数据检索的效率，降低数据的io成本，降低数据库排序的成本，降低cpu的消耗。</p><p>缺点：索引列需要空间，降低了更新表的速度。</p><h2 id="索引结构"><a href="#索引结构" class="headerlink" title="索引结构"></a>索引结构</h2><h3 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h3><p>相对于B树区别：所有的数据都会出现在叶子节点，叶子节点形成一个单向链表</p><p>Mysql索引结构对经典B+树进行了优化，在原B+树基础上，增加了一个指向相邻叶子节点的链表指针，形成了带有顺序指针的B+树，提高区间访问的效率。</p><h3 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h3><p>用的链地址法处理冲突</p><p>特点：</p><p>​hash索引只能用于对等比较（&#x3D;，in），不支持范围查询（between，&gt;，&lt;，…）</p><p>​无法利用索引完成排序操作</p><p>​查询效率高，通常只需要以此检索就可以了，效率通常高于b+树</p><p>mysql中，支持hash索引的是Memory引擎，而InnoDB中具有自适应hash功能，hash索引是存储引擎根据B+树索引在指定条件下自动构建的。</p><h2 id="索引分类"><a href="#索引分类" class="headerlink" title="索引分类"></a>索引分类</h2><table><thead><tr><th>分类</th><th>含义</th><th>特点</th><th>关键字</th></tr></thead><tbody><tr><td>主键索引</td><td>针对表中主键创建的索引</td><td>默认自动创建，只能有一个</td><td>primary</td></tr><tr><td>唯一索引</td><td>避免同一个表中某数据列中的值重复</td><td>可以有多个</td><td>unique</td></tr><tr><td>常规索引</td><td>快速定位特定数据</td><td>可以有多个</td><td></td></tr><tr><td>全文索引</td><td>全文索引查找的是文本中的关键词，而不是比较索引中的值</td><td>可以有多个</td><td>fulltext</td></tr></tbody></table><p>在innodb中，根据索引的存储形式，又可以分为以下两种：</p><table><thead><tr><th>分类</th><th>含义</th><th>特点</th></tr></thead><tbody><tr><td>聚集索引（clustered index）</td><td>将数据存储和索引放到了一块，索引结构中的叶子节点保持了行数据</td><td>必须有，而且只有一个</td></tr><tr><td>二级索引（secondary index）</td><td>将数据和索引分开存储，索引结构的叶子节点关联的是对应的主键</td><td>可以存在多个</td></tr></tbody></table><p>聚集索引选取规则：</p><p>​以下顺序：主键索引-&gt;唯一索引-&gt;自动生成一个rowid作为隐藏的聚集索引。</p><h2 id="索引语法"><a href="#索引语法" class="headerlink" title="索引语法"></a>索引语法</h2><p>创建索引</p><pre><code class="mysql">create [unique|fulltext] index index_name on table_name (index_col_name,...);</code></pre><p>查看索引</p><pre><code class="mysql">show index from table_name;</code></pre><p>删除索引</p><pre><code class="mysql">drop index index_name on table_name;</code></pre><h2 id="sql性能分析"><a href="#sql性能分析" class="headerlink" title="sql性能分析"></a>sql性能分析</h2><p>sql执行频率：mysql客户端连接成功后，通过show [session|global] status命令可以提供服务器状态信息。可以查看当前数据库的insert，update，delete，select的访问频次</p><pre><code class="mysql">show global status like &#39;Com____&#39;;</code></pre><p>慢查询日志</p><p>profile详情</p><pre><code class="mysql"># 查看每一条sql的耗时基本情况show profiles;# 查看指定query_id的sql语句每个阶段的耗时情况show profile for query query_id;# 查看指定query_id的sql语句cpu的使用情况show profile cpu for query_id;</code></pre><p>explain执行计划</p><p>explain或者desc命令获取mysql如果执行select语句的信息，包括在select语句执行过程中表如果连接和连接的顺序</p><pre><code class="mysql"># 直接在select语句之前加上关键字explain/descexplain ...</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>mysql-storage-engine</title>
+      <link href="/2023/08/29/mysql-engine/"/>
+      <url>/2023/08/29/mysql-engine/</url>
+      
+        <content type="html"><![CDATA[<h1 id="mysql-存储引擎"><a href="#mysql-存储引擎" class="headerlink" title="mysql-存储引擎"></a>mysql-存储引擎</h1><h2 id="mysql体系结构"><a href="#mysql体系结构" class="headerlink" title="mysql体系结构"></a>mysql体系结构</h2><p><img src="/..%5Cimages%5Cimage-mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png" alt="image-20230829093941681"></p><p>连接层，服务层，引擎层，存储层</p><h2 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h2><p>存储引擎是存储数据，建立索引，更新&#x2F;查询数据等技术的实现方式。存储引擎是基于表的，而不是基于库的，所以存储引擎可以被称为表类型。</p><h3 id="InnoDB"><a href="#InnoDB" class="headerlink" title="InnoDB"></a>InnoDB</h3><p>兼顾高可靠性和高性能的通用存储引擎，在mysql5.5之后，InnoDB是默认的存储引擎。</p><p>特点：</p><p>DML操作遵循ACID模型，支持<strong>事务</strong>；</p><p><strong>行级锁</strong>，提高并发访问性能；</p><p>支持外键foreign key约束，保证数据的完整性和正确性。</p><p>文件：</p><p>xxx.ibd：xxx代表的是表名，innoDB引擎的每张表都会对应这样一个表空间文件，存储该表的表结构（frm，sdi），索引和数据。</p><p>参数：innodb_file_per_table</p><h3 id="MyISAM"><a href="#MyISAM" class="headerlink" title="MyISAM"></a>MyISAM</h3><p>mysql早期的默认存储引擎。</p><p>特点：</p><p>不支持事务，不支持外键</p><p>支持表锁，不支持行锁</p><p>访问速度快</p><p>文件：</p><p>xxx.sdi：存储表结构信息</p><p>xxx.MYD：存储数据<br>xxx.MYI：存储索引</p><h3 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h3><p>表数据存储在内存中，由于受到硬件问题，或断电问题的影响，只能将这些表作为临时表或缓存使用</p><p>特点：</p><p>内存存放</p><p>hash索引（默认）</p><p>文件：</p><p>xxx.sdi：存储表结构信息</p><p><img src="/..%5Cimages%5Cimage-%E5%BC%95%E6%93%8E%E7%89%B9%E7%82%B9.png" alt="image-20230829100341545"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>transaction_sql</title>
       <link href="/2023/08/28/transaction-sql/"/>
       <url>/2023/08/28/transaction-sql/</url>

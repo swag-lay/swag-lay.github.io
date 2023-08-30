@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>select_tables | mhen</title>
+  <title>mysql-index | mhen</title>
   <meta name="keywords" content=" mysql ">
-  <meta name="description" content="select_tables | mhen">
+  <meta name="description" content="mysql-index | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="mysql-索引索引是帮助mysql高效获取数据的数据结构（有序）。这些数据结构以某种方式引用（指向）数据，这也就可以在这些数据结构上是实现高级查找算法，这种数据结构就是索引。 优势：提高数据检索的效率，降低数据的io成本，降低数据库排序的成本，降低cpu的消耗。 缺点：索引列需要空间，降低了更新表的速度。 索引结构B+树相对于B树区别：所有的数据都会出现在叶子节点，叶子节点形成一个单向链表 My">
 <meta property="og:type" content="article">
@@ -551,9 +551,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-select-tables" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-mysql-index" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">select_tables</h1>
+        <h1 class="article-title">mysql-index</h1>
     
     <div class="article-meta">
         
@@ -578,12 +578,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-08-28 15:51:25'>2023-08-28 13:53</time>
+            Created At : <time class="date" title='Updated At: 2023-08-30 16:26:20'>2023-08-29 10:36</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:623</span>
+        <span>Count:826</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -602,7 +602,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2"><span class="toc-text">mysql多表查询</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2%E5%88%86%E7%B1%BB"><span class="toc-text">多表查询分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E5%88%86%E7%B1%BB"><span class="toc-text">连接分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%86%85%E8%BF%9E%E6%8E%A5%EF%BC%9A"><span class="toc-text">内连接：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A4%96%E8%BF%9E%E6%8E%A5%EF%BC%9A"><span class="toc-text">外连接：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E8%BF%9E%E6%8E%A5%EF%BC%9A"><span class="toc-text">自连接：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%90%E6%9F%A5%E8%AF%A2"><span class="toc-text">子查询</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%81%94%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="toc-text">联合查询</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql-%E7%B4%A2%E5%BC%95"><span class="toc-text">mysql-索引</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E7%BB%93%E6%9E%84"><span class="toc-text">索引结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#B-%E6%A0%91"><span class="toc-text">B+树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash"><span class="toc-text">Hash</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E5%88%86%E7%B1%BB"><span class="toc-text">索引分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E8%AF%AD%E6%B3%95"><span class="toc-text">索引语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sql%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="toc-text">sql性能分析</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -618,49 +618,100 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="mysql多表查询"><a href="#mysql多表查询" class="headerlink" title="mysql多表查询"></a>mysql多表查询</h1><p>概述：各个表结构之间存在着多种联系，基本上分为三种：</p>
-<p>一对多（多对一）：</p>
-<p>​	在多的一方建立外键，指向一的一方的主键（比如部门和员工的关系）</p>
-<p>多对多</p>
-<p>​	建立第三种中间表，中间表至少包含两个外键，分别关联两方主键（例如学生和课程的关系）</p>
-<p>一对一</p>
-<p>​	多用于单边拆分，将一张表的基础字段放在一张表中，其他详细字段放在另一张表中，以提升操作效率</p>
-<p>​	在任意一方加入外键，关联另外一方的主键，并且设置外键为唯一的（unique）</p>
-<h2 id="多表查询分类"><a href="#多表查询分类" class="headerlink" title="多表查询分类"></a>多表查询分类</h2><h3 id="连接分类"><a href="#连接分类" class="headerlink" title="连接分类"></a>连接分类</h3><h4 id="内连接："><a href="#内连接：" class="headerlink" title="内连接："></a>内连接：</h4><p>相当于查询A，B交集部分数据</p>
-<p>隐式内连接</p>
-<pre><code class="mysql">select .. from .. where 条件...;
+        <h1 id="mysql-索引"><a href="#mysql-索引" class="headerlink" title="mysql-索引"></a>mysql-索引</h1><p>索引是帮助mysql<strong>高效获取数据的数据结构（有序）</strong>。这些数据结构以某种方式引用（指向）数据，这也就可以在这些数据结构上是实现高级查找算法，这种数据结构就是索引。</p>
+<p>优势：提高数据检索的效率，降低数据的io成本，降低数据库排序的成本，降低cpu的消耗。</p>
+<p>缺点：索引列需要空间，降低了更新表的速度。</p>
+<h2 id="索引结构"><a href="#索引结构" class="headerlink" title="索引结构"></a>索引结构</h2><h3 id="B-树"><a href="#B-树" class="headerlink" title="B+树"></a>B+树</h3><p>相对于B树区别：所有的数据都会出现在叶子节点，叶子节点形成一个单向链表</p>
+<p>Mysql索引结构对经典B+树进行了优化，在原B+树基础上，增加了一个指向相邻叶子节点的链表指针，形成了带有顺序指针的B+树，提高区间访问的效率。</p>
+<h3 id="Hash"><a href="#Hash" class="headerlink" title="Hash"></a>Hash</h3><p>用的链地址法处理冲突</p>
+<p>特点：</p>
+<p>​	hash索引只能用于对等比较（&#x3D;，in），不支持范围查询（between，&gt;，&lt;，…）</p>
+<p>​	无法利用索引完成排序操作</p>
+<p>​	查询效率高，通常只需要以此检索就可以了，效率通常高于b+树</p>
+<p>mysql中，支持hash索引的是Memory引擎，而InnoDB中具有自适应hash功能，hash索引是存储引擎根据B+树索引在指定条件下自动构建的。</p>
+<h2 id="索引分类"><a href="#索引分类" class="headerlink" title="索引分类"></a>索引分类</h2><table>
+<thead>
+<tr>
+<th>分类</th>
+<th>含义</th>
+<th>特点</th>
+<th>关键字</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主键索引</td>
+<td>针对表中主键创建的索引</td>
+<td>默认自动创建，只能有一个</td>
+<td>primary</td>
+</tr>
+<tr>
+<td>唯一索引</td>
+<td>避免同一个表中某数据列中的值重复</td>
+<td>可以有多个</td>
+<td>unique</td>
+</tr>
+<tr>
+<td>常规索引</td>
+<td>快速定位特定数据</td>
+<td>可以有多个</td>
+<td></td>
+</tr>
+<tr>
+<td>全文索引</td>
+<td>全文索引查找的是文本中的关键词，而不是比较索引中的值</td>
+<td>可以有多个</td>
+<td>fulltext</td>
+</tr>
+</tbody></table>
+<p>在innodb中，根据索引的存储形式，又可以分为以下两种：</p>
+<table>
+<thead>
+<tr>
+<th>分类</th>
+<th>含义</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>聚集索引（clustered index）</td>
+<td>将数据存储和索引放到了一块，索引结构中的叶子节点保持了行数据</td>
+<td>必须有，而且只有一个</td>
+</tr>
+<tr>
+<td>二级索引（secondary index）</td>
+<td>将数据和索引分开存储，索引结构的叶子节点关联的是对应的主键</td>
+<td>可以存在多个</td>
+</tr>
+</tbody></table>
+<p>聚集索引选取规则：</p>
+<p>​	以下顺序：主键索引-&gt;唯一索引-&gt;自动生成一个rowid作为隐藏的聚集索引。</p>
+<h2 id="索引语法"><a href="#索引语法" class="headerlink" title="索引语法"></a>索引语法</h2><p>创建索引</p>
+<pre><code class="mysql">create [unique|fulltext] index index_name on table_name (index_col_name,...);
 </code></pre>
-<p>显式内连接</p>
-<pre><code>select .. from 表1 [inner] join 表2 on 连接条件;
+<p>查看索引</p>
+<pre><code class="mysql">show index from table_name;
 </code></pre>
-<h4 id="外连接："><a href="#外连接：" class="headerlink" title="外连接："></a>外连接：</h4><p>左外连接：查询左表所有数据，以及两张表交集部分数据</p>
-<pre><code class="mysql">select .. from 表1 left [outer] join 表2 on .. #相当于查询表1（左表）的所有数据 包含 表1和表2交集部分的数据
+<p>删除索引</p>
+<pre><code class="mysql">drop index index_name on table_name;
 </code></pre>
-<p>右外连接：查询右表所有数据，以及两张表交集部分数据</p>
-<pre><code class="mysql">select .. from .. right [outer] join .. on .. #相当于查询表2（右表）的所有数据 包含 表1和表2交集部分的数据
+<h2 id="sql性能分析"><a href="#sql性能分析" class="headerlink" title="sql性能分析"></a>sql性能分析</h2><p>sql执行频率：mysql客户端连接成功后，通过show [session|global] status命令可以提供服务器状态信息。可以查看当前数据库的insert，update，delete，select的访问频次</p>
+<pre><code class="mysql">show global status like &#39;Com____&#39;;
 </code></pre>
-<h4 id="自连接："><a href="#自连接：" class="headerlink" title="自连接："></a>自连接：</h4><p>当前表与自身的连接查询，自连接必须使用表别名。</p>
-<p>自连接可以用内连接和外连接。</p>
-<pre><code class="mysql">select .. from 表a 别名a join 表a 别名b on 条件 ..;
+<p>慢查询日志</p>
+<p>profile详情</p>
+<pre><code class="mysql"># 查看每一条sql的耗时基本情况
+show profiles;
+
+# 查看指定query_id的sql语句每个阶段的耗时情况
+show profile for query query_id;
+
+# 查看指定query_id的sql语句cpu的使用情况
+show profile cpu for query_id;
 </code></pre>
-<h3 id="子查询"><a href="#子查询" class="headerlink" title="子查询"></a>子查询</h3><p>sql语句中嵌套select语句，称为嵌套查询，又称子查询</p>
-<pre><code class="mysql">select * from t1 where column1=(select column1 from t2);
-</code></pre>
-<p>子查询外部的语句可以是insert&#x2F;update&#x2F;delete&#x2F;select中的任意一个</p>
-<p>根据子查询结果不同，分为：</p>
-<p>标量子查询（子查询结果为单个值）</p>
-<p>列子查询（子查询结果为一列）</p>
-<p>​	常用操作符：in，not in，any，some ，all</p>
-<p>行子查询（子查询结果为一行）</p>
-<p>​	常用操作符：&#x3D;，&lt;&gt;，in，not in</p>
-<p>表子查询（子查询结果为多行多列）</p>
-<p>​	常用操作符：in</p>
-<p>根据子查询位置，分为：where之后，from之后，select之后</p>
-<h2 id="联合查询"><a href="#联合查询" class="headerlink" title="联合查询"></a>联合查询</h2><p>对于union查询，就是把多次查询的结果合并起来，形成一个新的查询结果集</p>
-<p>union all会把所有的查询直接联合，union会去重</p>
-<pre><code class="mysql">select .. from ..
-union [all]
-select .. from ..;
+<p>explain执行计划</p>
+<p>explain或者desc命令获取mysql如果执行select语句的信息，包括在select语句执行过程中表如果连接和连接的顺序</p>
+<pre><code class="mysql"># 直接在select语句之前加上关键字explain/desc
+explain ...
 </code></pre>
 
       
