@@ -3,8 +3,9 @@ title: mysql-ddl
 date: 2023-08-25 16:41:00
 categories:
 - 数据库
-tags:
 - Mysql
+tags:
+
 ---
 
 # mysql数据库基本操作-ddl

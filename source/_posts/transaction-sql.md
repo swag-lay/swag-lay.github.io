@@ -3,8 +3,9 @@ title: transaction_sql
 date: 2023-08-28 17:00:31
 categories:
 - 数据库
-tags:
 - mysql
+tags:
+
 ---
 
 # 事务

@@ -3,8 +3,9 @@ title: select_tables
 date: 2023-08-28 13:53:25
 categories:
 - 数据库
-tags:
 - mysql
+tags:
+
 ---
 
 # mysql多表查询
