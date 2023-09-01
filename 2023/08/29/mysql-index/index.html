@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>mysql-index | mhen</title>
-  <meta name="keywords" content=" mysql ">
+  <meta name="keywords" content="">
   <meta name="description" content="mysql-index | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="mysql-索引索引是帮助mysql高效获取数据的数据结构（有序）。这些数据结构以某种方式引用（指向）数据，这也就可以在这些数据结构上是实现高级查找算法，这种数据结构就是索引。 优势：提高数据检索的效率，降低数据的io成本，降低数据库排序的成本，降低cpu的消耗。 缺点：索引列需要空间，降低了更新表的速度。 索引结构B+树相对于B树区别：所有的数据都会出现在叶子节点，叶子节点形成一个单向链表 My">
@@ -14,9 +14,8 @@
 <meta property="og:description" content="mysql-索引索引是帮助mysql高效获取数据的数据结构（有序）。这些数据结构以某种方式引用（指向）数据，这也就可以在这些数据结构上是实现高级查找算法，这种数据结构就是索引。 优势：提高数据检索的效率，降低数据的io成本，降低数据库排序的成本，降低cpu的消耗。 缺点：索引列需要空间，降低了更新表的速度。 索引结构B+树相对于B树区别：所有的数据都会出现在叶子节点，叶子节点形成一个单向链表 My">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2023-08-29T02:36:41.000Z">
-<meta property="article:modified_time" content="2023-08-30T08:26:20.698Z">
+<meta property="article:modified_time" content="2023-09-01T01:32:01.205Z">
 <meta property="article:author" content="mhen">
-<meta property="article:tag" content="mysql">
 <meta name="twitter:card" content="summary">
 
 
@@ -91,7 +90,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(18)</small>
+                <small>(20)</small>
             
         </div>
     </li>
@@ -170,11 +169,40 @@
             
                 <li>
                     <div data-rel="数据库">
+                        <i class="fold iconfont icon-right"></i>
                         
                         数据库
-                        <small>(10)</small>
+                        <small>(12)</small>
                         
                     </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="数据库<--->mysql">
+                                        
+                                        mysql
+                                        
+                                            <small>(10
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="数据库<--->Mysql">
+                                        
+                                        Mysql
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
                     
                 </li>
             
@@ -259,6 +287,14 @@
             
         
     
+        
+            
+        
+    
+        
+            
+        
+    
 </ul>
 <div class="left-bottom">
     <div class="menus">
@@ -272,8 +308,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="18">
-<input type="hidden" id="yelog_site_word_count" value="7.2k">
+<input type="hidden" id="yelog_site_posts_number" value="20">
+<input type="hidden" id="yelog_site_word_count" value="8.9k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -356,10 +392,6 @@
                 <i class="iconfont icon-tag"></i><a>mysql</a>
             </li>
         
-            <li class="article-tag-list-item">
-                <i class="iconfont icon-tag"></i><a>Mysql</a>
-            </li>
-        
     </div>
 
 </div>
@@ -372,36 +404,54 @@
     <nav id="title-list-nav">
         
         
-        <a  class="All 数据库 "
+        <a  class="All 数据库 mysql "
+           href="/2023/09/01/sql-view/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_view">sql_view</span>
+            <span class="post-date" title="2023-09-01 12:59:44">2023/09/01</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/01/sql-optimize/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_optimize">sql_optimize</span>
+            <span class="post-date" title="2023-09-01 09:30:42">2023/09/01</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
            href="/2023/08/29/mysql-index/"
-           data-tag="mysql"
+           data-tag=""
            data-author="" >
             <span class="post-title" title="mysql-index">mysql-index</span>
             <span class="post-date" title="2023-08-29 10:36:41">2023/08/29</span>
         </a>
         
         
-        <a  class="All 数据库 "
+        <a  class="All 数据库 mysql "
            href="/2023/08/29/mysql-engine/"
-           data-tag="mysql"
+           data-tag=""
            data-author="" >
             <span class="post-title" title="mysql-storage-engine">mysql-storage-engine</span>
             <span class="post-date" title="2023-08-29 09:37:33">2023/08/29</span>
         </a>
         
         
-        <a  class="All 数据库 "
+        <a  class="All 数据库 mysql "
            href="/2023/08/28/transaction-sql/"
-           data-tag="mysql"
+           data-tag=""
            data-author="" >
             <span class="post-title" title="transaction_sql">transaction_sql</span>
             <span class="post-date" title="2023-08-28 17:00:31">2023/08/28</span>
         </a>
         
         
-        <a  class="All 数据库 "
+        <a  class="All 数据库 mysql "
            href="/2023/08/28/select-tables/"
-           data-tag="mysql"
+           data-tag=""
            data-author="" >
             <span class="post-title" title="select_tables">select_tables</span>
             <span class="post-date" title="2023-08-28 13:53:25">2023/08/28</span>
@@ -417,45 +467,45 @@
         </a>
         
         
-        <a  class="All 数据库 "
+        <a  class="All 数据库 mysql "
            href="/2023/08/28/mysql-funs/"
-           data-tag="mysql"
+           data-tag=""
            data-author="" >
             <span class="post-title" title="mysql-funs">mysql-funs</span>
             <span class="post-date" title="2023-08-28 09:19:42">2023/08/28</span>
         </a>
         
         
-        <a  class="All 数据库 "
+        <a  class="All 数据库 mysql "
            href="/2023/08/25/mysql-dcl/"
-           data-tag="mysql"
+           data-tag=""
            data-author="" >
             <span class="post-title" title="mysql-dcl">mysql-dcl</span>
             <span class="post-date" title="2023-08-25 18:32:55">2023/08/25</span>
         </a>
         
         
-        <a  class="All 数据库 "
+        <a  class="All 数据库 mysql "
            href="/2023/08/25/mysql-dql/"
-           data-tag="mysql"
+           data-tag=""
            data-author="" >
             <span class="post-title" title="mysql-dql">mysql-dql</span>
             <span class="post-date" title="2023-08-25 18:32:47">2023/08/25</span>
         </a>
         
         
-        <a  class="All 数据库 "
+        <a  class="All 数据库 mysql "
            href="/2023/08/25/mysql-dml/"
-           data-tag="mysql"
+           data-tag=""
            data-author="" >
             <span class="post-title" title="mysql-dml">mysql-dml</span>
             <span class="post-date" title="2023-08-25 18:14:33">2023/08/25</span>
         </a>
         
         
-        <a  class="All 数据库 "
+        <a  class="All 数据库 Mysql "
            href="/2023/08/25/mysql-ddl/"
-           data-tag="Mysql"
+           data-tag=""
            data-author="" >
             <span class="post-title" title="mysql-ddl">mysql-ddl</span>
             <span class="post-date" title="2023-08-25 16:41:00">2023/08/25</span>
@@ -563,27 +613,22 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="数据库">数据库</a>
+            <a  data-rel="数据库">数据库</a> > 
+            
+            <a  data-rel="数据库&lt;---&gt;mysql">mysql</a>
             
         </span>
         
         
-        <span class="tag">
-            <i class="iconfont icon-tag"></i>
-            
-            <a class="color1">mysql</a>
-            
-        </span>
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2023-09-01 09:32:01'>2023-08-29 10:36</time>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-08-30 16:26:20'>2023-08-29 10:36</time>
-        
-    </div>
-    <div class="article-meta">
-        
-        <span>Count:826</span>
+        <span>Count:1.6k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -602,7 +647,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql-%E7%B4%A2%E5%BC%95"><span class="toc-text">mysql-索引</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E7%BB%93%E6%9E%84"><span class="toc-text">索引结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#B-%E6%A0%91"><span class="toc-text">B+树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash"><span class="toc-text">Hash</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E5%88%86%E7%B1%BB"><span class="toc-text">索引分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E8%AF%AD%E6%B3%95"><span class="toc-text">索引语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sql%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="toc-text">sql性能分析</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql-%E7%B4%A2%E5%BC%95"><span class="toc-text">mysql-索引</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E7%BB%93%E6%9E%84"><span class="toc-text">索引结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#B-%E6%A0%91"><span class="toc-text">B+树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Hash"><span class="toc-text">Hash</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E5%88%86%E7%B1%BB"><span class="toc-text">索引分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E8%AF%AD%E6%B3%95"><span class="toc-text">索引语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sql%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="toc-text">sql性能分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E4%BD%BF%E7%94%A8%E8%A7%84%E5%88%99"><span class="toc-text">索引使用规则</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -687,6 +732,11 @@
 <p>​	以下顺序：主键索引-&gt;唯一索引-&gt;自动生成一个rowid作为隐藏的聚集索引。</p>
 <h2 id="索引语法"><a href="#索引语法" class="headerlink" title="索引语法"></a>索引语法</h2><p>创建索引</p>
 <pre><code class="mysql">create [unique|fulltext] index index_name on table_name (index_col_name,...);
+# 前缀索引 n表示前多少个位置
+cerate index idx_xxxx on table_name(column(n))
+可以根据索引的选择性来决定，而选择性是指不重复的索引值（基数）和数据表的记录总数的比值，索引选择性越高则查询效率越高，唯一索引的选择性是1，这是最好的索引选择性，性能也是最好的
+select count(distinct xxx)/count(*) from xxx;
+select count(distinct substring(xxx,1,n))/count(*) from xxx;
 </code></pre>
 <p>查看索引</p>
 <pre><code class="mysql">show index from table_name;
@@ -713,6 +763,36 @@ show profile cpu for query_id;
 <pre><code class="mysql"># 直接在select语句之前加上关键字explain/desc
 explain ...
 </code></pre>
+<h2 id="索引使用规则"><a href="#索引使用规则" class="headerlink" title="索引使用规则"></a>索引使用规则</h2><p>1.争对数据量较大，查询比较频繁的表建立索引</p>
+<p>2.针对常作为where，order by，group by操作的字段建立索引</p>
+<p>3.尽量选择区分度高的列作为索引，尽量建立唯一索引，区分度越高，使用索引的效率越高</p>
+<p>4.如果是字符串类型，字符较长，针对字段的特点，建立前缀索引</p>
+<p>5.尽量使用联合索引，减少单列索引，查询时，联合索引很多时候可以覆盖索引，节省存储空间，避免回表，提高效率</p>
+<p>6.控制索引的数量</p>
+<p>7.如果索引列不能存储null值，请在创建表时使用not null约束它，当优化器知道每列是否包含null值时，它可以更好的确定哪个索引更有效的用于查询</p>
+<p>最左前缀法制</p>
+<p>如果索引了多列（联合索引），要遵守最左前缀法制，查询从索引的最左列开始（放的位置没有影响，只要存在），并且不跳过索引中的列。</p>
+<p>如果跳过某一列，索引将部分失效（<strong>后面的字段索引失效</strong>）</p>
+<p>范围查询</p>
+<p>联合索引中，出现范围查询（&gt;，&lt;），范围查询右侧的列索引失效</p>
+<p>索引列运算</p>
+<p>不要在索引列上进行运算操作，索引将失效</p>
+<p>字符串不加引号</p>
+<p>字符串类型字段使用时，不加引号，索引将失效</p>
+<p>模糊查询</p>
+<p>如果仅仅是尾部模糊匹配，索引不会失效，如果是头部模糊匹配，索引失效。如果把查询列换为索引与之对应的列，头部模糊匹配就会解决，也就是使用覆盖索引</p>
+<p>or连接的条件</p>
+<p>用or分隔开的条件，如果or前的条件中的列有索引，而后面的列中没有索引，那么涉及的索引都不会被用到</p>
+<p>数据分布影响</p>
+<p>如果mysql评估使用索引比全表更慢，则不会使用索引</p>
+<p>sql提示</p>
+<p>use index：使用某索引</p>
+<p>ignore index：忽略某索引</p>
+<p>force index：强制执行某索引</p>
+<p>覆盖索引</p>
+<p>尽量使用覆盖索引（查询使用了索引，并且需要返回的列，在该索引中已经全部能够找到），减少select *</p>
+<p>using index condition：查找使用了索引，但是需要回表查询数据</p>
+<p>using where，using index：查找使用了索引，但是需要的数据都在索引列中能够找到，所以不需要回表查询数据</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>

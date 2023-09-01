@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>mysql-dml | mhen</title>
+  <title>sql_optimize | mhen</title>
   <meta name="keywords" content="">
-  <meta name="description" content="mysql-dml | mhen">
+  <meta name="description" content="sql_optimize | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="mysql-索引索引是帮助mysql高效获取数据的数据结构（有序）。这些数据结构以某种方式引用（指向）数据，这也就可以在这些数据结构上是实现高级查找算法，这种数据结构就是索引。 优势：提高数据检索的效率，降低数据的io成本，降低数据库排序的成本，降低cpu的消耗。 缺点：索引列需要空间，降低了更新表的速度。 索引结构B+树相对于B树区别：所有的数据都会出现在叶子节点，叶子节点形成一个单向链表 My">
 <meta property="og:type" content="article">
@@ -601,9 +601,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-mysql-dml" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-sql-optimize" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">mysql-dml</h1>
+        <h1 class="article-title">sql_optimize</h1>
     
     <div class="article-meta">
         
@@ -623,12 +623,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-09-01 09:31:39'>2023-08-25 18:14</time>
+            Created At : <time class="date" title='Updated At: 2023-09-01 12:58:54'>2023-09-01 09:30</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:165</span>
+        <span>Count:514</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -647,7 +647,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-dml"><span class="toc-text">mysql数据库基本操作-dml</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E6%95%B0%E6%8D%AE"><span class="toc-text">添加数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE"><span class="toc-text">修改数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="toc-text">删除数据</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL%E4%BC%98%E5%8C%96"><span class="toc-text">SQL优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="toc-text">插入数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E9%94%AE%E4%BC%98%E5%8C%96"><span class="toc-text">主键优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#order-by%E4%BC%98%E5%8C%96"><span class="toc-text">order by优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#group-by%E4%BC%98%E5%8C%96"><span class="toc-text">group by优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#limit%E4%BC%98%E5%8C%96"><span class="toc-text">limit优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#count%E4%BC%98%E5%8C%96"><span class="toc-text">count优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#update%E4%BC%98%E5%8C%96"><span class="toc-text">update优化</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -663,27 +663,30 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="mysql数据库基本操作-dml"><a href="#mysql数据库基本操作-dml" class="headerlink" title="mysql数据库基本操作-dml"></a>mysql数据库基本操作-dml</h1><p>dml：data manipulation language，用来对数据库中表的数据记录进行增删改操作</p>
-<h2 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h2><pre><code class="mysql">给指定字段添加数据
-insert into 表名 (字段名1,字段名2) values (值1,值2,...);
-
-给全部字段添加数据
-insert into 表名 values ();
-
-批量添加数据
-insert into 表名 () values (),();
-insert into 表名 values (),();
+        <h1 id="SQL优化"><a href="#SQL优化" class="headerlink" title="SQL优化"></a>SQL优化</h1><h2 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h2><p>insert插入：批量插入，手动提交事务，主键顺序插入</p>
+<p>大批量插入数据：使用load指令进行插入</p>
+<pre><code class="mysql">mysql --local-infile -u root -p
+set global local_infile=1;
+load data local infile &#39;/root/sql1.log&#39; into table ... fields terminated by &#39;,&#39; lines terminated by &#39;\n&#39;;
 </code></pre>
-<p>注意：</p>
-<ul>
-<li>字段顺序和值的顺序一一对应</li>
-<li>字符串和日期型数据应该包含在引号中</li>
-<li>数据大小在字段的规定范围中</li>
-</ul>
-<h2 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h2><pre><code class="mysql">update 表名 set 字段名1=值1 [where 条件];
-</code></pre>
-<h2 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h2><pre><code class="mysql">delete from 表名 [where 条件];
-</code></pre>
+<h2 id="主键优化"><a href="#主键优化" class="headerlink" title="主键优化"></a>主键优化</h2><p>主键乱序插入会发生页分裂 页合并</p>
+<p>主键设计原则</p>
+<p>​	尽量降低主键的长度</p>
+<p>​	插入数据时，尽量选择顺序插入，选择使用auto_increment自增主键</p>
+<p>​	尽量不要使用uuid做主键或者是其他自然主键，如身份证号</p>
+<p>​	业务操作时，避免对主键的修改</p>
+<h2 id="order-by优化"><a href="#order-by优化" class="headerlink" title="order by优化"></a>order by优化</h2><p>using filesort：通过表的索引或全表扫描，读取满足条件的数据行，然后在排序缓冲区sort buffer中完成排序操作，所有不是通过索引直接返回排序结果的排序都是filesort排序</p>
+<p>using index：通过有序索引顺序扫描直接返回有序数据，这种情况称为using index，不需要额外排序，操作效率高。</p>
+<p>根据排序字段建立合适的索引，多字段排序时，也遵循最左前缀法制</p>
+<p>尽量使用覆盖索引</p>
+<p>多字段排序，一个升序一个降序，此时需要注意联合索引在创建时的规则（asc&#x2F;desc）</p>
+<p>如果不可避免的出现filesort，大数据量排序时，可以适当增大排序缓冲区大小sort_buffer_size（默认256k）</p>
+<h2 id="group-by优化"><a href="#group-by优化" class="headerlink" title="group by优化"></a>group by优化</h2><p>通过索引</p>
+<p>最左前缀法制</p>
+<h2 id="limit优化"><a href="#limit优化" class="headerlink" title="limit优化"></a>limit优化</h2><p>优化思路：一般分页查询时，通过创建覆盖索引能够比较好地提高性能，可以通过覆盖索引加子查询形式进行优化</p>
+<h2 id="count优化"><a href="#count优化" class="headerlink" title="count优化"></a>count优化</h2><p>优化思路：自己计数</p>
+<p>效率排序：count(*)约等于count(1)&gt;count(主键id)&gt;count(字段)</p>
+<h2 id="update优化"><a href="#update优化" class="headerlink" title="update优化"></a>update优化</h2><p>InnoDB的行锁是针对索引加的锁，不是针对记录加的锁，并且该索引不能失效，否则就会从行锁升级为表锁</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
