@@ -4,6 +4,69 @@
   
     
     <entry>
+      <title>sql_lock</title>
+      <link href="/2023/09/05/sql-lock/"/>
+      <url>/2023/09/05/sql-lock/</url>
+      
+        <content type="html"><![CDATA[<h1 id="锁"><a href="#锁" class="headerlink" title="锁"></a>锁</h1><h2 id="全局锁"><a href="#全局锁" class="headerlink" title="全局锁"></a>全局锁</h2><p>对整个数据库加锁，之后整个实例处于只读状态，后续的dml的写语句，ddl语句，已经更新操作的事务提交语句都将被阻塞。</p><p>典型的使用场景是做全库的逻辑备份，对所有的表进行锁定，从而获取一致性视图，保证数据的完整性。</p><p>特点：</p><p>​如果在主库上备份，那么在备份期间都不能执行更新，业务基本上就得停摆。</p><p>​如果从库上备份，那么在备份期间从库不能执行主库同步过来的二进制日志，会导致主从延迟。</p><p>在innodb引擎中，我们可以在备份时加上参数–single-transaction参数来完成不加锁的一致性数据备份</p><pre><code class="sql">mysqldump --single-transaction -uroot -p123456 itcase&gt;itcast.sql</code></pre><h2 id="表级锁"><a href="#表级锁" class="headerlink" title="表级锁"></a>表级锁</h2><p>每次操作锁住整张表。锁定粒度大，发生锁冲突的概率最高，并发度最低。应用在mylsam，innodb，bdb等存储引擎中。</p><p>对于表级锁，主要分为以下三类：</p><p>表锁</p><p>​表共享读锁（read lock）</p><p>​表独占写锁 （write lock）</p><p>元数据锁（mdl）</p><p>系统 自动控制，无需显式使用。主要作用是维护表元数据的数据一致性，在表上有活动事务的时候，不可以对元数据进行写入操作。为了避免dml和ddl冲突，保证读写的正确性。</p><p>在mysql5.5中引入了mdl，对一张表进行增删改查的时候，加mdl读锁（共享）；当对表结构进行变更操作的时候，加mdl写锁（排他）。</p><p>意向锁</p><p>​意向共享锁（IS）：由语句select…lock in share mode添加</p><p>​意向排他锁（IX）：由insert，update，delete，select…for update添加</p><h2 id="行级锁"><a href="#行级锁" class="headerlink" title="行级锁"></a>行级锁</h2><p>每次操作锁住对应的行数据。锁定粒度最小，发生锁冲突的概率最低，并发度最高。应用在innodb中。</p><p>innodb的数据是基于索引组织的，行锁是通过对索引上的索引项加锁来实现的，而不是对记录加的锁。对于行级锁，主要分为以下三类：</p><p>​行锁：锁住单行记录的锁，防止其他事务对此行进行update和delete，在rc，rr隔离级别下都支持</p><p>​共享锁（S），排他锁（X）</p><p>​间隙锁：锁定索引记录间隙（不包含改记录），确保索引记录间隙不变，防止其他事务在这个间隙进行insert，产生幻读。在rr隔离级别下都支持。vb  </p><p>​临键锁：行锁和间隙锁组合，同时锁住数据，并锁住数据前面的间隙gap，在rr隔离级别下支持。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+          <category> mysql </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>sql_trigger</title>
+      <link href="/2023/09/05/sql-trigger/"/>
+      <url>/2023/09/05/sql-trigger/</url>
+      
+        <content type="html"><![CDATA[<h1 id="触发器"><a href="#触发器" class="headerlink" title="触发器"></a>触发器</h1><p>触发器是与表相关的数据库对象，指在insert&#x2F;update&#x2F;delete之前或之后，触发并执行触发器中定义的sql语句集合。触发器的这种特性可以协助应用在数据库端确保数据的完整性，日志记录，数据校验等操作。</p><p>使用别名old和new来引用触发器中发生变化的记录内容，这与其他的数据库是相似的。现在触发器还只支持行级触发，不支持语句级触发。</p><p>创建</p><pre><code class="sql">create trigger ...before/after insert/update/deleteon ... for each row begin     trigger_stmt;end;</code></pre><p>查看</p><pre><code class="sql">show triggers;</code></pre><p>删除</p><pre><code class="sql">drop trigger [schema_name]trigger_name;--如果没有指定schema_name，默认为当前数据库</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+          <category> mysql </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>sql_stored</title>
+      <link href="/2023/09/04/sql-stored/"/>
+      <url>/2023/09/04/sql-stored/</url>
+      
+        <content type="html"><![CDATA[<h1 id="存储过程"><a href="#存储过程" class="headerlink" title="存储过程"></a>存储过程</h1><p>介绍：事先经过编译并存储在数据库中的一段sql语句的集合，调用存储过程并可以简化应用开发任意的许多工作。减少数据在数据库和应用数据库之间的传输。</p><p>数据库sql语言层面的代码封装和重用。</p><p>特点：</p><p>封装，复用。</p><p>可以接收参数，也可以返回数据</p><p>减少网络交互，效率提升</p><p>创建：</p><pre><code class="sql">create procedure 存储过程名称([参数列表])begin    --sql语句end;</code></pre><p>调用：</p><pre><code class="sql">call 名称([参数]);</code></pre><p>查看</p><pre><code class="sql">select * from information_schema.routines_schema=&#39;xxx&#39;;--查询指定数据库的存储过程及状态信息show create procedure 存储过程名称;--查询某个存储过程的定义</code></pre><p>删除</p><pre><code class="sql">drop procedure [if exists] 存储过程名称;</code></pre><p>注意：在命令行中，执行创建存储过程的sql时，需要通过关键字delimiter指定sql语句的结束符</p><h2 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h2><p>系统变量是mysql服务器提供的，不是用户定义的，属于服务器层面。分为全局变量（global），会话变量（session）。</p><p>查看系统变量</p><pre><code class="sql">show [session|global] variables; --查看所有系统变量show [session|global] variables like &#39;...&#39;; --可以通过like模糊匹配方式查找变量select @@[session|global]系统变量名; --查看指定变量的值</code></pre><p>设置系统变量</p><pre><code class="mysql">set [session|global] 系统变量名=值;set @@[session|global]系统变量名=值;</code></pre><p>注意：如果没有指定session&#x2F;global，默认是session，会话变量</p><p>mysql服务重新启动之后，所设置的全局参数会失效，要想不失效，可以在&#x2F;etc&#x2F;my.cnf中配置</p><p>用户定义变量</p><p>是用户根据需要自己定义的变量，用户变量不用提取声明，在用的时候直接用“@变量名”使用就可以。其作用域为当前连接。</p><p>赋值：</p><pre><code class="sql">set @var_name=expr [,@var_name=expr]...;set @var_name:=expr [,@var_name:=expr]...;select @var_name:=expr [,@var_name:=expr]...;select 字段名 into @var_name from 表名;</code></pre><p>使用</p><pre><code class="sql">select @var_name;</code></pre><p>注意：用户定义的变量无需对其进行声明或初始化，只不过获取到的值为null。</p><p>局部变量</p><p>是根据需要定义的在局部生效的变量，访问之前，需要declare声明。可用作存储过程内的局部变量和输入参数，局部变量的范围是在其内声明的begin…end块。</p><p>声明</p><pre><code class="sql">declare 变量名 变量类型[...];</code></pre><p>赋值</p><pre><code class="sql">set 变量=值;set 变量名:=值;select 字段名 into 变量名 from 表名...;</code></pre><p>if</p><pre><code class="mysql">if ... then     ...elseif ... then     ...else     ...end if;</code></pre><p>参数</p><table><thead><tr><th>类型</th><th>含义</th><th>备注</th></tr></thead><tbody><tr><td>in</td><td>该类参数作为输入，也就是需要调用时传入值</td><td>默认</td></tr><tr><td>out</td><td>该类参数作为输出，作为返回值</td><td></td></tr><tr><td>inout</td><td>即可以作为输入参数，也可以作为输出参数</td><td></td></tr></tbody></table><pre><code class="sql">create procedure 存储过程名称([in/out/inout 参数名 参数类型])beginend;</code></pre><p>case</p><pre><code class="mysql">case ...    when ... then ...    ..    [else ...]end case;</code></pre><pre><code class="mysql">case     when ... then ...    ..    [else ...]end case;</code></pre><p>while</p><pre><code class="mysql">while ... do    ...end while;</code></pre><p>repeat</p><pre><code class="mysql">repeat     ..    until ...end repeat;</code></pre><p>loop</p><pre><code class="mysql">[begin_lable:] loop    ...end loop[end_label];leave label;--退出指定标记的循环体iterate label;--直接进入下一次循环</code></pre><p>游标：</p><p>用来存储查询结果集的数据类型，在存储过程和函数中可以使用游标对结果集进行循环的处理。</p><p>声明</p><pre><code class="mysql">declare ... cursor for ...;</code></pre><p>打开</p><pre><code class="mysql">open ...;</code></pre><p>获取游标记录</p><pre><code class="mysql">fetch ... into 变量[,变量];</code></pre><p>关闭游标</p><pre><code class="mysql">close ...;</code></pre><p>条件处理程序</p><pre><code class="sql">declare handler_action  handler for condition_value[,condition_value]... statement;handler_action    continue:继续执行当前程序    exit:终止执行当前程序condition_value    sqlstate sqlstate_value:状态码，如02000    sqlwarning:所有以01开头的sqlstate代码的简写    not found:所有以02开头的sqlstate代码的简写    sqlexception:所有没有被sqlwarning或not found捕获的sqlstate代码的简写</code></pre><h1 id="存储函数"><a href="#存储函数" class="headerlink" title="存储函数"></a>存储函数</h1><p>存储函数是有返回值的存储过程，存储函数的参数只能是in类型</p><pre><code class="mysql">create function 存储函数名称([参数列表])returns type [characteristic ...]begin    ...    return ...;end;</code></pre><p>characteristic说明</p><p>​deterministic：相同的输入参数总数产生相同的结果</p><p>​no sql：不包含sql语句</p><p>​reads sql data：包含读取数据的语句，但不包含写入数据的语句</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+          <category> mysql </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>sql_view</title>
       <link href="/2023/09/01/sql-view/"/>
       <url>/2023/09/01/sql-view/</url>
@@ -71,7 +134,7 @@
       <link href="/2023/08/29/mysql-engine/"/>
       <url>/2023/08/29/mysql-engine/</url>
       
-        <content type="html"><![CDATA[<h1 id="mysql-存储引擎"><a href="#mysql-存储引擎" class="headerlink" title="mysql-存储引擎"></a>mysql-存储引擎</h1><h2 id="mysql体系结构"><a href="#mysql体系结构" class="headerlink" title="mysql体系结构"></a>mysql体系结构</h2><p><img src="/..%5Cimages%5Cimage-mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png" alt="image-20230829093941681"></p><p>连接层，服务层，引擎层，存储层</p><h2 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h2><p>存储引擎是存储数据，建立索引，更新&#x2F;查询数据等技术的实现方式。存储引擎是基于表的，而不是基于库的，所以存储引擎可以被称为表类型。</p><h3 id="InnoDB"><a href="#InnoDB" class="headerlink" title="InnoDB"></a>InnoDB</h3><p>兼顾高可靠性和高性能的通用存储引擎，在mysql5.5之后，InnoDB是默认的存储引擎。</p><p>特点：</p><p>DML操作遵循ACID模型，支持<strong>事务</strong>；</p><p><strong>行级锁</strong>，提高并发访问性能；</p><p>支持外键foreign key约束，保证数据的完整性和正确性。</p><p>文件：</p><p>xxx.ibd：xxx代表的是表名，innoDB引擎的每张表都会对应这样一个表空间文件，存储该表的表结构（frm，sdi），索引和数据。</p><p>参数：innodb_file_per_table</p><h3 id="MyISAM"><a href="#MyISAM" class="headerlink" title="MyISAM"></a>MyISAM</h3><p>mysql早期的默认存储引擎。</p><p>特点：</p><p>不支持事务，不支持外键</p><p>支持表锁，不支持行锁</p><p>访问速度快</p><p>文件：</p><p>xxx.sdi：存储表结构信息</p><p>xxx.MYD：存储数据<br>xxx.MYI：存储索引</p><h3 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h3><p>表数据存储在内存中，由于受到硬件问题，或断电问题的影响，只能将这些表作为临时表或缓存使用</p><p>特点：</p><p>内存存放</p><p>hash索引（默认）</p><p>文件：</p><p>xxx.sdi：存储表结构信息</p><p><img src="/..%5Cimages%5Cimage-%E5%BC%95%E6%93%8E%E7%89%B9%E7%82%B9.png" alt="image-20230829100341545"></p>]]></content>
+        <content type="html"><![CDATA[<h1 id="mysql-存储引擎"><a href="#mysql-存储引擎" class="headerlink" title="mysql-存储引擎"></a>mysql-存储引擎</h1><h2 id="mysql体系结构"><a href="#mysql体系结构" class="headerlink" title="mysql体系结构"></a>mysql体系结构</h2><p><img src="/..%5Cimages%5Cimage-mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png" alt="image-20230829093941681"></p><p>连接层，服务层，引擎层，存储层</p><h2 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h2><p>存储引擎是存储数据，建立索引，更新&#x2F;查询数据等技术的实现方式。存储引擎是基于表的，而不是基于库的，所以存储引擎可以被称为表类型。</p><h3 id="InnoDB"><a href="#InnoDB" class="headerlink" title="InnoDB"></a>InnoDB</h3><p>兼顾高可靠性和高性能的通用存储引擎，在mysql5.5之后，InnoDB是默认的存储引擎。</p><p>特点：</p><p>DML操作遵循ACID模型，支持<strong>事务</strong>；</p><p><strong>行级锁</strong>，提高并发访问性能；</p><p>支持外键foreign key约束，保证数据的完整性和正确性。</p><p>文件：</p><p>xxx.ibd：xxx代表的是表名，innoDB引擎的每张表都会对应这样一个表空间文件，存储该表的表结构（frm，sdi），索引和数据。</p><p>参数：innodb_file_per_table</p><h3 id="MyISM"><a href="#MyISM" class="headerlink" title="MyISM"></a>MyISM</h3><p>mysql早期的默认存储引擎。</p><p>特点：</p><p>不支持事务，不支持外键</p><p>支持表锁，不支持行锁</p><p>访问速度快</p><p>文件：</p><p>xxx.sdi：存储表结构信息</p><p>xxx.MYD：存储数据<br>xxx.MYI：存储索引</p><h3 id="Memory"><a href="#Memory" class="headerlink" title="Memory"></a>Memory</h3><p>表数据存储在内存中，由于受到硬件问题，或断电问题的影响，只能将这些表作为临时表或缓存使用</p><p>特点：</p><p>内存存放</p><p>hash索引（默认）</p><p>文件：</p><p>xxx.sdi：存储表结构信息</p><p><img src="/..%5Cimages%5Cimage-%E5%BC%95%E6%93%8E%E7%89%B9%E7%82%B9.png" alt="image-20230829100341545"></p><h2 id="InnoDB-1"><a href="#InnoDB-1" class="headerlink" title="InnoDB"></a>InnoDB</h2><p><img src="/..%5Cimages%5Cinnodb.png" alt="image-20230906102612387"></p><p>表空间</p><p>ibd文件，一个mysql实例可以对应多个表空间，用于存储记录，索引等数据</p><p>段</p><p>分为数据段，索引段，回滚段，innodb是索引组织表，数据段就是b+树的叶子节点，索引段为b+树的非叶子节点。</p><p>区</p><p>表空间的单元结构，每个区的大小为1M。默认情况下，innodb存储引擎页大小为16k，即一个区中一共有64个连续的页。</p><p>页</p><p>innodb存储引擎磁盘管理的最小单元，每个页的大小默认为16kb，为了保证页的连续性，innodb存储引擎每次从磁盘申请4-5个区。</p><p>行</p><p>innodb存储引擎数据是按行进行存放的。</p><h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p><img src="/..%5Cimages%5Cinnodb%E6%9E%B6%E6%9E%84.png" alt="image-20230906103426248"></p><h3 id="后台线程"><a href="#后台线程" class="headerlink" title="后台线程"></a>后台线程</h3><p><img src="F:\swag-lay.github.io\source\images\innodb后台线程.png" alt="image-20230906133932389"></p><p>master thread</p><p>核心后台线程，负责调度其他线程，还负责将缓冲池中的数据异步刷新到磁盘中，保持数据的一致性，还包括脏页的刷新，合并插入缓存，undo页的回收</p><p>io thread</p><p>大量使用了aio来处理io请求，这样可以极大地提高数据库的性能，而io thread负责这些io的回调</p><table><thead><tr><th>线程类型</th><th>默认个数</th><th>职责</th></tr></thead><tbody><tr><td>read thread</td><td>4</td><td>负责读操作</td></tr><tr><td>write thread</td><td>4</td><td>负责写操作</td></tr><tr><td>log thread</td><td>1</td><td>负责将日志缓冲区刷新到磁盘</td></tr><tr><td>insert buffer thread</td><td>1</td><td>负责将写缓冲区内容刷新到磁盘</td></tr></tbody></table><p>purge thread</p><p>主要用于回收事务已经提交了的undo log，在事务提交之后，undo log可能不用了，就用它来回收。</p><p>page cleaner thread</p><p>协助master thread刷新脏页到磁盘的线程，他可以减轻master thread的工作压力，减少阻塞</p><h3 id="事务原理"><a href="#事务原理" class="headerlink" title="事务原理"></a>事务原理</h3><p>不可分割的工作单位，把所有的操作作为一个整体一起向系统提交或撤销操作请求，即这些操作要么同时成功，要么同时失败。</p><p>acid特性</p><p>原子性，一致性，持久性是由redo log，undo log决定的。</p><p>隔离性是由锁，mvcc决定的。</p><p>redo log：重做日志，记录的是事务提交时数据页的物理修改，是用来实现事务的持久性。改日志文件由两部分组成：重做日志缓冲（redo log buffer）以及重做日志文件（redo log file），前者是在内存中，后者在磁盘中。当事务提交之后会把所有修改信息都存到改日志文件中，用于在刷新脏页到磁盘，发生错误时，进行数据恢复使用。</p><p>undo log：回滚日志，用于记录数据被修改前的信息，作用包含两个：提供回滚和mvcc（多版本并发控制）</p><p>undo log和redo log记录物理日志不一样，它是逻辑日志。</p><p>undo log销毁：undo log在事务执行时产生，事务提交时，并不会立即删除undo log，因为这些日志可能还用于mvcc</p><p>undo log存储：undo log采用段的方式进行管理和记录，存放在前面介绍rollback segment回滚段中，内部包含1024个undo log segment</p><p>当insert的时候,产生的undo log日志只在回滚时需要,在事务提交后,可被立即删除.</p><p>而update,delete的时候,产生的undo log日志不仅在回滚时需要,在快照时也需要,不会立即被删除</p><p>undo log版本链:不同事务或相同事务对同一条记录进行修改,会导致该记录的undolog生成一条记录版本链表,链表的头部是最新的旧记录,链表尾部是最早的旧记录.</p><h3 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h3><h4 id="当前读"><a href="#当前读" class="headerlink" title="当前读"></a>当前读</h4><p>读取的是记录的最新版本，读取时还要保证其他并发事务不能修改当前记录，会对读取的记录进行加锁。对于我们日常的操作，如：select…lock in share mode(共享锁)，select…for update,update,insert,delete(排他锁)都是一种当前读</p><h4 id="快照读"><a href="#快照读" class="headerlink" title="快照读"></a>快照读</h4><p>简单的select（不加锁）就是快照读，快照读，读取的是记录数据的可见版本，有可能是历史数据，不加锁，是非阻塞读</p><p>read committed：每次select，都生成一个快照读</p><p>repeatable read：开启事务后第一个select语句才是快照读的地方</p><p>serializable：快照读会退化为当前读</p><h4 id="mvcc"><a href="#mvcc" class="headerlink" title="mvcc"></a>mvcc</h4><p>多版本并发控制.指维护一个数据的多个版本,使得读写操作没有冲突,快照读为mysql实现mvcc提供了一个非阻塞读功能.mvcc的具体实现,需要依赖于数据库记录中的三个隐式字段,undo log日志,readview.</p><p>三个隐式字段</p><table><thead><tr><th>隐藏字段</th><th>含义</th></tr></thead><tbody><tr><td>db_trx_id</td><td>最近修改事务id,记录插入这条记录或最后一次修改该记录的事务ID</td></tr><tr><td>db_roll_ptr</td><td>回滚指针,指向这条记录的上一个版本,用于配合undo log,指向上一个版本</td></tr><tr><td>db_row_id</td><td>隐藏主键,如果表结构没有指定主键,将会生成该隐藏字段</td></tr></tbody></table><p>readview</p><p>readview是快照读sql执行时mvcc提供数据的依据,记录并维护系统当前活跃的事务(未提交的)id.</p><p>readview中包含四个核心字段</p><table><thead><tr><th>字段</th><th>含义</th></tr></thead><tbody><tr><td>m_ids</td><td>当前活跃的事务id集合</td></tr><tr><td>min_trx_id</td><td>最小活跃事务id</td></tr><tr><td>max_trx_id</td><td>预分配事务id,当前最大事务id+1(因为事务id是自增的)</td></tr><tr><td>creator_trx_id</td><td>readview创建者的事务id</td></tr></tbody></table><p>不同的隔离级别,生成readview的时机不同</p><p>read committed:在事务中每一次执行快照时生成readview</p><p>repeatable read:仅在事务中第一次执行快照读时生成readview,后续复用readview</p>]]></content>
       
       
       <categories>
