@@ -3,7 +3,7 @@ title: mysql-ddl
 date: 2023-08-25 16:41:00
 categories:
 - 数据库
-- Mysql
+- mysql
 tags:
 
 ---
