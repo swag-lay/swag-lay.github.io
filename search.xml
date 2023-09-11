@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>hadoop_server</title>
+      <link href="/2023/09/07/hadoop-server/"/>
+      <url>/2023/09/07/hadoop-server/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Hadoop的部署"><a href="#Hadoop的部署" class="headerlink" title="Hadoop的部署"></a>Hadoop的部署</h1><p>大规模数据的存储，计算，传输</p><p>1.上传，配置软链接</p><p>2.修改配置文件</p><p>workers</p><p>hadoop-env.sh</p><p>core-site.xml</p><p>hdfs-site.xml</p><p>3.分发到node2，node3，配置环境变量</p><p>4.创建数据目录，并修改文件权限归属hadoop账户</p><p>5.启动。</p><p>namenode：master主角色，写edits</p><p>secondarynamenode：master的辅助，通过http从namenode拉去数据（edits和fsimage），然后合并完成后提供给namenode使用</p><h2 id="一键启停脚本"><a href="#一键启停脚本" class="headerlink" title="一键启停脚本"></a>一键启停脚本</h2><p>$HADOOP_HOME&#x2F;sbin&#x2F;start-dfs.sh，一键启动</p><p>原理：</p><p>在执行此脚本的机器上，启动SecondaryNameNode</p><p>读取core-site.xml内容（fs.defaultFS项），确认NameNode所在机器并启动</p><p>读取workers内容，确认DataNode所在机器，启动所有DataNode</p><p>$HADOOP_HOME&#x2F;sbin&#x2F;stop-dfs.sh，一键关闭</p><p>$HADOOP_HOME&#x2F;SBIN&#x2F;hadoop-daemon.sh 单独控制所在机器的进程的启停</p><pre><code class="sh">hadoop-daemon.sh (start|status|stop) (namenode|secondarynamenode|datanode)</code></pre><p>$HADOOP_HOME&#x2F;bin&#x2F;hdfs 单独控制所在机器的进程的启停</p><pre><code class="sh">hdfs --daemon (start|status|stop) (namenode|secondarynamenode|datanode)</code></pre><p>hadoop命令</p><p>老版本：hadoop fs [generic options]</p><p>新版本：hdfs dfs [generic options]</p><h1 id="HDFS存储原理"><a href="#HDFS存储原理" class="headerlink" title="HDFS存储原理"></a>HDFS存储原理</h1><p>分布式存储：每个节点存储数据的一部分</p><p>问题：文件大小不一样，不利于统一管理</p><p>解决：设定统一的管理单位block块</p><h2 id="数据写入流程"><a href="#数据写入流程" class="headerlink" title="数据写入流程"></a>数据写入流程</h2><p><img src="/..%5Cimages%5Cnamenode%E5%86%99%E5%85%A5%E6%B5%81%E7%A8%8B.png" alt="image-20230911190443515"></p><p>关键信息点：</p><p>​namenode不负责数据写入，只负责数据记录和权限审批</p><p>​客户端直接向一台datanode写数据，这个datanode一般是离客户端最近（网络距离）的那一个</p><p>​数据块副本的复制工作，由datanode之间自行完成（构建一个pipline，按顺序复制分发）</p><h2 id="数据读取流程"><a href="#数据读取流程" class="headerlink" title="数据读取流程"></a>数据读取流程</h2><p><img src="F:\swag-lay.github.io\source\images\namenode数据读取.png" alt="image-20230911190900682"></p><p>关键信息点：</p><p>​数据同样不通过namenode提供</p><p>​namenode提供的block列表，会基于网络距离计算尽量提供离客户端最近的</p><p>​这是因为1个block默认有3份，会尽量找离客户端最近的那一份让其读取</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 大数据开发 </category>
+          
+          <category> hadoop </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>sql_lock</title>
       <link href="/2023/09/05/sql-lock/"/>
       <url>/2023/09/05/sql-lock/</url>
@@ -313,7 +334,7 @@
           
           <category> 数据库 </category>
           
-          <category> Mysql </category>
+          <category> mysql </category>
           
       </categories>
       

@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>jvm-learn | mhen</title>
-  <meta name="keywords" content=" jvm ">
-  <meta name="description" content="jvm-learn | mhen">
+  <title>hadoop_server | mhen</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="hadoop_server | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="Hadoop的部署大规模数据的存储，计算，传输 1.上传，配置软链接 2.修改配置文件 workers hadoop-env.sh core-site.xml hdfs-site.xml 3.分发到node2，node3，配置环境变量 4.创建数据目录，并修改文件权限归属hadoop账户 5.启动。 namenode：master主角色，写edits secondarynamenode：maste">
 <meta property="og:type" content="article">
@@ -659,9 +659,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-jvm-learn" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-hadoop-server" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">jvm-learn</h1>
+        <h1 class="article-title">hadoop_server</h1>
     
     <div class="article-meta">
         
@@ -671,29 +671,22 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="java">java</a> > 
+            <a  data-rel="大数据开发">大数据开发</a> > 
             
-            <a  data-rel="java&lt;---&gt;jvm">jvm</a>
+            <a  data-rel="大数据开发&lt;---&gt;hadoop">hadoop</a>
             
         </span>
         
-        
-        <span class="tag">
-            <i class="iconfont icon-tag"></i>
-            
-            <a class="color4">jvm</a>
-            
-        </span>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-05-24 13:19:40'>2023-05-23 16:32</time>
+            Created At : <time class="date" title='Updated At: 2023-09-11 20:03:33'>2023-09-07 13:38</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:418</span>
+        <span>Count:483</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -712,7 +705,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E5%86%85%E5%AD%98%E5%8C%BA%E5%9F%9F"><span class="toc-text">Java内存区域</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E6%95%B0%E6%8D%AE%E5%8C%BA%E5%9F%9F"><span class="toc-text">运行数据区域</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM%E5%9B%9E%E6%94%B6"><span class="toc-text">JVM回收</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%9D%A2%E8%AF%95%E9%A2%98"><span class="toc-text">常见面试题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%AA%E5%B8%B8%E9%87%8F%E4%B8%BA%E5%BA%9F%E5%BC%83%E5%B8%B8%E9%87%8F"><span class="toc-text">如果判断一个常量为废弃常量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E5%88%A4%E6%96%AD%E4%B8%80%E4%B8%AA%E7%B1%BB%E6%98%AF%E6%97%A0%E7%94%A8%E7%9A%84%E7%B1%BB"><span class="toc-text">如果判断一个类是无用的类</span></a></li></ol></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Hadoop%E7%9A%84%E9%83%A8%E7%BD%B2"><span class="toc-text">Hadoop的部署</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E9%94%AE%E5%90%AF%E5%81%9C%E8%84%9A%E6%9C%AC"><span class="toc-text">一键启停脚本</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HDFS%E5%AD%98%E5%82%A8%E5%8E%9F%E7%90%86"><span class="toc-text">HDFS存储原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%86%99%E5%85%A5%E6%B5%81%E7%A8%8B"><span class="toc-text">数据写入流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96%E6%B5%81%E7%A8%8B"><span class="toc-text">数据读取流程</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -728,35 +721,46 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Java内存区域"><a href="#Java内存区域" class="headerlink" title="Java内存区域"></a>Java内存区域</h1><h2 id="运行数据区域"><a href="#运行数据区域" class="headerlink" title="运行数据区域"></a>运行数据区域</h2><p>JDK1.7</p>
-<p><img src="/../images/image-20230523163329596.png" alt="image-20230523163329596"></p>
-<p>JDK1.8</p>
-<p><img src="/../images%5Cimage-20230523163752233.png" alt="image-20230523163752233"></p>
-<h1 id="JVM回收"><a href="#JVM回收" class="headerlink" title="JVM回收"></a>JVM回收</h1><p>JDK1.7</p>
-<p><img src="/../images%5Cjdk1.7%E5%A0%86%E7%BB%93%E6%9E%84.png" alt="image-20230523163752233"></p>
-<ul>
-<li>新生代</li>
-<li>老生代</li>
-<li>永久代</li>
-</ul>
-<p>JDK1.8</p>
-<p><img src="/..%5Cimages%5Cimage-20230523164208008.png" alt="image-20230523164208008"></p>
-<ul>
-<li>新生代</li>
-<li>老生代</li>
-<li>元空间</li>
-</ul>
-<h3 id="常见面试题"><a href="#常见面试题" class="headerlink" title="常见面试题"></a>常见面试题</h3><h4 id="如果判断一个常量为废弃常量"><a href="#如果判断一个常量为废弃常量" class="headerlink" title="如果判断一个常量为废弃常量"></a>如果判断一个常量为废弃常量</h4><p>JDK1.7之前运行时常量池逻辑包含字符串常量池存放在方法区，此时hotspot对方法区的实现为永久代</p>
-<p>JDK1.7字符串常量池被从方法区拿到了堆中，这里没有提高运行时常量池，也就是说字符串常量池被单独拿到了堆，运行常量池剩下的东西还在方法区，也就是永久代</p>
-<p>JDK1.8 hotspot移除永久代用元空间代替，这个时候字符串常量池还在堆中，运行时常量池还在方法区，但方法区的实现从永生代变为了元空间。</p>
-<p>假设字符串常量池中存在字符“abc”，如果当前没有任何String对象引用该常量，就说明此常量是废弃常量，如果此时发生内存回收的话而且有必要的话，“abc”就会被清楚</p>
-<h4 id="如果判断一个类是无用的类"><a href="#如果判断一个类是无用的类" class="headerlink" title="如果判断一个类是无用的类"></a>如果判断一个类是无用的类</h4><p>满足三个条件</p>
-<ol>
-<li>该类所有的实例都已经被回收，也就是Java堆中不存在该类的任何实例</li>
-<li>加载该类的classLoader被回收</li>
-<li>该类对应的java.lang.Class对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法</li>
-</ol>
-<p>如果满足上述条件虚拟机可以对类进行回收，但并不是像对象一样不使用了就必然被回收</p>
+        <h1 id="Hadoop的部署"><a href="#Hadoop的部署" class="headerlink" title="Hadoop的部署"></a>Hadoop的部署</h1><p>大规模数据的存储，计算，传输</p>
+<p>1.上传，配置软链接</p>
+<p>2.修改配置文件</p>
+<p>workers</p>
+<p>hadoop-env.sh</p>
+<p>core-site.xml</p>
+<p>hdfs-site.xml</p>
+<p>3.分发到node2，node3，配置环境变量</p>
+<p>4.创建数据目录，并修改文件权限归属hadoop账户</p>
+<p>5.启动。</p>
+<p>namenode：master主角色，写edits</p>
+<p>secondarynamenode：master的辅助，通过http从namenode拉去数据（edits和fsimage），然后合并完成后提供给namenode使用</p>
+<h2 id="一键启停脚本"><a href="#一键启停脚本" class="headerlink" title="一键启停脚本"></a>一键启停脚本</h2><p>$HADOOP_HOME&#x2F;sbin&#x2F;start-dfs.sh，一键启动</p>
+<p>原理：</p>
+<p>在执行此脚本的机器上，启动SecondaryNameNode</p>
+<p>读取core-site.xml内容（fs.defaultFS项），确认NameNode所在机器并启动</p>
+<p>读取workers内容，确认DataNode所在机器，启动所有DataNode</p>
+<p>$HADOOP_HOME&#x2F;sbin&#x2F;stop-dfs.sh，一键关闭</p>
+<p>$HADOOP_HOME&#x2F;SBIN&#x2F;hadoop-daemon.sh 单独控制所在机器的进程的启停</p>
+<pre><code class="sh">hadoop-daemon.sh (start|status|stop) (namenode|secondarynamenode|datanode)
+</code></pre>
+<p>$HADOOP_HOME&#x2F;bin&#x2F;hdfs 单独控制所在机器的进程的启停</p>
+<pre><code class="sh">hdfs --daemon (start|status|stop) (namenode|secondarynamenode|datanode)
+</code></pre>
+<p>hadoop命令</p>
+<p>老版本：hadoop fs [generic options]</p>
+<p>新版本：hdfs dfs [generic options]</p>
+<h1 id="HDFS存储原理"><a href="#HDFS存储原理" class="headerlink" title="HDFS存储原理"></a>HDFS存储原理</h1><p>分布式存储：每个节点存储数据的一部分</p>
+<p>问题：文件大小不一样，不利于统一管理</p>
+<p>解决：设定统一的管理单位block块</p>
+<h2 id="数据写入流程"><a href="#数据写入流程" class="headerlink" title="数据写入流程"></a>数据写入流程</h2><p><img src="/..%5Cimages%5Cnamenode%E5%86%99%E5%85%A5%E6%B5%81%E7%A8%8B.png" alt="image-20230911190443515"></p>
+<p>关键信息点：</p>
+<p>​	namenode不负责数据写入，只负责数据记录和权限审批</p>
+<p>​	客户端直接向一台datanode写数据，这个datanode一般是离客户端最近（网络距离）的那一个</p>
+<p>​	数据块副本的复制工作，由datanode之间自行完成（构建一个pipline，按顺序复制分发）</p>
+<h2 id="数据读取流程"><a href="#数据读取流程" class="headerlink" title="数据读取流程"></a>数据读取流程</h2><p><img src="F:\swag-lay.github.io\source\images\namenode数据读取.png" alt="image-20230911190900682"></p>
+<p>关键信息点：</p>
+<p>​	数据同样不通过namenode提供</p>
+<p>​	namenode提供的block列表，会基于网络距离计算尽量提供离客户端最近的</p>
+<p>​	这是因为1个block默认有3份，会尽量找离客户端最近的那一份让其读取</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
