@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>hexo-use | mhen</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="hexo-use | mhen">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="golang学习go语言主要特性  自动垃圾回收 更丰富的内置类型 函数多返回值 错误处理 匿名函数和闭包 类型和接口 并发编程 反射 语言交互性  go基础 包声明 package，每个go应用程序都包含一个名为main的包  引入包 import  函数 func，main函数是每一个可执行程序必须包含的，一般是启动后第一个执行的，如果有init()函数会先执行该函数  变量  语句 &amp;amp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="golang">
+<meta property="og:url" content="http://example.com/2023/10/27/golang/index.html">
+<meta property="og:site_name" content="mhen">
+<meta property="og:description" content="golang学习go语言主要特性  自动垃圾回收 更丰富的内置类型 函数多返回值 错误处理 匿名函数和闭包 类型和接口 并发编程 反射 语言交互性  go基础 包声明 package，每个go应用程序都包含一个名为main的包  引入包 import  函数 func，main函数是每一个可执行程序必须包含的，一般是启动后第一个执行的，如果有init()函数会先执行该函数  变量  语句 &amp;amp">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-10-27T05:13:53.000Z">
+<meta property="article:modified_time" content="2023-10-31T07:41:32.717Z">
+<meta property="article:author" content="mhen">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>mhen</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="github"
+               href="https://github.com/"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="All">All
+            
+                <small>(29)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                <li>
+                    <div data-rel="工具">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        工具
+                        <small>(3)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="工具<--->git">
+                                        
+                                        git
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="工具<--->hexo">
+                                        
+                                        hexo
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="工具<--->idea">
+                                        <i class="fold iconfont icon-right"></i>
+                                        
+                                        idea
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                        <ul class="sub hide">
+                                            
+                                                <li>
+                                                    <div data-rel="工具<--->ideadebug">
+                                                        
+                                                        debug
+                                                        
+                                                            <small>(1)</small>
+                                                        
+                                                    </div>
+                                                </li>
+                                            
+                                        </ul>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="数据库">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        数据库
+                        <small>(15)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="数据库<--->mysql">
+                                        
+                                        mysql
+                                        
+                                            <small>(14
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="大数据开发">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        大数据开发
+                        <small>(5)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="大数据开发<--->hadoop">
+                                        
+                                        hadoop
+                                        
+                                            <small>(3
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="大数据开发<--->hive">
+                                        
+                                        hive
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="golang">
+                        
+                        golang
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="java">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        java
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="java<--->jvm">
+                                        
+                                        jvm
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="leetcode">
+                        
+                        leetcode
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="Mybatis">
+                        
+                        Mybatis
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="29">
+<input type="hidden" id="yelog_site_word_count" value="19.1k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        Links
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">All</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>动态规划</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>类加载</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>bug</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>construct</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>debug</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>git</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>idea</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>mysql</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <div id="local-search-result">
+
+    </div>
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="All golang "
+           href="/2023/10/27/golang/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="golang">golang</span>
+            <span class="post-date" title="2023-10-27 13:13:53">2023/10/27</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hive "
+           href="/2023/09/12/hive/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="hive">hive</span>
+            <span class="post-date" title="2023-09-12 15:18:18">2023/09/12</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hadoop "
+           href="/2023/09/12/yarn/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="yarn">yarn</span>
+            <span class="post-date" title="2023-09-12 09:47:14">2023/09/12</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hadoop "
+           href="/2023/09/12/mapreduce/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mapreduce">mapreduce</span>
+            <span class="post-date" title="2023-09-12 09:29:03">2023/09/12</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hadoop "
+           href="/2023/09/07/hadoop-server/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="hadoop_server">hadoop_server</span>
+            <span class="post-date" title="2023-09-07 13:38:52">2023/09/07</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/05/sql-lock/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_lock">sql_lock</span>
+            <span class="post-date" title="2023-09-05 14:35:13">2023/09/05</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/05/sql-trigger/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_trigger">sql_trigger</span>
+            <span class="post-date" title="2023-09-05 10:29:54">2023/09/05</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/04/sql-stored/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_stored">sql_stored</span>
+            <span class="post-date" title="2023-09-04 10:38:27">2023/09/04</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/01/sql-view/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_view">sql_view</span>
+            <span class="post-date" title="2023-09-01 12:59:44">2023/09/01</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/01/sql-optimize/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_optimize">sql_optimize</span>
+            <span class="post-date" title="2023-09-01 09:30:42">2023/09/01</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/29/mysql-index/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-index">mysql-index</span>
+            <span class="post-date" title="2023-08-29 10:36:41">2023/08/29</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/29/mysql-engine/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-storage-engine">mysql-storage-engine</span>
+            <span class="post-date" title="2023-08-29 09:37:33">2023/08/29</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/28/transaction-sql/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="transaction_sql">transaction_sql</span>
+            <span class="post-date" title="2023-08-28 17:00:31">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/28/select-tables/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="select_tables">select_tables</span>
+            <span class="post-date" title="2023-08-28 13:53:25">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 "
+           href="/2023/08/28/constraint/"
+           data-tag="mysql"
+           data-author="" >
+            <span class="post-title" title="constraint">constraint</span>
+            <span class="post-date" title="2023-08-28 12:25:25">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/28/mysql-funs/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-funs">mysql-funs</span>
+            <span class="post-date" title="2023-08-28 09:19:42">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/25/mysql-dcl/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-dcl">mysql-dcl</span>
+            <span class="post-date" title="2023-08-25 18:32:55">2023/08/25</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/25/mysql-dql/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-dql">mysql-dql</span>
+            <span class="post-date" title="2023-08-25 18:32:47">2023/08/25</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/25/mysql-dml/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-dml">mysql-dml</span>
+            <span class="post-date" title="2023-08-25 18:14:33">2023/08/25</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/25/mysql-ddl/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-ddl">mysql-ddl</span>
+            <span class="post-date" title="2023-08-25 16:41:00">2023/08/25</span>
+        </a>
+        
+        
+        <a  class="All leetcode "
+           href="/2023/06/12/constructTree/"
+           data-tag="construct"
+           data-author="" >
+            <span class="post-title" title="constructTree">constructTree</span>
+            <span class="post-date" title="2023-06-12 12:35:42">2023/06/12</span>
+        </a>
+        
+        
+        <a  class="All java jvm "
+           href="/2023/05/24/jvm-class-loading-process/"
+           data-tag="类加载"
+           data-author="" >
+            <span class="post-title" title="jvm-class-loading-process">jvm-class-loading-process</span>
+            <span class="post-date" title="2023-05-24 15:56:37">2023/05/24</span>
+        </a>
+        
+        
+        <a  class="All java jvm "
+           href="/2023/05/23/jvm-learn/"
+           data-tag="jvm"
+           data-author="" >
+            <span class="post-title" title="jvm-learn">jvm-learn</span>
+            <span class="post-date" title="2023-05-23 16:32:08">2023/05/23</span>
+        </a>
+        
+        
+        <a  class="All 工具 idea debug "
+           href="/2023/05/12/debug-skill/"
+           data-tag="debug,idea"
+           data-author="" >
+            <span class="post-title" title="debug-skill">debug-skill</span>
+            <span class="post-date" title="2023-05-12 12:35:32">2023/05/12</span>
+        </a>
+        
+        
+        <a  class="All 工具 git "
+           href="/2023/05/10/git-learning/"
+           data-tag="git"
+           data-author="" >
+            <span class="post-title" title="git-learning">git-learning</span>
+            <span class="post-date" title="2023-05-10 18:14:02">2023/05/10</span>
+        </a>
+        
+        
+        <a  class="All Mybatis "
+           href="/2023/05/10/MybatisMapperXML%E6%96%87%E4%BB%B6%E6%8A%A5%E9%94%99/"
+           data-tag="bug"
+           data-author="" >
+            <span class="post-title" title="Mybatis:MapperXML文件报错(Unable to resolve table &#39;limit&#39;)">Mybatis:MapperXML文件报错(Unable to resolve table &#39;limit&#39;)</span>
+            <span class="post-date" title="2023-05-10 14:33:43">2023/05/10</span>
+        </a>
+        
+        
+        <a  class="All leetcode "
+           href="/2023/05/10/leetcode-%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2/"
+           data-tag="动态规划"
+           data-author="" >
+            <span class="post-title" title="leetcode-最长回文子串">leetcode-最长回文子串</span>
+            <span class="post-date" title="2023-05-10 10:51:43">2023/05/10</span>
+        </a>
+        
+        
+        <a  class="All 工具 hexo "
+           href="/2023/05/09/hexo-use/"
+           data-tag="hexo"
+           data-author="" >
+            <span class="post-title" title="hexo-use">hexo-use</span>
+            <span class="post-date" title="2023-05-09 22:03:50">2023/05/09</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hive "
+           href="/2023/05/09/Hive-SQL%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="hexo-use">hexo-use</span>
+            <span class="post-date" title="2023-05-09 22:03:50">2023/05/09</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-Hive-SQL语法大全" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">hexo-use</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="大数据开发">大数据开发</a> > 
+            
+            <a  data-rel="大数据开发&lt;---&gt;hive">hive</a>
+            
+        </span>
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2023-09-13 15:52:28'>2023-05-09 22:03</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>Count:4.6k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Hive-SQL-%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8"><span class="toc-text">Hive SQL 语法大全</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E8%AF%AD%E6%B3%95%E6%8F%8F%E8%BF%B0%E8%AF%B4%E6%98%8E"><span class="toc-text">基于语法描述说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C"><span class="toc-text">数据库操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">创建数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">删除数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BF%AE%E6%94%B9LOCATION"><span class="toc-text">数据库修改LOCATION</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-text">选择数据库</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A1%A8%E6%93%8D%E4%BD%9C"><span class="toc-text">表操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-text">数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E5%BB%BA%E8%A1%A8"><span class="toc-text">基础建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%85%B6%E5%AE%83%E8%A1%A8%E7%9A%84%E7%BB%93%E6%9E%84%E5%BB%BA%E8%A1%A8"><span class="toc-text">基于其它表的结构建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C%E5%BB%BA%E8%A1%A8"><span class="toc-text">基于查询结果建表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E8%A1%A8"><span class="toc-text">删除表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E8%A1%A8"><span class="toc-text">修改表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%8C%BA%E6%93%8D%E4%BD%9C"><span class="toc-text">分区操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%A1%B6%E6%93%8D%E4%BD%9C"><span class="toc-text">分桶操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD"><span class="toc-text">数据加载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%87%BA"><span class="toc-text">数据导出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E6%9D%82%E7%B1%BB%E5%9E%8B"><span class="toc-text">复杂类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%9F%A5%E8%AF%A2%E7%9A%84%E8%AF%BE%E5%A0%82SQL%E8%AE%B0%E5%BD%95"><span class="toc-text">数据查询的课堂SQL记录</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%9F%A5%E8%AF%A2"><span class="toc-text">基本查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#RLIKE"><span class="toc-text">RLIKE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UNION%E8%81%94%E5%90%88"><span class="toc-text">UNION联合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Sampling%E9%87%87%E6%A0%B7"><span class="toc-text">Sampling采样</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E5%88%97"><span class="toc-text">虚拟列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%BD%E6%95%B0"><span class="toc-text">函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A4%BE%E4%BA%A4%E6%A1%88%E4%BE%8B%E6%93%8D%E4%BD%9CSQL"><span class="toc-text">社交案例操作SQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Hive%E5%88%97%E6%B3%A8%E9%87%8A%E3%80%81%E8%A1%A8%E6%B3%A8%E9%87%8A%E7%AD%89%E4%B9%B1%E7%A0%81%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">Hive列注释、表注释等乱码解决方案</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-6 i,
+    .toc-level-6 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Hive-SQL-语法大全"><a href="#Hive-SQL-语法大全" class="headerlink" title="Hive SQL 语法大全"></a>Hive SQL 语法大全</h1><h2 id="基于语法描述说明"><a href="#基于语法描述说明" class="headerlink" title="基于语法描述说明"></a>基于语法描述说明</h2><pre><code class="sql">CREATE DATABASE [IF NOT EXISTS] db_name [LOCATION] &#39;path&#39;;
+SELECT expr, ... FROM tbl ORDER BY col_name [ASC | DESC]
+(A | B | C)
+</code></pre>
+<p>如上语法，在语法描述中出现：</p>
+<ul>
+<li><p><code>[]</code>，表示可选，如上<code>[LOCATION] </code>表示可写、可不写</p>
+</li>
+<li><p><code>|</code>，表示或，如上<code>ASC | DESC</code>，表示二选一</p>
+</li>
+<li><p>…，表示序列，即未完结，如上<code>SELECT expr, ...</code> 表示在SELECT后可以跟多个<code>expr（查询表达式）</code>，以逗号隔开</p>
+</li>
+<li><p><code>()</code>，表示必填，如上(A | B | C)表示此处必填，填入内容在A、B、C中三选一</p>
+</li>
+</ul>
+<h2 id="数据库操作"><a href="#数据库操作" class="headerlink" title="数据库操作"></a>数据库操作</h2><h3 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h3><pre><code class="sql">CREATE DATABASE [IF NOT EXISTS] db_name [LOCATION &#39;path&#39;] [COMMENT database_comment];
+</code></pre>
+<ul>
+<li><p><code>IF NOT EXISTS</code>，如存在同名数据库<code>不执行任何操作</code>，否则<code>执行创建数据库</code>操作</p>
+</li>
+<li><p><code>[LOCATION]</code>，自定义数据库存储位置，<code>如不填写</code>，默认数据库在HDFS的路径为：<code>/user/hive/warehouse</code></p>
+</li>
+<li><p><code>[COMMENT database_comment]</code>，可选，数据库注释</p>
+</li>
+</ul>
+<h3 id="删除数据库"><a href="#删除数据库" class="headerlink" title="删除数据库"></a>删除数据库</h3><pre><code class="sql">DROP DATABASE [IF EXISTS] db_name [CASCADE];
+</code></pre>
+<ul>
+<li><code>[IF EXISTS]</code>，可选，如果存在此数据库执行删除，不存在不执行任何操作</li>
+<li><code>[CASCADE]</code>，可选，级联删除，即数据库内存在表，使用CASCADE可以强制删除数据库</li>
+</ul>
+<h3 id="数据库修改LOCATION"><a href="#数据库修改LOCATION" class="headerlink" title="数据库修改LOCATION"></a>数据库修改LOCATION</h3><pre><code class="sql">ALTER DATABASE database_name SET LOCATION hdfs_path;
+</code></pre>
+<p>&#x3D;&#x3D;不会在HDFS对数据库所在目录进行改名，只是修改location后，新创建的表在新的路径，旧的不变&#x3D;&#x3D;</p>
+<h3 id="选择数据库"><a href="#选择数据库" class="headerlink" title="选择数据库"></a>选择数据库</h3><pre><code class="sql">USE db_name;
+</code></pre>
+<ul>
+<li>选择数据库后，后续<code>SQL</code>操作基于当前选择的库执行</li>
+<li>如不使用use，默认在<code>default</code>库执行</li>
+</ul>
+<p><strong>若想切换回使用default库</strong></p>
+<pre><code class="sql">USE DEFAULT;
+</code></pre>
+<p><strong>查询当前USE的数据库</strong></p>
+<pre><code class="sql">SELECT current_database();
+</code></pre>
+<h2 id="表操作"><a href="#表操作" class="headerlink" title="表操作"></a>表操作</h2><h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><table>
+<thead>
+<tr>
+<th><strong>分类</strong></th>
+<th><strong>类型</strong></th>
+<th><strong>描述</strong></th>
+<th><strong>字面量示例</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>原始类型</td>
+<td>BOOLEAN</td>
+<td>true&#x2F;false</td>
+<td>TRUE</td>
+</tr>
+<tr>
+<td></td>
+<td>TINYINT</td>
+<td>1字节的有符号整数 -128~127</td>
+<td>1Y</td>
+</tr>
+<tr>
+<td></td>
+<td>SMALLINT</td>
+<td>2个字节的有符号整数，-32768~32767</td>
+<td>1S</td>
+</tr>
+<tr>
+<td></td>
+<td>INT</td>
+<td>4个字节的带符号整数</td>
+<td>1</td>
+</tr>
+<tr>
+<td></td>
+<td>BIGINT</td>
+<td>8字节带符号整数</td>
+<td>1L</td>
+</tr>
+<tr>
+<td></td>
+<td>FLOAT</td>
+<td>4字节单精度浮点数1.0</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>DOUBLE</td>
+<td>8字节双精度浮点数</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td></td>
+<td>DEICIMAL</td>
+<td>任意精度的带符号小数</td>
+<td>1.0</td>
+</tr>
+<tr>
+<td></td>
+<td>STRING</td>
+<td>字符串，变长</td>
+<td>“a”,’b’</td>
+</tr>
+<tr>
+<td></td>
+<td>VARCHAR</td>
+<td>变长字符串</td>
+<td>“a”,’b’</td>
+</tr>
+<tr>
+<td></td>
+<td>CHAR</td>
+<td>固定长度字符串</td>
+<td>“a”,’b’</td>
+</tr>
+<tr>
+<td></td>
+<td>BINARY</td>
+<td>字节数组</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>TIMESTAMP</td>
+<td>时间戳，毫秒值精度</td>
+<td>122327493795</td>
+</tr>
+<tr>
+<td></td>
+<td>DATE</td>
+<td>日期</td>
+<td>‘2016-03-29’</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>时间频率间隔</td>
+<td></td>
+</tr>
+<tr>
+<td>复杂类型</td>
+<td>ARRAY</td>
+<td>有序的的同类型的集合</td>
+<td>array(1,2)</td>
+</tr>
+<tr>
+<td></td>
+<td>MAP</td>
+<td>key-value,key必须为原始类型，value可以任意类型</td>
+<td>map(‘a’,1,’b’,2)</td>
+</tr>
+<tr>
+<td></td>
+<td>STRUCT</td>
+<td>字段集合,类型可以不同</td>
+<td>struct(‘1’,1,1.0), named_stract(‘col1’,’1’,’col2’,1,’clo3’,1.0)</td>
+</tr>
+<tr>
+<td></td>
+<td>UNION</td>
+<td>在有限取值范围内的一个值</td>
+<td>create_union(1,’a’,63)</td>
+</tr>
+</tbody></table>
+<h3 id="基础建表"><a href="#基础建表" class="headerlink" title="基础建表"></a>基础建表</h3><pre><code class="sql">CREATE [EXTERNAL] TABLE tb_name
+    (col_name col_type [COMMENT col_comment], ......)
+    [COMMENT tb_comment]
+    [PARTITIONED BY(col_name, col_type, ......)]
+    [CLUSTERED BY(col_name, col_type, ......) INTO num BUCKETS]
+    [ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;&#39;]
+    [LOCATION &#39;path&#39;]
+</code></pre>
+<ul>
+<li><p><code>[EXTERNAL]</code>，外部表，需搭配</p>
+<ul>
+<li><p><code>[ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;&#39;]</code>指定列分隔符</p>
+</li>
+<li><p><code>[LOCATION &#39;path&#39;]</code>表数据路径</p>
+</li>
+<li><p>外部表示意</p>
+<pre><code class="sql">CREATE EXTERNAL TABLE test_ext(id int) COMMENT &#39;external table&#39; ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;\t&#39; LOCATION &#39;hdfs://node1:8020/tmp/test_ext&#39;;
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p><code>[COMMENT tb_comment]</code>表注释，可选</p>
+</li>
+<li><p><code>[PARTITIONED BY(col_name, col_type, ......)]</code>基于列分区</p>
+<pre><code class="sql">-- 分区表示意
+CREATE TABLE test_ext(id int) COMMENT &#39;partitioned table&#39; PARTITION BY(year string, month string, day string) ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;\t&#39;;
+</code></pre>
+</li>
+<li><p><code>[CLUSTERED BY(col_name, col_type, ......)]</code>基于列分桶</p>
+<pre><code class="sql">CREATE TABLE course (c_id string,c_name string,t_id string) CLUSTERED BY(c_id) INTO 3 BUCKETS ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;\t&#39;;
+</code></pre>
+</li>
+</ul>
+<h3 id="基于其它表的结构建表"><a href="#基于其它表的结构建表" class="headerlink" title="基于其它表的结构建表"></a>基于其它表的结构建表</h3><pre><code class="sql">CREATE TABLE tbl_name LIKE other_tbl;
+</code></pre>
+<h3 id="基于查询结果建表"><a href="#基于查询结果建表" class="headerlink" title="基于查询结果建表"></a>基于查询结果建表</h3><pre><code class="sql">CREATE TABLE tbl_name AS SELECT ...;
+</code></pre>
+<h3 id="删除表"><a href="#删除表" class="headerlink" title="删除表"></a>删除表</h3><pre><code class="sql">DROP TABLE tbl;
+</code></pre>
+<h3 id="修改表"><a href="#修改表" class="headerlink" title="修改表"></a>修改表</h3><p><strong>重命名</strong></p>
+<pre><code class="sql">ALTER TABLE old RENAME TO new;
+</code></pre>
+<p><strong>修改属性</strong></p>
+<pre><code class="sql">ALTER TABLE tbl SET TBLPROPERTIES(key=value);
+-- 常用属性
+(&quot;EXTERNAL&quot;=&quot;TRUE&quot;) -- 内外部表，TRUE表示外部表
+(&#39;comment&#39; = new_comment) -- 修改表注释
+-- 其余属性参见
+https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL#LanguageManualDDL-listTableProperties
+</code></pre>
+<p>内部表：未被external修饰的表，普通表。存储位置由hive.metastore.warehouse.dir参数决定，删除内部表会直接删除元数据和存储数据，因此不适合和其他工具共享数据。</p>
+<p>外部表：表数据可以在任何位置，通过location关键字指定。数据存储的不同也代表了这个表在理念上并不是hive内部管理的，而是可以随意临时连接到外部数据上的。所以在删除外部表时，仅仅是删除元数据（表信息），而不会删除数据本身</p>
+<h3 id="分区操作"><a href="#分区操作" class="headerlink" title="分区操作"></a>分区操作</h3><p><strong>创建分区表</strong></p>
+<pre><code class="sql">-- 分区表示意
+CREATE TABLE test_ext(id int) COMMENT &#39;partitioned table&#39; PARTITION BY(year string, month string, day string) ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;\t&#39;;
+</code></pre>
+<p><strong>添加分区</strong></p>
+<pre><code class="sql">ALTER TABLE tablename ADD PARTITION (partition_key=&#39;partition_value&#39;, ......);
+</code></pre>
+<p><strong>修改分区值</strong></p>
+<pre><code class="sql">ALTER TABLE tablename PARTITION (partition_key=&#39;old_partition_value&#39;) RENAME TO PARTITION (partition_key=&#39;new_partition_value&#39;);
+</code></pre>
+<p>&#x3D;&#x3D;注意&#x3D;&#x3D;</p>
+<p>只会在元数据中修改，不会同步修改HDFS路径吗，如：</p>
+<ul>
+<li>原分区路径为：<code>/user/hive/warehouse/test.db/test_table/month=201910</code>，分区名：<code>month=&#39;201910&#39;</code></li>
+<li>将分区名修改为：<code>201911</code>后，分区所在路径不变，依旧是：<code>/user/hive/warehouse/test.db/test_table/month=201910</code></li>
+</ul>
+<p>如果希望修改分区名后，同步修改HDFS的路径，并保证正常可用，需要：</p>
+<ul>
+<li>在元数据库中：<code>找到SDS表</code> -&gt; <code>找到LOCATION列</code> -&gt; <code>找到对应分区的路径记录进行修改</code><ul>
+<li>如将记录的：<code>/user/hive/warehouse/test.db/test_table/month=201910</code> 修改为：<code>/user/hive/warehouse/test.db/test_table/month=201911</code></li>
+</ul>
+</li>
+<li>在HDFS中，同步修改文件夹名<ul>
+<li>如将文件夹：<code>/user/hive/warehouse/test.db/test_table/month=201910</code> 修改为：<code>/user/hive/warehouse/test.db/test_table/month=201911</code></li>
+</ul>
+</li>
+</ul>
+<p><strong>删除分区</strong></p>
+<pre><code class="sql">ALTER TABLE tablename DROP PARTITION (partition_key=&#39;partition_value&#39;);
+</code></pre>
+<blockquote>
+<p>删除分区后，只是在元数据中删除，即删除元数据库中：</p>
+<ul>
+<li><code>PARTITION</code>表</li>
+<li><code>SDS</code>表</li>
+</ul>
+<p>相关记录</p>
+<p>&#x3D;&#x3D;分区所在的HDFS文件夹依旧保留&#x3D;&#x3D;</p>
+</blockquote>
+<p><strong>加载数据</strong></p>
+<p>LOAD DATA</p>
+<pre><code class="sql">LOAD DATA [LOCAL] INPATH &#39;path&#39; INTO TABLE tbl PARTITION(partition_key=&#39;partition_value&#39;);
+</code></pre>
+<p>基于hdfs进行load加载数据，源数据文件会消失（本质上是被移动到表所在的目录中），不加overwrite是把数据追加到数据表中</p>
+<p>INSERT SELECT</p>
+<pre><code class="sql">INSERT (OVERWRITE | INTO) TABLE tbl PARTITION(partition_key=&#39;partition_value&#39;) SELECT ... FROM ...;
+</code></pre>
+<h3 id="分桶操作"><a href="#分桶操作" class="headerlink" title="分桶操作"></a>分桶操作</h3><p><strong>建表</strong></p>
+<pre><code class="sql">CREATE TABLE course (c_id string,c_name string,t_id string) 
+    [PARTITION(partition_key=&#39;partition_value&#39;)] 
+    CLUSTERED BY(c_id) INTO 3 BUCKETS ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;\t&#39;;
+</code></pre>
+<ul>
+<li><code>CLUSTERED BY(col)</code> 指定分桶列</li>
+<li><code>INTO 3 BUCKETS</code>，设定3个桶</li>
+</ul>
+<blockquote>
+<p>分桶表需要开启：</p>
+<p><code>set hive.enforce.bucketing=true;</code></p>
+<p>设置自动匹配桶数量的reduces task数量</p>
+</blockquote>
+<p><strong>数据加载</strong></p>
+<pre><code class="sql">INSERT (OVERWRITE | INTO) TABLE tbl 
+    [PARTITION(partition_key=&#39;partition_value&#39;)] 
+    SELECT ... FROM ... CLUSTER BY(col);
+</code></pre>
+<p>&#x3D;&#x3D;分桶表无法使用LOAD DATA进行数据加载&#x3D;&#x3D;</p>
+<h3 id="数据加载"><a href="#数据加载" class="headerlink" title="数据加载"></a>数据加载</h3><p><strong>LOAD DATA</strong></p>
+<p>将数据文件加载到表</p>
+<pre><code class="sql">LOAD DATA [LOCAL] INPATH &#39;path&#39; INTO TABLE tbl [PARTITION(partition_key=&#39;partition_value&#39;)];	-- 指定分区可选
+</code></pre>
+<p><strong>INSERT SELECT</strong></p>
+<p>将其它表数据，加载到目标表</p>
+<pre><code class="sql">INSERT (OVERWRITE | INTO) TABLE tbl 
+    [PARTITION(partition_key=&#39;partition_value&#39;)] 		-- 指定分区，可选
+    SELECT ... FROM ... [CLUSTER BY(col)];				-- 指定分桶列，可选
+</code></pre>
+<h3 id="数据导出"><a href="#数据导出" class="headerlink" title="数据导出"></a>数据导出</h3><p><strong>INSERT OVERWRITE SELECT</strong></p>
+<pre><code class="sql">INSERT OVERWRITE [LOCAL] DIRECTORY ‘path’ 				-- LOCAL可选，带LOCAL导出Linux本地，不带LOCAL导出到HDFS
+    [ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;&#39;]		-- 可选，自定义列分隔符
+    SELECT ... FROM ...;
+</code></pre>
+<p><strong>bin&#x2F;hive</strong></p>
+<ul>
+<li><code>bin/hive -e &#39;sql&#39; &gt; export_file</code> 将<code>sql</code>结果重定向到导出文件中</li>
+<li><code>bin/hive -f &#39;sql_script_file&#39; &gt; export_file</code> 将<code>sql脚本</code>执行的结果重定向到导出文件中</li>
+</ul>
+<h3 id="复杂类型"><a href="#复杂类型" class="headerlink" title="复杂类型"></a>复杂类型</h3><table>
+<thead>
+<tr>
+<th><strong>类型</strong></th>
+<th><strong>定义</strong></th>
+<th><strong>示例</strong></th>
+<th><strong>内含元素类型</strong></th>
+<th><strong>元素个数</strong></th>
+<th><strong>取元素</strong></th>
+<th><strong>可用函数</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>array</td>
+<td>array&lt;类型&gt;</td>
+<td>如定义为array<int>数据为：1,2,3,4,5</td>
+<td>单值，类型取决于定义</td>
+<td>动态，不限制</td>
+<td>array[数字序号] 序号从0开始</td>
+<td>size统计元素个数 array_contains判断是否包含指定数据</td>
+</tr>
+<tr>
+<td>map</td>
+<td>map&lt;key类型, value类型&gt;</td>
+<td>如定义为：map&lt;string, int&gt;数据为：{’a’: 1, ‘b’: 2, ‘c’: 3}</td>
+<td>键值对，K-V，K和V类型取决于定义</td>
+<td>动态，不限制</td>
+<td>map[key] 取出对应key的value</td>
+<td>size统计元素个数array_contains判断是否包含指定数据 map_keys取出全部key，返回array map_values取出全部values，返回array</td>
+</tr>
+<tr>
+<td>struct</td>
+<td>struct&lt;子列名 类型, 子列名 类型…&gt;</td>
+<td>如定义为：struct&lt;c1 string, c2 int, c3 date&gt;数据为：’a’, 1, ‘2000-01-01’</td>
+<td>单值，类型取决于定义</td>
+<td>固定，取决于定义的子列数量</td>
+<td>struct.子列名 通过子列名取出子列值</td>
+<td>暂无</td>
+</tr>
+</tbody></table>
+<h2 id="数据查询的课堂SQL记录"><a href="#数据查询的课堂SQL记录" class="headerlink" title="数据查询的课堂SQL记录"></a>数据查询的课堂SQL记录</h2><h3 id="基本查询"><a href="#基本查询" class="headerlink" title="基本查询"></a>基本查询</h3><pre><code class="sql">create database itheima;
+use itheima;
+CREATE TABLE itheima.orders (
+    orderId bigint COMMENT &#39;订单id&#39;,
+    orderNo string COMMENT &#39;订单编号&#39;,
+    shopId bigint COMMENT &#39;门店id&#39;,
+    userId bigint COMMENT &#39;用户id&#39;,
+    orderStatus tinyint COMMENT &#39;订单状态 -3:用户拒收 -2:未付款的订单 -1：用户取消 0:待发货 1:配送中 2:用户确认收货&#39;,
+    goodsMoney double COMMENT &#39;商品金额&#39;,
+    deliverMoney double COMMENT &#39;运费&#39;,
+    totalMoney double COMMENT &#39;订单金额（包括运费）&#39;,
+    realTotalMoney double COMMENT &#39;实际订单金额（折扣后金额）&#39;,
+    payType tinyint COMMENT &#39;支付方式,0:未知;1:支付宝，2：微信;3、现金；4、其他&#39;,
+    isPay tinyint COMMENT &#39;是否支付 0:未支付 1:已支付&#39;,
+    userName string COMMENT &#39;收件人姓名&#39;,
+    userAddress string COMMENT &#39;收件人地址&#39;,
+    userPhone string COMMENT &#39;收件人电话&#39;,
+    createTime timestamp COMMENT &#39;下单时间&#39;,
+    payTime timestamp COMMENT &#39;支付时间&#39;,
+    totalPayFee int COMMENT &#39;总支付金额&#39;
+) ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;\t&#39;;
+
+load data local inpath &#39;/home/hadoop/itheima_orders.txt&#39; into table itheima.orders;
+
+CREATE TABLE itheima.users (
+    userId int,
+    loginName string,
+    loginSecret int,
+    loginPwd string,
+    userSex tinyint,
+    userName string,
+    trueName string,
+    brithday date,
+    userPhoto string,
+    userQQ string,
+    userPhone string,
+    userScore int,
+    userTotalScore int,
+    userFrom tinyint,
+    userMoney double,
+    lockMoney double,
+    createTime timestamp,
+    payPwd string,
+    rechargeMoney double
+) ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;\t&#39;;
+
+load data local inpath &#39;/home/hadoop/itheima_users.txt&#39; into table itheima.users;
+
+-- 查询全表数据
+SELECT * FROM itheima.orders;
+
+-- 查询单列信息
+SELECT orderid, userid, totalmoney FROM itheima.orders o ;
+
+-- 查询表有多少条数据
+SELECT COUNT(*) FROM itheima.orders;
+
+-- 过滤广东省的订单
+SELECT * FROM itheima.orders WHERE useraddress LIKE &#39;%广东%&#39;;
+
+-- 找出广东省单笔营业额最大的订单
+SELECT * FROM itheima.orders WHERE useraddress LIKE &#39;%广东%&#39;
+ORDER BY totalmoney DESC LIMIT 1;
+
+-- 统计未支付、已支付各自的人数
+SELECT ispay, COUNT(*) FROM itheima.orders o GROUP BY ispay ;
+
+-- 在已付款的订单中，统计每个用户最高的一笔消费金额
+SELECT userid, MAX(totalmoney) FROM itheima.orders WHERE ispay = 1 GROUP BY userid;
+-- 统计每个用户的平均订单消费额
+SELECT userid, AVG(totalmoney) FROM itheima.orders GROUP BY userid;
+-- 统计每个用户的平均订单消费额，并过滤大于10000的数据
+SELECT userid, AVG(totalmoney) AS avg_money FROM itheima.orders GROUP BY userid HAVING avg_money &gt; 10000;
+
+-- 订单表和用户表JOIN 找出用户username
+SELECT o.orderid, o.userid, u.username FROM itheima.orders o JOIN itheima.users u ON o.userid = u.userid;
+SELECT o.orderid, o.userid, u.username FROM itheima.orders o LEFT JOIN itheima.users u ON o.userid = u.userid;
+</code></pre>
+<h3 id="RLIKE"><a href="#RLIKE" class="headerlink" title="RLIKE"></a>RLIKE</h3><p><img src="https://image-set.oss-cn-zhangjiakou.aliyuncs.com/img-out/2023/02/24/20230224234706.png" alt="image-20230224234706719"></p>
+<p><img src="https://image-set.oss-cn-zhangjiakou.aliyuncs.com/img-out/2023/02/24/20230224234719.png" alt="image-20230224234719463"></p>
+<p><img src="https://image-set.oss-cn-zhangjiakou.aliyuncs.com/img-out/2023/02/24/20230224234733.png" alt="image-20230224234733895"></p>
+<pre><code class="sql">-- 查找广东省数据
+SELECT * FROM itheima.orders WHERE useraddress RLIKE &#39;.*广东.*&#39;;
+-- 查找用户地址是：xx省 xx市 xx区
+SELECT * FROM itheima.orders WHERE useraddress RLIKE &#39;..省 ..市 ..区&#39;;
+-- 查找用户姓为：张、王、邓
+SELECT * FROM itheima.orders WHERE username RLIKE &#39;[张王邓]\\S+&#39;;
+-- 查找手机号符合：188****0*** 规则
+SELECT * FROM itheima.orders WHERE userphone RLIKE &#39;188\\S&#123;4&#125;0[0-9]&#123;3&#125;&#39;;
+</code></pre>
+<h3 id="UNION联合"><a href="#UNION联合" class="headerlink" title="UNION联合"></a>UNION联合</h3><pre><code class="sql">CREATE TABLE itheima.course(
+c_id string, 
+c_name string, 
+t_id string)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY &#39;\t&#39;;
+
+LOAD DATA LOCAL INPATH &#39;/home/hadoop/course.txt&#39; INTO TABLE itheima.course;
+-- 基础UNION
+SELECT * FROM itheima.course WHERE t_id = &#39;周杰轮&#39;
+    UNION
+SELECT * FROM itheima.course WHERE t_id = &#39;王力鸿&#39;;
+-- 去重演示
+SELECT * FROM itheima.course
+    UNION
+SELECT * FROM itheima.course;
+-- 不去重
+SELECT * FROM itheima.course
+    UNION ALL
+SELECT * FROM itheima.course;
+-- UNION写在FROM中 UNION写在子查询中
+SELECT t_id, COUNT(*) FROM 
+(
+    SELECT * FROM itheima.course WHERE t_id = &#39;周杰轮&#39;
+        UNION ALL
+    SELECT * FROM itheima.course WHERE t_id = &#39;王力鸿&#39; 
+) AS u GROUP BY t_id;
+
+-- 用于INSERT SELECT
+INSERT OVERWRITE TABLE itheima.course2
+SELECT * FROM itheima.course 
+    UNION
+SELECT * FROM itheima.course;
+</code></pre>
+<h3 id="Sampling采样"><a href="#Sampling采样" class="headerlink" title="Sampling采样"></a>Sampling采样</h3><pre><code class="sql"># 随机桶抽取， 分配桶是有规则的
+# 可以按照列的hash取模分桶
+# 按照完全随机分桶
+-- 其它条件不变的话，每一次运行结果一致
+select username, orderId, totalmoney FROM itheima.orders 
+    tablesample(bucket 3 out of 10 on username);
+    
+-- 完全随机，每一次运行结果不同
+select * from itheima.orders 
+    tablesample(bucket 3 out of 10 on rand());
+    
+
+
+# 数据块抽取，按顺序抽取，每次条件不变，抽取结果不变
+-- 抽取100条
+select * from itheima.orders
+    tablesample(100 rows);
+    
+-- 取1%数据
+select * from itheima.orders
+    tablesample(1 percent);
+    
+-- 取 1KB数据
+select * from itheima.orders
+    tablesample(1K);
+</code></pre>
+<h3 id="虚拟列"><a href="#虚拟列" class="headerlink" title="虚拟列"></a>虚拟列</h3><p>虚拟列是Hive内置的可以在查询语句中使用的特殊标记，可以查询数据本身的详细参数。</p>
+<p>Hive目前可用3个虚拟列：</p>
+<pre><code class="shell">- INPUT__FILE__NAME，显示数据行所在的具体文件
+- BLOCK__OFFSET__INSIDE__FILE，显示数据行所在文件的偏移量
+- ROW__OFFSET__INSIDE__BLOCK，显示数据所在HDFS块的偏移量
+  此虚拟列需要设置：SET hive.exec.rowoffset=true 才可使用
+</code></pre>
+<pre><code class="sql">SET hive.exec.rowoffset=true;
+
+SELECT orderid, username, INPUT__FILE__NAME, BLOCK__OFFSET__INSIDE__FILE, ROW__OFFSET__INSIDE__BLOCK FROM itheima.orders;
+
+SELECT *, BLOCK__OFFSET__INSIDE__FILE FROM itheima.orders WHERE BLOCK__OFFSET__INSIDE__FILE &lt; 1000;
+
+SELECT orderid, username, INPUT__FILE__NAME, BLOCK__OFFSET__INSIDE__FILE, ROW__OFFSET__INSIDE__BLOCK FROM itheima.orders_bucket;
+
+SELECT INPUT__FILE__NAME, COUNT(*) FROM itheima.orders_bucket GROUP BY INPUT__FILE__NAME;
+</code></pre>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><p>数值、集合、转换、日期函数</p>
+<pre><code class="sql">-- 查看所有可用函数
+show functions;
+-- 查看函数使用方式
+describe function extended count;
+-- 数值函数
+-- round 取整，设置小数精度
+select round(3.1415926);		-- 取整(四舍五入)
+select round(3.1415926, 4);		-- 设置小数精度4位(四舍五入)
+-- 随机数
+select rand();					-- 完全随机
+select rand(3);					-- 设置随机数种子，设置种子后每次运行结果一致的
+-- 绝对值
+select abs(-3);
+-- 求PI
+select pi();
+
+-- 集合函数
+-- 求元素个数
+select size(work_locations) from test_array;
+select size(members) from test_map;
+-- 取出map的全部key
+select map_keys(members) from test_map;
+-- 取出map的全部value
+select map_values(members) from test_map;
+-- 查询array内是否包含指定元素，是就返回True
+select * from test_array where ARRAY_CONTAINS(work_locations, &#39;tianjin&#39;);
+-- 排序
+select *, sort_array(work_locations) from test_array;
+
+
+-- 类型转换函数
+-- 转二进制
+select binary(&#39;hadoop&#39;);
+-- 自由转换，类型转换失败报错或返回NULL
+select cast(&#39;1&#39; as bigint);
+
+-- 日期函数
+-- 当前时间戳
+select current_timestamp();
+-- 当前日期
+select current_date();
+-- 时间戳转日期
+select to_date(current_timestamp());
+-- 年月日季度等
+select year(&#39;2020-01-11&#39;);
+select month(&#39;2020-01-11&#39;);
+select day(&#39;2020-01-11&#39;);
+select quarter(&#39;2020-05-11&#39;);
+select dayofmonth(&#39;2020-05-11&#39;);
+select hour(&#39;2020-05-11 10:36:59&#39;);
+select minute(&#39;2020-05-11 10:36:59&#39;);
+select second(&#39;2020-05-11 10:36:59&#39;);
+select weekofyear(&#39;2020-05-11 10:36:59&#39;);
+-- 日期之间的天数
+select datediff(&#39;2022-12-31&#39;, &#39;2019-12-31&#39;);
+-- 日期相加、相减
+select date_add(&#39;2022-12-31&#39;, 5);
+select date_sub(&#39;2022-12-31&#39;, 5);
+</code></pre>
+<h2 id="社交案例操作SQL"><a href="#社交案例操作SQL" class="headerlink" title="社交案例操作SQL"></a>社交案例操作SQL</h2><p>准备数据</p>
+<pre><code class="sql">-- 创建数据库
+create database db_msg;
+-- 选择数据库
+use db_msg;
+
+-- 如果表已存在就删除
+drop table if exists db_msg.tb_msg_source ;
+-- 建表
+create table db_msg.tb_msg_source(
+    msg_time string comment &quot;消息发送时间&quot;,
+    sender_name string comment &quot;发送人昵称&quot;,
+    sender_account string comment &quot;发送人账号&quot;,
+    sender_sex string comment &quot;发送人性别&quot;,
+    sender_ip string comment &quot;发送人ip地址&quot;,
+    sender_os string comment &quot;发送人操作系统&quot;,
+    sender_phonetype string comment &quot;发送人手机型号&quot;,
+    sender_network string comment &quot;发送人网络类型&quot;,
+    sender_gps string comment &quot;发送人的GPS定位&quot;,
+    receiver_name string comment &quot;接收人昵称&quot;,
+    receiver_ip string comment &quot;接收人IP&quot;,
+    receiver_account string comment &quot;接收人账号&quot;,
+    receiver_os string comment &quot;接收人操作系统&quot;,
+    receiver_phonetype string comment &quot;接收人手机型号&quot;,
+    receiver_network string comment &quot;接收人网络类型&quot;,
+    receiver_gps string comment &quot;接收人的GPS定位&quot;,
+    receiver_sex string comment &quot;接收人性别&quot;,
+    msg_type string comment &quot;消息类型&quot;,
+    distance string comment &quot;双方距离&quot;,
+    message string comment &quot;消息内容&quot;
+);
+
+-- 上传数据到HDFS(Linux命令)
+hadoop fs -mkdir -p /chatdemo/data
+hadoop fs -put chat_data-30W.csv /chatdemo/data/
+
+-- 加载数据到表中，基于HDFS加载
+load data inpath &#39;/chatdemo/data/chat_data-30W.csv&#39; into table tb_msg_source;
+
+-- 验证数据加载
+select * from tb_msg_source tablesample(100 rows);
+-- 验证一下表的数量
+select count(*) from tb_msg_source;
+</code></pre>
+<p>ETL清洗转换</p>
+<pre><code class="sql">create table db_msg.tb_msg_etl(
+    msg_time string comment &quot;消息发送时间&quot;,
+    sender_name string comment &quot;发送人昵称&quot;,
+    sender_account string comment &quot;发送人账号&quot;,
+    sender_sex string comment &quot;发送人性别&quot;,
+    sender_ip string comment &quot;发送人ip地址&quot;,
+    sender_os string comment &quot;发送人操作系统&quot;,
+    sender_phonetype string comment &quot;发送人手机型号&quot;,
+    sender_network string comment &quot;发送人网络类型&quot;,
+    sender_gps string comment &quot;发送人的GPS定位&quot;,
+    receiver_name string comment &quot;接收人昵称&quot;,
+    receiver_ip string comment &quot;接收人IP&quot;,
+    receiver_account string comment &quot;接收人账号&quot;,
+    receiver_os string comment &quot;接收人操作系统&quot;,
+    receiver_phonetype string comment &quot;接收人手机型号&quot;,
+    receiver_network string comment &quot;接收人网络类型&quot;,
+    receiver_gps string comment &quot;接收人的GPS定位&quot;,
+    receiver_sex string comment &quot;接收人性别&quot;,
+    msg_type string comment &quot;消息类型&quot;,
+    distance string comment &quot;双方距离&quot;,
+    message string comment &quot;消息内容&quot;,
+    msg_day string comment &quot;消息日&quot;,
+    msg_hour string comment &quot;消息小时&quot;,
+    sender_lng double comment &quot;经度&quot;,
+    sender_lat double comment &quot;纬度&quot;
+);
+
+INSERT OVERWRITE TABLE db_msg.tb_msg_etl
+SELECT 
+    *, 
+    DATE(msg_time) AS msg_day, 
+    HOUR(msg_time) AS msg_hour, 
+    SPLIT(sender_gps, &#39;,&#39;)[0] AS sender_lng, 
+    SPLIT(sender_gps, &#39;,&#39;)[1] AS sender_lat
+FROM db_msg.tb_msg_source
+WHERE LENGTH(sender_gps) &gt; 0;
+</code></pre>
+<p>指标计算</p>
+<p>需求1</p>
+<pre><code class="sql">--保存结果表
+CREATE TABLE IF NOT EXISTS tb_rs_total_msg_cnt 
+COMMENT &quot;每日消息总量&quot; AS 
+SELECT 
+    msg_day, 
+    COUNT(*) AS total_msg_cnt 
+FROM db_msg.tb_msg_etl 
+GROUP BY msg_day;
+</code></pre>
+<p>需求2</p>
+<pre><code class="sql">--保存结果表
+CREATE TABLE IF NOT EXISTS tb_rs_hour_msg_cnt 
+COMMENT &quot;每小时消息量趋势&quot; AS  
+SELECT  
+    msg_hour, 
+    COUNT(*) AS total_msg_cnt, 
+    COUNT(DISTINCT sender_account) AS sender_user_cnt, 
+    COUNT(DISTINCT receiver_account) AS receiver_user_cnt
+FROM db_msg.tb_msg_etl GROUP BY msg_hour;
+</code></pre>
+<p>需求3</p>
+<pre><code class="sql">CREATE TABLE IF NOT EXISTS tb_rs_loc_cnt
+COMMENT &#39;今日各地区发送消息总量&#39; AS 
+SELECT 
+    msg_day,  
+    sender_lng, 
+    sender_lat, 
+    COUNT(*) AS total_msg_cnt 
+FROM db_msg.tb_msg_etl
+GROUP BY msg_day, sender_lng, sender_lat;
+</code></pre>
+<p>需求4</p>
+<pre><code class="sql">--保存结果表
+CREATE TABLE IF NOT EXISTS tb_rs_user_cnt
+COMMENT &quot;今日发送消息人数、接受消息人数&quot; AS
+SELECT 
+msg_day, 
+COUNT(DISTINCT sender_account) AS sender_user_cnt, 
+COUNT(DISTINCT receiver_account) AS receiver_user_cnt
+FROM db_msg.tb_msg_etl
+GROUP BY msg_day;
+</code></pre>
+<p>需求5</p>
+<pre><code class="sql">--保存结果表
+CREATE TABLE IF NOT EXISTS db_msg.tb_rs_s_user_top10
+COMMENT &quot;发送消息条数最多的Top10用户&quot; AS
+SELECT 
+    sender_name AS username, 
+    COUNT(*) AS sender_msg_cnt 
+FROM db_msg.tb_msg_etl 
+GROUP BY sender_name 
+ORDER BY sender_msg_cnt DESC 
+LIMIT 10;
+</code></pre>
+<p>需求6</p>
+<pre><code class="sql">CREATE TABLE IF NOT EXISTS db_msg.tb_rs_r_user_top10
+COMMENT &quot;接收消息条数最多的Top10用户&quot; AS
+SELECT 
+receiver_name AS username, 
+COUNT(*) AS receiver_msg_cnt 
+FROM db_msg.tb_msg_etl 
+GROUP BY receiver_name 
+ORDER BY receiver_msg_cnt DESC 
+LIMIT 10;
+</code></pre>
+<p>需求7</p>
+<pre><code class="sql">CREATE TABLE IF NOT EXISTS db_msg.tb_rs_sender_phone
+COMMENT &quot;发送人的手机型号分布&quot; AS
+SELECT 
+    sender_phonetype, 
+    COUNT(sender_account) AS cnt 
+FROM db_msg.tb_msg_etl 
+GROUP BY sender_phonetype;
+</code></pre>
+<p>需求8</p>
+<pre><code class="sql">--保存结果表
+CREATE TABLE IF NOT EXISTS db_msg.tb_rs_sender_os
+COMMENT &quot;发送人的OS分布&quot; AS
+SELECT
+    sender_os, 
+    COUNT(sender_account) AS cnt 
+FROM db_msg.tb_msg_etl 
+GROUP BY sender_os
+</code></pre>
+<h2 id="Hive列注释、表注释等乱码解决方案"><a href="#Hive列注释、表注释等乱码解决方案" class="headerlink" title="Hive列注释、表注释等乱码解决方案"></a>Hive列注释、表注释等乱码解决方案</h2><pre><code class="sql">-- 在Hive的MySQL元数据库中执行
+use hive;
+
+1).修改字段注释字符集
+
+alter table COLUMNS_V2 modify column COMMENT varchar(256) character set utf8;
+2).修改表注释字符集
+
+alter table TABLE_PARAMS modify column PARAM_VALUE varchar(4000) character set utf8;
+3).修改分区表参数，以支持分区键能够用中文表示
+
+alter table PARTITION_PARAMS modify column PARAM_VALUE varchar(4000) character set utf8;
+alter table PARTITION_KEYS modify column PKEY_COMMENT varchar(4000) character set utf8;
+4).修改索引注解
+
+mysql&gt;alter table INDEX_PARAMS modify column PARAM_VALUE varchar(4000) character set utf8;
+</code></pre>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
+    </div>
+</article>
+
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2023 Mhen
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("black_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+        $('pre code').each(function(){
+            var lines = $(this).text().trim().split('\n').length, widther='';
+            if (lines>99) {
+                widther = 'widther'
+            }
+            var $numbering = $('<ul/>').addClass('pre-numbering ' + widther).attr("unselectable","on");
+            $(this).addClass('has-numbering ' + widther)
+                    .parent()
+                    .append($numbering);
+            for(var i=1;i<=lines;i++){
+                $numbering.append($('<li/>').text(i));
+            }
+        });
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<style>
+    pre{
+        position: relative;
+        margin-bottom: 24px;
+        border-radius: 10px;
+        border: 1px solid #e2dede;
+        background: #FFF;
+        overflow: hidden;
+    }
+    code.has-numbering{
+        margin-left: 30px;
+    }
+    code.has-numbering.widther{
+        margin-left: 35px;
+    }
+    .pre-numbering{
+        margin: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        padding: 0.5em 3px 0.7em 5px;
+        border-right: 1px solid #C3CCD0;
+        text-align: right;
+        color: #AAA;
+        background-color: #fafafa;
+    }
+    .pre-numbering.widther {
+        width: 35px;
+    }
+</style>
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>

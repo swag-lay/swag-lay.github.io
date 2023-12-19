@@ -6,20 +6,17 @@
   <meta name="keywords" content="">
   <meta name="description" content="mysql-dql | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="Hadoop的部署大规模数据的存储，计算，传输 1.上传，配置软链接 2.修改配置文件 workers hadoop-env.sh core-site.xml hdfs-site.xml 3.分发到node2，node3，配置环境变量 4.创建数据目录，并修改文件权限归属hadoop账户 5.启动。 namenode：master主角色，写edits secondarynamenode：maste">
+<meta name="description" content="golang学习go语言主要特性  自动垃圾回收 更丰富的内置类型 函数多返回值 错误处理 匿名函数和闭包 类型和接口 并发编程 反射 语言交互性  go基础 包声明 package，每个go应用程序都包含一个名为main的包  引入包 import  函数 func，main函数是每一个可执行程序必须包含的，一般是启动后第一个执行的，如果有init()函数会先执行该函数  变量  语句 &amp;amp">
 <meta property="og:type" content="article">
-<meta property="og:title" content="hadoop_server">
-<meta property="og:url" content="http://example.com/2023/09/07/hadoop-server/index.html">
+<meta property="og:title" content="golang">
+<meta property="og:url" content="http://example.com/2023/10/27/golang/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="Hadoop的部署大规模数据的存储，计算，传输 1.上传，配置软链接 2.修改配置文件 workers hadoop-env.sh core-site.xml hdfs-site.xml 3.分发到node2，node3，配置环境变量 4.创建数据目录，并修改文件权限归属hadoop账户 5.启动。 namenode：master主角色，写edits secondarynamenode：maste">
+<meta property="og:description" content="golang学习go语言主要特性  自动垃圾回收 更丰富的内置类型 函数多返回值 错误处理 匿名函数和闭包 类型和接口 并发编程 反射 语言交互性  go基础 包声明 package，每个go应用程序都包含一个名为main的包  引入包 import  函数 func，main函数是每一个可执行程序必须包含的，一般是启动后第一个执行的，如果有init()函数会先执行该函数  变量  语句 &amp;amp">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/..%5Cimages%5Cnamenode%E5%86%99%E5%85%A5%E6%B5%81%E7%A8%8B.png">
-<meta property="og:image" content="f:\swag-lay.github.io\source\images\namenode%E6%95%B0%E6%8D%AE%E8%AF%BB%E5%8F%96.png">
-<meta property="article:published_time" content="2023-09-07T05:38:52.000Z">
-<meta property="article:modified_time" content="2023-09-11T12:03:33.312Z">
+<meta property="article:published_time" content="2023-10-27T05:13:53.000Z">
+<meta property="article:modified_time" content="2023-10-31T07:41:32.717Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/..%5Cimages%5Cnamenode%E5%86%99%E5%85%A5%E6%B5%81%E7%A8%8B.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -93,7 +90,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(24)</small>
+                <small>(29)</small>
             
         </div>
     </li>
@@ -206,7 +203,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         大数据开发
-                        <small>(1)</small>
+                        <small>(5)</small>
                         
                     </div>
                     
@@ -217,7 +214,19 @@
                                         
                                         hadoop
                                         
-                                            <small>(1
+                                            <small>(3
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="大数据开发<--->hive">
+                                        
+                                        hive
+                                        
+                                            <small>(2
                                                 )</small>
                                         
                                     </div>
@@ -231,6 +240,24 @@
         
     
         
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="golang">
+                        
+                        golang
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                </li>
             
         
     
@@ -330,8 +357,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="24">
-<input type="hidden" id="yelog_site_word_count" value="12.6k">
+<input type="hidden" id="yelog_site_posts_number" value="29">
+<input type="hidden" id="yelog_site_word_count" value="19.1k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -424,6 +451,42 @@
     </div>
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="All golang "
+           href="/2023/10/27/golang/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="golang">golang</span>
+            <span class="post-date" title="2023-10-27 13:13:53">2023/10/27</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hive "
+           href="/2023/09/12/hive/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="hive">hive</span>
+            <span class="post-date" title="2023-09-12 15:18:18">2023/09/12</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hadoop "
+           href="/2023/09/12/yarn/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="yarn">yarn</span>
+            <span class="post-date" title="2023-09-12 09:47:14">2023/09/12</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hadoop "
+           href="/2023/09/12/mapreduce/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mapreduce">mapreduce</span>
+            <span class="post-date" title="2023-09-12 09:29:03">2023/09/12</span>
+        </a>
         
         
         <a  class="All 大数据开发 hadoop "
@@ -636,6 +699,15 @@
         <a  class="All 工具 hexo "
            href="/2023/05/09/hexo-use/"
            data-tag="hexo"
+           data-author="" >
+            <span class="post-title" title="hexo-use">hexo-use</span>
+            <span class="post-date" title="2023-05-09 22:03:50">2023/05/09</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hive "
+           href="/2023/05/09/Hive-SQL%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8/"
+           data-tag=""
            data-author="" >
             <span class="post-title" title="hexo-use">hexo-use</span>
             <span class="post-date" title="2023-05-09 22:03:50">2023/05/09</span>
