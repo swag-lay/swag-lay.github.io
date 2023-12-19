@@ -151,8 +151,20 @@ git commit --amend
      vim congfig
      ```
 
-     
-
   
 
-  
+
+## git pr
+
+fork开源项目
+
+git clone 本地fork仓库
+
+与源项目上游建立连接
+
+git remote add upstream ...
+
+同步最新代码
+
+git fetch upstream 分支名
+
