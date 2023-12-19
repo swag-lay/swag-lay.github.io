@@ -6,15 +6,15 @@
   <meta name="keywords" content="">
   <meta name="description" content="golang | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="golang学习go语言主要特性  自动垃圾回收 更丰富的内置类型 函数多返回值 错误处理 匿名函数和闭包 类型和接口 并发编程 反射 语言交互性  go基础 包声明 package，每个go应用程序都包含一个名为main的包  引入包 import  函数 func，main函数是每一个可执行程序必须包含的，一般是启动后第一个执行的，如果有init()函数会先执行该函数  变量  语句 &amp;amp">
+<meta name="description" content="go的协程goroutinegoroutine是与其他函数或方法同时进行的函数和方法。可以被认为是轻量级的线程，创建goroutine的成本很小，他就是一段代码，一个函数入口。以及在堆上为其分配的一个堆栈（初始大小为4k，会随着程序的执行自动增长删除）。 优势 与线程相比所占空间小成本低，可以根据应用程序的需要增长和收缩。线程中大小必须指定且固定 goroutine被多路复用到较少的os线程上。一">
 <meta property="og:type" content="article">
-<meta property="og:title" content="golang">
-<meta property="og:url" content="http://example.com/2023/10/27/golang/index.html">
+<meta property="og:title" content="go_goroutine">
+<meta property="og:url" content="http://example.com/2023/12/19/go-goroutine/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="golang学习go语言主要特性  自动垃圾回收 更丰富的内置类型 函数多返回值 错误处理 匿名函数和闭包 类型和接口 并发编程 反射 语言交互性  go基础 包声明 package，每个go应用程序都包含一个名为main的包  引入包 import  函数 func，main函数是每一个可执行程序必须包含的，一般是启动后第一个执行的，如果有init()函数会先执行该函数  变量  语句 &amp;amp">
+<meta property="og:description" content="go的协程goroutinegoroutine是与其他函数或方法同时进行的函数和方法。可以被认为是轻量级的线程，创建goroutine的成本很小，他就是一段代码，一个函数入口。以及在堆上为其分配的一个堆栈（初始大小为4k，会随着程序的执行自动增长删除）。 优势 与线程相比所占空间小成本低，可以根据应用程序的需要增长和收缩。线程中大小必须指定且固定 goroutine被多路复用到较少的os线程上。一">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2023-10-27T05:13:53.000Z">
-<meta property="article:modified_time" content="2023-10-31T07:41:32.717Z">
+<meta property="article:published_time" content="2023-12-19T07:52:12.000Z">
+<meta property="article:modified_time" content="2023-12-19T08:20:32.675Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
 
@@ -90,7 +90,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(29)</small>
+                <small>(31)</small>
             
         </div>
     </li>
@@ -253,7 +253,7 @@
                     <div data-rel="golang">
                         
                         golang
-                        <small>(1)</small>
+                        <small>(3)</small>
                         
                     </div>
                     
@@ -357,8 +357,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="29">
-<input type="hidden" id="yelog_site_word_count" value="19.1k">
+<input type="hidden" id="yelog_site_posts_number" value="31">
+<input type="hidden" id="yelog_site_word_count" value="19.7k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -451,6 +451,24 @@
     </div>
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="All golang "
+           href="/2023/12/19/go-goroutine/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="go_goroutine">go_goroutine</span>
+            <span class="post-date" title="2023-12-19 15:52:12">2023/12/19</span>
+        </a>
+        
+        
+        <a  class="All golang "
+           href="/2023/12/19/go-channel/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="go_channel">go_channel</span>
+            <span class="post-date" title="2023-12-19 10:34:35">2023/12/19</span>
+        </a>
         
         
         <a  class="All golang "

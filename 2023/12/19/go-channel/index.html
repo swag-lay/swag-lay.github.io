@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>hexo-use | mhen</title>
-  <meta name="keywords" content=" hexo ">
-  <meta name="description" content="hexo-use | mhen">
+  <title>go_channel | mhen</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="go_channel | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="go的协程goroutinegoroutine是与其他函数或方法同时进行的函数和方法。可以被认为是轻量级的线程，创建goroutine的成本很小，他就是一段代码，一个函数入口。以及在堆上为其分配的一个堆栈（初始大小为4k，会随着程序的执行自动增长删除）。 优势 与线程相比所占空间小成本低，可以根据应用程序的需要增长和收缩。线程中大小必须指定且固定 goroutine被多路复用到较少的os线程上。一">
 <meta property="og:type" content="article">
@@ -749,9 +749,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-hexo-use" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-go-channel" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">hexo-use</h1>
+        <h1 class="article-title">go_channel</h1>
     
     <div class="article-meta">
         
@@ -761,29 +761,20 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="工具">工具</a> > 
-            
-            <a  data-rel="工具&lt;---&gt;hexo">hexo</a>
+            <a  data-rel="golang">golang</a>
             
         </span>
         
         
-        <span class="tag">
-            <i class="iconfont icon-tag"></i>
-            
-            <a class="color5">hexo</a>
-            
-        </span>
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2023-12-19 14:21:17'>2023-12-19 10:34</time>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-05-11 14:22:35'>2023-05-09 22:03</time>
-        
-    </div>
-    <div class="article-meta">
-        
-        <span>Count:35</span>
+        <span>Count:377</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -802,7 +793,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%96%B0%E6%96%87%E7%AB%A0"><span class="toc-text">创建新文章</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#go%E7%9A%84channel%E7%89%B9%E6%80%A7"><span class="toc-text">go的channel特性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%B3%95"><span class="toc-text">用法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E6%80%A7"><span class="toc-text">特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8channel%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F"><span class="toc-text">使用channel需要注意</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -818,9 +809,35 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="创建新文章"><a href="#创建新文章" class="headerlink" title="创建新文章"></a>创建新文章</h2><p>hexo new &lt;&gt;</p>
-<p>git<br>git add .<br>git commit -m “”<br>git push origin public</p>
-<p>发布网站并推送静态文件到master分支<br>hexo g -d</p>
+        <h1 id="go的channel特性"><a href="#go的channel特性" class="headerlink" title="go的channel特性"></a>go的channel特性</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>用于在协程之间传递数据，定义</p>
+<pre><code class="go">chan T
+</code></pre>
+<p>T表示channel中可以传递的数据类型</p>
+<pre><code class="go">ch:=make(chan string,10//可以设置缓冲区大小)
+</code></pre>
+<p>channel是一个管道，数据从一个协程流入管道，再从管道流出到另一个写出，也就是实现协程之间的同步和通信</p>
+<h2 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h2><ol>
+<li>发送<pre><code class="go">ch &lt;- x //把x发送到channel中
+</code></pre>
+ 当channel满了之后，发送操作会被阻塞，直到其他协程从channel中取走数据，这样可以保证空间不足的情况下数据不会丢失</li>
+<li>接收<pre><code class="go">x:=&lt;- ch
+</code></pre>
+ 当channel中没有数据时，接收操作会被阻塞，直到有其他协程向channel中发送了数据</li>
+<li>关闭<br> chose(ch)<br> 如果一个channel已经关闭，再向他发送数据会导致panic错误</li>
+</ol>
+<h2 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h2><ul>
+<li>线程安全<br>  多个协程可以同时读写一个channel，而不会发生数据竞争的问题。channel实现了锁机制，保证了多个协程之间对channel的访问是安全的</li>
+<li>阻塞式发送和接收</li>
+<li>顺序性<br>  通过channel发送的数据是按发送的顺序进行排列的。</li>
+<li>可以关闭<br>  关闭channel之后，其他协程依然可以从中接收数据，但不能向其中发送数据。可以避免内存泄漏的问题</li>
+<li>缓冲区大小</li>
+</ul>
+<h2 id="使用channel需要注意"><a href="#使用channel需要注意" class="headerlink" title="使用channel需要注意"></a>使用channel需要注意</h2><ul>
+<li>避免死锁</li>
+<li>避免泄露</li>
+<li>避免竞争</li>
+<li>避免过度使用</li>
+</ul>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>

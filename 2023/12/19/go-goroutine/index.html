@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>hexo-use | mhen</title>
-  <meta name="keywords" content=" hexo ">
-  <meta name="description" content="hexo-use | mhen">
+  <title>go_goroutine | mhen</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="go_goroutine | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="go的协程goroutinegoroutine是与其他函数或方法同时进行的函数和方法。可以被认为是轻量级的线程，创建goroutine的成本很小，他就是一段代码，一个函数入口。以及在堆上为其分配的一个堆栈（初始大小为4k，会随着程序的执行自动增长删除）。 优势 与线程相比所占空间小成本低，可以根据应用程序的需要增长和收缩。线程中大小必须指定且固定 goroutine被多路复用到较少的os线程上。一">
 <meta property="og:type" content="article">
@@ -749,9 +749,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-hexo-use" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-go-goroutine" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">hexo-use</h1>
+        <h1 class="article-title">go_goroutine</h1>
     
     <div class="article-meta">
         
@@ -761,29 +761,20 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="工具">工具</a> > 
-            
-            <a  data-rel="工具&lt;---&gt;hexo">hexo</a>
+            <a  data-rel="golang">golang</a>
             
         </span>
         
         
-        <span class="tag">
-            <i class="iconfont icon-tag"></i>
-            
-            <a class="color5">hexo</a>
-            
-        </span>
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2023-12-19 16:20:32'>2023-12-19 15:52</time>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-05-11 14:22:35'>2023-05-09 22:03</time>
-        
-    </div>
-    <div class="article-meta">
-        
-        <span>Count:35</span>
+        <span>Count:206</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -802,7 +793,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%96%B0%E6%96%87%E7%AB%A0"><span class="toc-text">创建新文章</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#go%E7%9A%84%E5%8D%8F%E7%A8%8B"><span class="toc-text">go的协程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#goroutine"><span class="toc-text">goroutine</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%98%E5%8A%BF"><span class="toc-text">优势</span></a></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -818,9 +809,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="创建新文章"><a href="#创建新文章" class="headerlink" title="创建新文章"></a>创建新文章</h2><p>hexo new &lt;&gt;</p>
-<p>git<br>git add .<br>git commit -m “”<br>git push origin public</p>
-<p>发布网站并推送静态文件到master分支<br>hexo g -d</p>
+        <h1 id="go的协程"><a href="#go的协程" class="headerlink" title="go的协程"></a>go的协程</h1><h2 id="goroutine"><a href="#goroutine" class="headerlink" title="goroutine"></a>goroutine</h2><p>goroutine是与其他函数或方法同时进行的函数和方法。可以被认为是轻量级的线程，创建goroutine的成本很小，他就是一段代码，一个函数入口。以及在堆上为其分配的一个堆栈（初始大小为4k，会随着程序的执行自动增长删除）。</p>
+<h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><ol>
+<li>与线程相比所占空间小成本低，可以根据应用程序的需要增长和收缩。线程中大小必须指定且固定</li>
+<li>goroutine被多路复用到较少的os线程上。一个程序中可能只有一个线程和数千个goroutines</li>
+<li>当使用goroutines访问共享内存时，通过设计的通道可以防止竞态条件发生。通道可以被认为是goroutines通信的管道</li>
+</ol>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
