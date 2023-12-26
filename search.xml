@@ -4,6 +4,80 @@
   
     
     <entry>
+      <title>tomcat</title>
+      <link href="/2023/12/26/tomcat/"/>
+      <url>/2023/12/26/tomcat/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>服务治理</title>
+      <link href="/2023/12/26/%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86/"/>
+      <url>/2023/12/26/%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86/</url>
+      
+        <content type="html"><![CDATA[<h1 id="为什么需要服务注册"><a href="#为什么需要服务注册" class="headerlink" title="为什么需要服务注册"></a>为什么需要服务注册</h1><h2 id="服务注册和发现的基本流程"><a href="#服务注册和发现的基本流程" class="headerlink" title="服务注册和发现的基本流程"></a>服务注册和发现的基本流程</h2><p>每个服务节点在启动运行的时候，会向注册中心注册服务，也就是将自己的地址信息（ip，端口，服务名字等）上报给注册中心，注册中心将地址信息保存起来。<br>一个服务节点如果要调用另外一个服务节点，会直接用该服务的信息到注册中心要对方的地址信息，这就<strong>服务发现</strong>。拿到地址信息之后，还会在本地缓存一份，保证在注册中心宕机时仍然可以正常调用服务。<br>为了保证服务地址列表中都是可用服务的地址信息，注册中心通常会通过<strong>心跳机制</strong>来检测服务是否可用。<br><img src="/..%5Cimages%5Cimage-20231226100852374.png" alt="image-20231226100852374"></p><h1 id="分布式下如何进行配置管理"><a href="#分布式下如何进行配置管理" class="headerlink" title="分布式下如何进行配置管理"></a>分布式下如何进行配置管理</h1><h2 id="为什么要用配置中心"><a href="#为什么要用配置中心" class="headerlink" title="为什么要用配置中心"></a>为什么要用配置中心</h2><p>业务的发展一般会导致服务数量的增加，从而导致程序配置增多。传统的配置文件的方式已经无法满足当前需求，主要原因：</p><ul><li>安全性得不到满足</li><li>时效性不够</li><li>不支持权限控制</li><li>不支持配置集中管理</li></ul><h1 id="分布式事务解决方案有哪些"><a href="#分布式事务解决方案有哪些" class="headerlink" title="分布式事务解决方案有哪些"></a>分布式事务解决方案有哪些</h1><h2 id="数据库事务"><a href="#数据库事务" class="headerlink" title="数据库事务"></a>数据库事务</h2><p>ACID：原子性，一致性，隔离性，持久性<br>只有保证了事物的原子性，隔离性，持久性之后，一致性才能得到保障。也就是说AID是手段，C是目的。AID是数据库的属性，而一致性是应用程序的属性。</p><h3 id="数据事务的实现原理"><a href="#数据事务的实现原理" class="headerlink" title="数据事务的实现原理"></a>数据事务的实现原理</h3><p>以mysql的innodb引擎为例，使用<strong>redo log</strong>保障事务的持久性，使用<strong>undo log</strong>保障事务的原子性。通过<strong>锁机制，mvcc</strong>等手段保证事务的隔离性</p><h2 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h2><p>分布式事务的终极目标是保证系统中多个相关联的数据库中的数据的一致性<br>两理论：CAP，BASE</p><h3 id="分布式事务解决方案"><a href="#分布式事务解决方案" class="headerlink" title="分布式事务解决方案"></a>分布式事务解决方案</h3><p>2PC，3PC，TCC，本地消息表，MQ事务，Saga等<br>2PC：</p><ol><li>准备阶段的主要目的是测试RM能否执行本地数据库事务操作（注意：这一步并不会提交事务）</li><li>提交阶段中TM会根据准备阶段中RM的消息来决定是执行事务提交还是回滚操作</li><li>提交阶段之后一定会结束当前的分布式事务<br>优点：</li></ol><ul><li>实现简单</li><li>针对的是数据强一致性</li></ul><p>缺点：</p><ul><li>同步阻塞</li><li>数据不一致</li><li>单点问题</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 分布式&amp;微服务 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>java_并发</title>
+      <link href="/2023/12/22/java-%E5%B9%B6%E5%8F%91/"/>
+      <url>/2023/12/22/java-%E5%B9%B6%E5%8F%91/</url>
+      
+        <content type="html"><![CDATA[<h1 id="并发编程线程基础"><a href="#并发编程线程基础" class="headerlink" title="并发编程线程基础"></a>并发编程线程基础</h1><p>进程是系统进行资源分配的基本单位<br>线程是进程的一个执行路径，线程是cpu分配的基本单位</p><p>线程创建的三种方式和优缺点</p><ol><li>继承Thread类并重写run方法</li></ol><ul><li>优点：在run()方法内直接获取当前线程直接使用this就可以，不用使用Thread.currentThread()方法</li><li>缺点：不支持多继承，无法继承其他类<br>  任务与代码没有分离，多个线程执行一样的任务时需要多份任务代码<br>  没有返回值</li></ul><ol start="2"><li>实现Runnable接口的run方法</li></ol><ul><li>优点：解决继承Thread类单继承的局限性<br>  降低线程对象和线程任务之间的耦合性，增强程序可扩展性<br>  将线程单独进行对象的封装，符合面向对象的思想</li><li>缺点：没有返回值</li></ul><ol start="3"><li>实现Callable接口（使用FutureTask方式）</li></ol><ul><li>优点：有返回值<br>  解决继承Thread类单继承的局限性<br>  降低线程对象和线程任务的耦合性，增强程序可扩展性<br>  将线程单独进行对象的封装，更符合面向对象的思想</li><li>缺点：编程和理解稍复杂</li></ul><h2 id="线程的通知和等待"><a href="#线程的通知和等待" class="headerlink" title="线程的通知和等待"></a>线程的通知和等待</h2><h2 id="线程上下文切换"><a href="#线程上下文切换" class="headerlink" title="线程上下文切换"></a>线程上下文切换</h2><p>cpu资源的分配采用了时间片轮转的策略，也就是给每个线程分配一个时间片，线程在时间片内占用cpu执行任务。人气线程使用完时间片后，就会处于就绪状态并让出cpu让其他线程占用，这就是上下文切换<br>切换的时机：</p><ol><li>当前线程的cpu时间片使用完处于就绪状态时</li><li>当前线程被其他线程中断时</li></ol><h2 id="线程死锁"><a href="#线程死锁" class="headerlink" title="线程死锁"></a>线程死锁</h2><ol><li>互斥</li><li>请求保存</li><li>不可剥夺</li><li>环路等待<br>synchronized 是 Java 中的关键字，用于控制多线程访问共享资源时的同步。它可以保证同一时间只有一个线程执行特定代码区块，从而避免并发问题如数据不一致或竞态条件。原子性内置锁，线程的执行代码在进行synchronized代码块前会自动获取内部锁，这时候其他线程访问该同步代码块时会被阻塞挂起。拿到内部锁的线程会在正常退出同步代码块或者抛出异常后或者在同步块内调用了该内置锁资源的wait系列方法时释放该内置锁。</li></ol><h2 id="守护线程和用户线程"><a href="#守护线程和用户线程" class="headerlink" title="守护线程和用户线程"></a>守护线程和用户线程</h2><p>守护线程和用户线程的区别：当最后一个非守护线程结束时，jvm会正常退出，而不管当前时候有守护线程<br>ThreadLocal：线程的局部变量，ThreadLocal的变量只有当前自身线程可以访问，别的线程都访问不了</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> java </category>
+          
+          <category> 并发编程 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>java8_new</title>
+      <link href="/2023/12/20/java8-new/"/>
+      <url>/2023/12/20/java8-new/</url>
+      
+        <content type="html"><![CDATA[<h1 id="jdk8新特性"><a href="#jdk8新特性" class="headerlink" title="jdk8新特性"></a>jdk8新特性</h1><h2 id="lambda表达式"><a href="#lambda表达式" class="headerlink" title="lambda表达式"></a>lambda表达式</h2><p>闭包，把函数作为一个方法的参数</p><pre><code class="java">(parameters) -&gt; &#123;statements;&#125;</code></pre><p>特征</p><ul><li>可选类型说明：不需要声明参数类型，编译器可以统一识别参数值</li><li>可选的圆括号：一个参数无需定义原括号，多个参数需要定义圆括号</li><li>可选的大括号：主体包含了一个语句，不需要使用大括号</li><li>可选的返回关键字：如果主体只有一个表达式返回值则编译器会自动返回值，大括号需要指定表达式返回了一个数值</li></ul><h2 id="方法引用"><a href="#方法引用" class="headerlink" title="方法引用"></a>方法引用</h2><p>方法引用使用一对冒号::</p><h2 id="函数式接口"><a href="#函数式接口" class="headerlink" title="函数式接口"></a>函数式接口</h2><p>有且仅有一个抽象方法，但是可以有多个非抽象方法的接口。函数式接口可以被隐式转换为lambda表达式</p><h2 id="默认方法"><a href="#默认方法" class="headerlink" title="默认方法"></a>默认方法</h2><p>接口的默认方法，默认方法就是接口可以有实现方法，而且不需要实现类去实现其方法。<br>接口可以声明（并且可以提供实现）静态方法。</p><h2 id="stream流"><a href="#stream流" class="headerlink" title="stream流"></a>stream流</h2><p>stream of elements -&gt; filter -&gt; sorted -&gt; map -&gt; collect<br>stream是一个来自数据源的元素队列且支持聚合操作</p><ul><li>元素是特定类型的对象，形成一个队列。java中的stream并不会存储元素，而是按需计算</li><li><strong>数据源</strong>流的来源，可以是集合，数组，i&#x2F;o cahnnel，generator</li><li><strong>聚合操作</strong>类似sql语句一样的操作<br>和Collection操作的不同</li><li><strong>pipelining</strong>：中间操作都会返回流对象本身。</li><li><strong>内部迭代</strong>：对集合遍历都是通过Iterator和for-each的方式，显式的在集合外部进行迭代，这叫外部迭代。Stream流提供内部迭代的方式，通过访问者实现</li></ul><h2 id="optional类"><a href="#optional类" class="headerlink" title="optional类"></a>optional类</h2><p>一个可以为null的容器对象。如果值存在则isPresent()方法会返回true，调用get()方法会返回该对象。是一个容器，它可以保存类型T的值，或者仅仅保存null。</p><h2 id="Nashorn，JavaScript引擎"><a href="#Nashorn，JavaScript引擎" class="headerlink" title="Nashorn，JavaScript引擎"></a>Nashorn，JavaScript引擎</h2><h2 id="时间api"><a href="#时间api" class="headerlink" title="时间api"></a>时间api</h2><h2 id="Base64"><a href="#Base64" class="headerlink" title="Base64"></a>Base64</h2><p>base64编码的编码器和解码器</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> java </category>
+          
+          <category> jdk8 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>go_goroutine</title>
       <link href="/2023/12/19/go-goroutine/"/>
       <url>/2023/12/19/go-goroutine/</url>

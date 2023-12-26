@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>java_并发 | mhen</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="java_并发 | mhen">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tomcat">
+<meta property="og:url" content="http://example.com/2023/12/26/tomcat/index.html">
+<meta property="og:site_name" content="mhen">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-12-26T05:28:01.000Z">
+<meta property="article:modified_time" content="2023-12-26T05:28:01.870Z">
+<meta property="article:author" content="mhen">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>mhen</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="github"
+               href="https://github.com/"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="All">All
+            
+                <small>(35)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                <li>
+                    <div data-rel="工具">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        工具
+                        <small>(3)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="工具<--->git">
+                                        
+                                        git
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="工具<--->hexo">
+                                        
+                                        hexo
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="工具<--->idea">
+                                        <i class="fold iconfont icon-right"></i>
+                                        
+                                        idea
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                        <ul class="sub hide">
+                                            
+                                                <li>
+                                                    <div data-rel="工具<--->ideadebug">
+                                                        
+                                                        debug
+                                                        
+                                                            <small>(1)</small>
+                                                        
+                                                    </div>
+                                                </li>
+                                            
+                                        </ul>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="数据库">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        数据库
+                        <small>(15)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="数据库<--->mysql">
+                                        
+                                        mysql
+                                        
+                                            <small>(14
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="大数据开发">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        大数据开发
+                        <small>(5)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="大数据开发<--->hadoop">
+                                        
+                                        hadoop
+                                        
+                                            <small>(3
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="大数据开发<--->hive">
+                                        
+                                        hive
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="分布式&amp;微服务">
+                        
+                        分布式&amp;微服务
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="golang">
+                        
+                        golang
+                        <small>(3)</small>
+                        
+                    </div>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="java">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        java
+                        <small>(4)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="java<--->并发编程">
+                                        
+                                        并发编程
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="java<--->jdk8">
+                                        
+                                        jdk8
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="java<--->jvm">
+                                        
+                                        jvm
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="leetcode">
+                        
+                        leetcode
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="Mybatis">
+                        
+                        Mybatis
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="35">
+<input type="hidden" id="yelog_site_word_count" value="21.5k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        Links
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">All</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>动态规划</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>类加载</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>bug</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>construct</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>debug</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>git</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>idea</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>mysql</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <div id="local-search-result">
+
+    </div>
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="All "
+           href="/2023/12/26/tomcat/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="tomcat">tomcat</span>
+            <span class="post-date" title="2023-12-26 13:28:01">2023/12/26</span>
+        </a>
+        
+        
+        <a  class="All 分布式&amp;微服务 "
+           href="/2023/12/26/%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="服务治理">服务治理</span>
+            <span class="post-date" title="2023-12-26 10:03:05">2023/12/26</span>
+        </a>
+        
+        
+        <a  class="All java 并发编程 "
+           href="/2023/12/22/java-%E5%B9%B6%E5%8F%91/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="java_并发">java_并发</span>
+            <span class="post-date" title="2023-12-22 15:02:42">2023/12/22</span>
+        </a>
+        
+        
+        <a  class="All java jdk8 "
+           href="/2023/12/20/java8-new/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="java8_new">java8_new</span>
+            <span class="post-date" title="2023-12-20 17:15:39">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="All golang "
+           href="/2023/12/19/go-goroutine/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="go_goroutine">go_goroutine</span>
+            <span class="post-date" title="2023-12-19 15:52:12">2023/12/19</span>
+        </a>
+        
+        
+        <a  class="All golang "
+           href="/2023/12/19/go-channel/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="go_channel">go_channel</span>
+            <span class="post-date" title="2023-12-19 10:34:35">2023/12/19</span>
+        </a>
+        
+        
+        <a  class="All golang "
+           href="/2023/10/27/golang/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="golang">golang</span>
+            <span class="post-date" title="2023-10-27 13:13:53">2023/10/27</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hive "
+           href="/2023/09/12/hive/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="hive">hive</span>
+            <span class="post-date" title="2023-09-12 15:18:18">2023/09/12</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hadoop "
+           href="/2023/09/12/yarn/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="yarn">yarn</span>
+            <span class="post-date" title="2023-09-12 09:47:14">2023/09/12</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hadoop "
+           href="/2023/09/12/mapreduce/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mapreduce">mapreduce</span>
+            <span class="post-date" title="2023-09-12 09:29:03">2023/09/12</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hadoop "
+           href="/2023/09/07/hadoop-server/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="hadoop_server">hadoop_server</span>
+            <span class="post-date" title="2023-09-07 13:38:52">2023/09/07</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/05/sql-lock/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_lock">sql_lock</span>
+            <span class="post-date" title="2023-09-05 14:35:13">2023/09/05</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/05/sql-trigger/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_trigger">sql_trigger</span>
+            <span class="post-date" title="2023-09-05 10:29:54">2023/09/05</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/04/sql-stored/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_stored">sql_stored</span>
+            <span class="post-date" title="2023-09-04 10:38:27">2023/09/04</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/01/sql-view/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_view">sql_view</span>
+            <span class="post-date" title="2023-09-01 12:59:44">2023/09/01</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/01/sql-optimize/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_optimize">sql_optimize</span>
+            <span class="post-date" title="2023-09-01 09:30:42">2023/09/01</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/29/mysql-index/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-index">mysql-index</span>
+            <span class="post-date" title="2023-08-29 10:36:41">2023/08/29</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/29/mysql-engine/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-storage-engine">mysql-storage-engine</span>
+            <span class="post-date" title="2023-08-29 09:37:33">2023/08/29</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/28/transaction-sql/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="transaction_sql">transaction_sql</span>
+            <span class="post-date" title="2023-08-28 17:00:31">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/28/select-tables/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="select_tables">select_tables</span>
+            <span class="post-date" title="2023-08-28 13:53:25">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 "
+           href="/2023/08/28/constraint/"
+           data-tag="mysql"
+           data-author="" >
+            <span class="post-title" title="constraint">constraint</span>
+            <span class="post-date" title="2023-08-28 12:25:25">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/28/mysql-funs/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-funs">mysql-funs</span>
+            <span class="post-date" title="2023-08-28 09:19:42">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/25/mysql-dcl/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-dcl">mysql-dcl</span>
+            <span class="post-date" title="2023-08-25 18:32:55">2023/08/25</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/25/mysql-dql/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-dql">mysql-dql</span>
+            <span class="post-date" title="2023-08-25 18:32:47">2023/08/25</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/25/mysql-dml/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-dml">mysql-dml</span>
+            <span class="post-date" title="2023-08-25 18:14:33">2023/08/25</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/25/mysql-ddl/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-ddl">mysql-ddl</span>
+            <span class="post-date" title="2023-08-25 16:41:00">2023/08/25</span>
+        </a>
+        
+        
+        <a  class="All leetcode "
+           href="/2023/06/12/constructTree/"
+           data-tag="construct"
+           data-author="" >
+            <span class="post-title" title="constructTree">constructTree</span>
+            <span class="post-date" title="2023-06-12 12:35:42">2023/06/12</span>
+        </a>
+        
+        
+        <a  class="All java jvm "
+           href="/2023/05/24/jvm-class-loading-process/"
+           data-tag="类加载"
+           data-author="" >
+            <span class="post-title" title="jvm-class-loading-process">jvm-class-loading-process</span>
+            <span class="post-date" title="2023-05-24 15:56:37">2023/05/24</span>
+        </a>
+        
+        
+        <a  class="All java jvm "
+           href="/2023/05/23/jvm-learn/"
+           data-tag="jvm"
+           data-author="" >
+            <span class="post-title" title="jvm-learn">jvm-learn</span>
+            <span class="post-date" title="2023-05-23 16:32:08">2023/05/23</span>
+        </a>
+        
+        
+        <a  class="All 工具 idea debug "
+           href="/2023/05/12/debug-skill/"
+           data-tag="debug,idea"
+           data-author="" >
+            <span class="post-title" title="debug-skill">debug-skill</span>
+            <span class="post-date" title="2023-05-12 12:35:32">2023/05/12</span>
+        </a>
+        
+        
+        <a  class="All 工具 git "
+           href="/2023/05/10/git-learning/"
+           data-tag="git"
+           data-author="" >
+            <span class="post-title" title="git-learning">git-learning</span>
+            <span class="post-date" title="2023-05-10 18:14:02">2023/05/10</span>
+        </a>
+        
+        
+        <a  class="All Mybatis "
+           href="/2023/05/10/MybatisMapperXML%E6%96%87%E4%BB%B6%E6%8A%A5%E9%94%99/"
+           data-tag="bug"
+           data-author="" >
+            <span class="post-title" title="Mybatis:MapperXML文件报错(Unable to resolve table &#39;limit&#39;)">Mybatis:MapperXML文件报错(Unable to resolve table &#39;limit&#39;)</span>
+            <span class="post-date" title="2023-05-10 14:33:43">2023/05/10</span>
+        </a>
+        
+        
+        <a  class="All leetcode "
+           href="/2023/05/10/leetcode-%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2/"
+           data-tag="动态规划"
+           data-author="" >
+            <span class="post-title" title="leetcode-最长回文子串">leetcode-最长回文子串</span>
+            <span class="post-date" title="2023-05-10 10:51:43">2023/05/10</span>
+        </a>
+        
+        
+        <a  class="All 工具 hexo "
+           href="/2023/05/09/hexo-use/"
+           data-tag="hexo"
+           data-author="" >
+            <span class="post-title" title="hexo-use">hexo-use</span>
+            <span class="post-date" title="2023-05-09 22:03:50">2023/05/09</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hive "
+           href="/2023/05/09/Hive-SQL%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="hexo-use">hexo-use</span>
+            <span class="post-date" title="2023-05-09 22:03:50">2023/05/09</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-java-并发" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">java_并发</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="java">java</a> > 
+            
+            <a  data-rel="java&lt;---&gt;并发编程">并发编程</a>
+            
+        </span>
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2023-12-22 19:04:15'>2023-12-22 15:02</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>Count:720</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80"><span class="toc-text">并发编程线程基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E9%80%9A%E7%9F%A5%E5%92%8C%E7%AD%89%E5%BE%85"><span class="toc-text">线程的通知和等待</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-text">线程上下文切换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81"><span class="toc-text">线程死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B%E5%92%8C%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B"><span class="toc-text">守护线程和用户线程</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-6 i,
+    .toc-level-6 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="并发编程线程基础"><a href="#并发编程线程基础" class="headerlink" title="并发编程线程基础"></a>并发编程线程基础</h1><p>进程是系统进行资源分配的基本单位<br>线程是进程的一个执行路径，线程是cpu分配的基本单位</p>
+<p>线程创建的三种方式和优缺点</p>
+<ol>
+<li>继承Thread类并重写run方法</li>
+</ol>
+<ul>
+<li>优点：在run()方法内直接获取当前线程直接使用this就可以，不用使用Thread.currentThread()方法</li>
+<li>缺点：不支持多继承，无法继承其他类<br>  任务与代码没有分离，多个线程执行一样的任务时需要多份任务代码<br>  没有返回值</li>
+</ul>
+<ol start="2">
+<li>实现Runnable接口的run方法</li>
+</ol>
+<ul>
+<li>优点：解决继承Thread类单继承的局限性<br>  降低线程对象和线程任务之间的耦合性，增强程序可扩展性<br>  将线程单独进行对象的封装，符合面向对象的思想</li>
+<li>缺点：没有返回值</li>
+</ul>
+<ol start="3">
+<li>实现Callable接口（使用FutureTask方式）</li>
+</ol>
+<ul>
+<li>优点：有返回值<br>  解决继承Thread类单继承的局限性<br>  降低线程对象和线程任务的耦合性，增强程序可扩展性<br>  将线程单独进行对象的封装，更符合面向对象的思想</li>
+<li>缺点：编程和理解稍复杂</li>
+</ul>
+<h2 id="线程的通知和等待"><a href="#线程的通知和等待" class="headerlink" title="线程的通知和等待"></a>线程的通知和等待</h2><h2 id="线程上下文切换"><a href="#线程上下文切换" class="headerlink" title="线程上下文切换"></a>线程上下文切换</h2><p>cpu资源的分配采用了时间片轮转的策略，也就是给每个线程分配一个时间片，线程在时间片内占用cpu执行任务。人气线程使用完时间片后，就会处于就绪状态并让出cpu让其他线程占用，这就是上下文切换<br>切换的时机：</p>
+<ol>
+<li>当前线程的cpu时间片使用完处于就绪状态时</li>
+<li>当前线程被其他线程中断时</li>
+</ol>
+<h2 id="线程死锁"><a href="#线程死锁" class="headerlink" title="线程死锁"></a>线程死锁</h2><ol>
+<li>互斥</li>
+<li>请求保存</li>
+<li>不可剥夺</li>
+<li>环路等待<br>synchronized 是 Java 中的关键字，用于控制多线程访问共享资源时的同步。它可以保证同一时间只有一个线程执行特定代码区块，从而避免并发问题如数据不一致或竞态条件。原子性内置锁，线程的执行代码在进行synchronized代码块前会自动获取内部锁，这时候其他线程访问该同步代码块时会被阻塞挂起。拿到内部锁的线程会在正常退出同步代码块或者抛出异常后或者在同步块内调用了该内置锁资源的wait系列方法时释放该内置锁。</li>
+</ol>
+<h2 id="守护线程和用户线程"><a href="#守护线程和用户线程" class="headerlink" title="守护线程和用户线程"></a>守护线程和用户线程</h2><p>守护线程和用户线程的区别：当最后一个非守护线程结束时，jvm会正常退出，而不管当前时候有守护线程<br>ThreadLocal：线程的局部变量，ThreadLocal的变量只有当前自身线程可以访问，别的线程都访问不了</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
+    </div>
+</article>
+
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2023 Mhen
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("black_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+        $('pre code').each(function(){
+            var lines = $(this).text().trim().split('\n').length, widther='';
+            if (lines>99) {
+                widther = 'widther'
+            }
+            var $numbering = $('<ul/>').addClass('pre-numbering ' + widther).attr("unselectable","on");
+            $(this).addClass('has-numbering ' + widther)
+                    .parent()
+                    .append($numbering);
+            for(var i=1;i<=lines;i++){
+                $numbering.append($('<li/>').text(i));
+            }
+        });
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<style>
+    pre{
+        position: relative;
+        margin-bottom: 24px;
+        border-radius: 10px;
+        border: 1px solid #e2dede;
+        background: #FFF;
+        overflow: hidden;
+    }
+    code.has-numbering{
+        margin-left: 30px;
+    }
+    code.has-numbering.widther{
+        margin-left: 35px;
+    }
+    .pre-numbering{
+        margin: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        padding: 0.5em 3px 0.7em 5px;
+        border-right: 1px solid #C3CCD0;
+        text-align: right;
+        color: #AAA;
+        background-color: #fafafa;
+    }
+    .pre-numbering.widther {
+        width: 35px;
+    }
+</style>
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>
