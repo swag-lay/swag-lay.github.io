@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Mybatis:MapperXML文件报错(Unable to resolve table &#39;limit&#39;) | mhen</title>
-  <meta name="keywords" content=" bug ">
-  <meta name="description" content="Mybatis:MapperXML文件报错(Unable to resolve table &#39;limit&#39;) | mhen">
+  <title>rabbitmq | mhen</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="rabbitmq | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="rabbitmq核心核心特性 消息确认机制  为了确保消息成功被消费，提供了消息确认机制，当消费者接收到消息后，比如要给一个反馈： ack：消费成功 nack：消费失败 reject：拒接   消息过期机制  可以给每条消息指定一个有效期，一段时间内未被消费者处理，就过期了。  适合场景：清理过期数据，模拟延迟队列的实现，专门让某个程序处理过期请求 死信队列  为了保证消息的可靠性，比如每条消息都">
 <meta property="og:type" content="article">
@@ -868,9 +868,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-MybatisMapperXML文件报错" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-rabbitmq" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Mybatis:MapperXML文件报错(Unable to resolve table &#39;limit&#39;)</h1>
+        <h1 class="article-title">rabbitmq</h1>
     
     <div class="article-meta">
         
@@ -880,27 +880,20 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="Mybatis">Mybatis</a>
+            <a  data-rel="rabbitmq">rabbitmq</a>
             
         </span>
         
         
-        <span class="tag">
-            <i class="iconfont icon-tag"></i>
-            
-            <a class="color4">bug</a>
-            
-        </span>
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2024-01-23 15:35:53'>2024-01-23 14:57</time>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-05-11 14:22:35'>2023-05-10 14:33</time>
-        
-    </div>
-    <div class="article-meta">
-        
-        <span>Count:142</span>
+        <span>Count:479</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -919,7 +912,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Mybatis-MapperXML%E6%96%87%E4%BB%B6%E6%8A%A5%E9%94%99-Unable-to-resolve-table-%E2%80%98limit%E2%80%99"><span class="toc-text">Mybatis:MapperXML文件报错(Unable to resolve table ‘limit’)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95"><span class="toc-text">解决办法</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#rabbitmq%E6%A0%B8%E5%BF%83"><span class="toc-text">rabbitmq核心</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="toc-text">核心特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%A4%E6%8D%A2%E6%9C%BA"><span class="toc-text">交换机</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -935,27 +928,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Mybatis-MapperXML文件报错-Unable-to-resolve-table-‘limit’"><a href="#Mybatis-MapperXML文件报错-Unable-to-resolve-table-‘limit’" class="headerlink" title="Mybatis:MapperXML文件报错(Unable to resolve table ‘limit’)"></a>Mybatis:MapperXML文件报错(Unable to resolve table ‘limit’)</h1><p>在使用<where><if></if></where>时报错</p>
-<pre><code class="javascript">&lt;select id=&quot;selectBySearch&quot; parameterType=&quot;life.mhe.community.dto.QuestionQueryDTO&quot; resultMap=&quot;BaseResultMap&quot;&gt;
-        select * from question
-        &lt;where&gt;
-            &lt;if test=&quot;search!=null&quot;&gt;
-                 title regexp #&#123;search&#125;
-            &lt;/if&gt;
-        &lt;/where&gt;
-        order by gmt_create desc limit #&#123;page&#125;,#&#123;size&#125;
-    &lt;/select&gt;
-</code></pre>
-<h2 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h2><p>起初将where和if交换位置依旧报错</p>
-<p>类似问题：</p>
-<p>[]: <a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/60575770/">https://stackoverflow.com/questions/60575770/</a></p>
-<p>最终将标签<where>改为where关键字解决</p>
-<pre><code class="javascript">where
-            &lt;if test=&quot;search!=null&quot;&gt;
-                 title regexp #&#123;search&#125;
-            &lt;/if&gt;
-        order by gmt_create desc limit #&#123;page&#125;,#&#123;size&#125;
-</code></pre>
+        <h1 id="rabbitmq核心"><a href="#rabbitmq核心" class="headerlink" title="rabbitmq核心"></a>rabbitmq核心</h1><h2 id="核心特性"><a href="#核心特性" class="headerlink" title="核心特性"></a>核心特性</h2><ul>
+<li>消息确认机制<br>  为了确保消息成功被消费，提供了消息确认机制，当消费者接收到消息后，比如要给一个反馈：<ul>
+<li>ack：消费成功</li>
+<li>nack：消费失败</li>
+<li>reject：拒接</li>
+</ul>
+</li>
+<li>消息过期机制<br>  可以给每条消息指定一个有效期，一段时间内未被消费者处理，就过期了。<br>  <strong>适合场景</strong>：清理过期数据，模拟延迟队列的实现，专门让某个程序处理过期请求</li>
+<li>死信队列<br>  为了保证消息的可靠性，比如每条消息都成功消费，需要提供一个容错机制，即：失败的消息怎么处理？</li>
+</ul>
+<h2 id="交换机"><a href="#交换机" class="headerlink" title="交换机"></a>交换机</h2><ul>
+<li>direct交换机<br>  允许我们将交换机和队列关联起来，指定交换机将哪种类型的消息发送给哪个队列</li>
+<li>topic交换机<br>  消息会根据一个<strong>模糊的</strong>路由键转发到指定的队列，也就是是特定的一类消息可以交给特定的一类系统（程序）来处理</li>
+<li>rpc交换机<br>  允许不同的程序在网络上进行通信和交互，就像调用本地函数一样。使用rpc，我们可以通过远程调用方式实现程序之间的内部通信。一般情况下，如果只是实现两个程序之间的内部通信，并没有必要借助消息队列来模拟rpc。可以使用专门的rpc框架。</li>
+<li>headers交换机<br>  类似于主题和直接交换机，可以根据消息应发送到哪个队列。这种方式不是像之前那样指定一个路由键，而是根据消息的头部消息进行匹配，以确定消息要发送到哪个队列。然而，由于性能较差且相对复杂，一般情况下并不推荐使用这种方式。</li>
+</ul>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
