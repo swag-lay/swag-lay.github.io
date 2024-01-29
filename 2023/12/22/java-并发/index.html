@@ -6,15 +6,15 @@
   <meta name="keywords" content="">
   <meta name="description" content="java_并发 | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="rabbitmq核心核心特性 消息确认机制  为了确保消息成功被消费，提供了消息确认机制，当消费者接收到消息后，比如要给一个反馈： ack：消费成功 nack：消费失败 reject：拒接   消息过期机制  可以给每条消息指定一个有效期，一段时间内未被消费者处理，就过期了。  适合场景：清理过期数据，模拟延迟队列的实现，专门让某个程序处理过期请求 死信队列  为了保证消息的可靠性，比如每条消息都">
+<meta name="description" content="GMP模型goroutine的并发编程模型基于gmp模型G:表示goroutine，每个goroutine都有自己的栈空间，定时器，初始化的栈空间在2k左右，空间会随着需求增长M:抽象化代表内核线程，记录内核线程栈信息，当goroutine调度到线程时，使用该goroutine自己的栈信息P:代表调度器，负责调度goroutine，维护一个本地goroutine队列，M从P上获得goroutine">
 <meta property="og:type" content="article">
-<meta property="og:title" content="rabbitmq">
-<meta property="og:url" content="http://example.com/2024/01/23/rabbitmq/index.html">
+<meta property="og:title" content="go_gmp">
+<meta property="og:url" content="http://example.com/2024/01/29/go-gmp/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="rabbitmq核心核心特性 消息确认机制  为了确保消息成功被消费，提供了消息确认机制，当消费者接收到消息后，比如要给一个反馈： ack：消费成功 nack：消费失败 reject：拒接   消息过期机制  可以给每条消息指定一个有效期，一段时间内未被消费者处理，就过期了。  适合场景：清理过期数据，模拟延迟队列的实现，专门让某个程序处理过期请求 死信队列  为了保证消息的可靠性，比如每条消息都">
+<meta property="og:description" content="GMP模型goroutine的并发编程模型基于gmp模型G:表示goroutine，每个goroutine都有自己的栈空间，定时器，初始化的栈空间在2k左右，空间会随着需求增长M:抽象化代表内核线程，记录内核线程栈信息，当goroutine调度到线程时，使用该goroutine自己的栈信息P:代表调度器，负责调度goroutine，维护一个本地goroutine队列，M从P上获得goroutine">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-01-23T06:57:17.000Z">
-<meta property="article:modified_time" content="2024-01-23T07:35:53.974Z">
+<meta property="article:published_time" content="2024-01-29T07:16:43.000Z">
+<meta property="article:modified_time" content="2024-01-29T09:52:29.073Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
 
@@ -90,7 +90,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(36)</small>
+                <small>(37)</small>
             
         </div>
     </li>
@@ -202,6 +202,10 @@
     
         
             
+        
+    
+        
+            
                 <li>
                     <div data-rel="大数据开发">
                         <i class="fold iconfont icon-right"></i>
@@ -283,11 +287,28 @@
             
                 <li>
                     <div data-rel="golang">
+                        <i class="fold iconfont icon-right"></i>
                         
                         golang
-                        <small>(3)</small>
+                        <small>(4)</small>
                         
                     </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="golang<--->并发编程">
+                                        
+                                        并发编程
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
                     
                 </li>
             
@@ -431,8 +452,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="36">
-<input type="hidden" id="yelog_site_word_count" value="22.5k">
+<input type="hidden" id="yelog_site_posts_number" value="37">
+<input type="hidden" id="yelog_site_word_count" value="22.8k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -525,6 +546,15 @@
     </div>
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="All golang 并发编程 "
+           href="/2024/01/29/go-gmp/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="go_gmp">go_gmp</span>
+            <span class="post-date" title="2024-01-29 15:16:43">2024/01/29</span>
+        </a>
         
         
         <a  class="All rabbitmq "
