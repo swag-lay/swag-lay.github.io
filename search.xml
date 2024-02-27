@@ -32,14 +32,14 @@
         <content type="html"><![CDATA[<h1 id="innodb对mvcc的实现"><a href="#innodb对mvcc的实现" class="headerlink" title="innodb对mvcc的实现"></a>innodb对mvcc的实现</h1><h2 id="mvcc"><a href="#mvcc" class="headerlink" title="mvcc"></a>mvcc</h2><p>多版本并发控制，用于在多个并发事务同时读写数据库时保持数据的一致性和隔离性。主要通过<strong>在每个数据行上维护多个版本的数据</strong>来实现的。当某个事务要对数据库中的数据进行修改时，mvcc会为该事务创建一个数据快照，而不是直接修改实际的数据行。</p><p>通俗来说分读操作和写操作，读操作会使用旧版本的快照，写操作会创建新版本。<br>对于版本的回收，防止数据库中版本无限增长，mvcc会定期回收</p><h2 id="一致性非锁定读"><a href="#一致性非锁定读" class="headerlink" title="一致性非锁定读"></a>一致性非锁定读</h2><p>一致性非锁定读通常做法是加一个版本号或者时间戳字段，在更新数据的同时版本号+1或者更新时间戳。查询时，将当前可见的版本号与对应记录的版本号进行比对，如果记录的版本小于可见版本，则改记录可见。<br>在innodb中，多版本孔子就是对非锁定读的实现，如果读取的行正在执行delete和update操作，这时读操作不会去等待行上锁的释放。而是会去读取行的一个快照数据，对于这种读取历史数据的方式，我们叫他快照读。<br>**innodb在实现repeatable read时，如果执行的是当前读，则会对读取的记录使用next-key lock，来防止其他事务在间隙间插入数据。</p><h2 id="innodb对mvcc的实现-1"><a href="#innodb对mvcc的实现-1" class="headerlink" title="innodb对mvcc的实现"></a>innodb对mvcc的实现</h2><p>隐藏字段，read view，undo log<br>不同事务下mvcc的差异<br>rc事务下会在每次查询时生成一个read view列表（m_ids列表），也就是说会更新不应该看到的事务列表<br>rr事务下只会在事务开始后第一次查询生成一个read view列表。</p>]]></content>
       
       
+      <categories>
+          
+          <category> 数据库 </category>
+          
+          <category> mysql </category>
+          
+      </categories>
       
-        <tags>
-            
-            <tag> mysql </tag>
-            
-            <tag> 数据库 </tag>
-            
-        </tags>
       
     </entry>
     

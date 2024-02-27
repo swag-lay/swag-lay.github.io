@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>mysql-innodb-mvcc | mhen</title>
-  <meta name="keywords" content=" mysql , 数据库 ">
+  <meta name="keywords" content="">
   <meta name="description" content="mysql-innodb-mvcc | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="lockjdk1.6为了减少获得锁和释放锁带来的性能消耗，引入了“偏向锁”和“轻量级锁”，因此锁变味了四种状态，无锁，偏向锁，轻量级锁，重量级锁。锁可以升级但不能降级  偏向锁：偏向第一个访问锁的线程。在运行过程中，同步锁只有一个线程访问，不存在线程竞争，不需要触发同步，这种情况下给线程加一个偏向锁。当线程第二次到达同步代码块，回判断持有锁的线程是否为自己，正常则继续。因为没有释放过锁，并不需要加">
@@ -172,7 +172,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         数据库
-                        <small>(15)</small>
+                        <small>(16)</small>
                         
                     </div>
                     
@@ -183,7 +183,7 @@
                                         
                                         mysql
                                         
-                                            <small>(14
+                                            <small>(15
                                                 )</small>
                                         
                                     </div>
@@ -505,10 +505,6 @@
             </li>
         
             <li class="article-tag-list-item">
-                <i class="iconfont icon-tag"></i><a>数据库</a>
-            </li>
-        
-            <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>bug</a>
             </li>
         
@@ -561,9 +557,9 @@
         </a>
         
         
-        <a  class="All "
+        <a  class="All 数据库 mysql "
            href="/2024/02/27/mysql-innodb-mvcc/"
-           data-tag="mysql,数据库"
+           data-tag=""
            data-author="" >
             <span class="post-title" title="mysql-innodb-mvcc">mysql-innodb-mvcc</span>
             <span class="post-date" title="2024-02-27 10:10:01">2024/02/27</span>
@@ -928,20 +924,21 @@
         
         
         
-        
-        <span class="tag">
-            <i class="iconfont icon-tag"></i>
+        <span class="book">
+            <i class="iconfont icon-category"></i>
             
-            <a class="color1">mysql</a>
             
-            <a class="color4">数据库</a>
+            <a  data-rel="数据库">数据库</a> > 
+            
+            <a  data-rel="数据库&lt;---&gt;mysql">mysql</a>
             
         </span>
+        
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-02-27 10:55:47'>2024-02-27 10:10</time>
+            Created At : <time class="date" title='Updated At: 2024-02-27 18:35:00'>2024-02-27 10:10</time>
         
     </div>
     <div class="article-meta">
