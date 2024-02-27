@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>mapreduce | mhen</title>
+  <title>java-synchronized | mhen</title>
   <meta name="keywords" content="">
-  <meta name="description" content="mapreduce | mhen">
+  <meta name="description" content="java-synchronized | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="innodb对mvcc的实现mvcc多版本并发控制，用于在多个并发事务同时读写数据库时保持数据的一致性和隔离性。主要通过在每个数据行上维护多个版本的数据来实现的。当某个事务要对数据库中的数据进行修改时，mvcc会为该事务创建一个数据快照，而不是直接修改实际的数据行。 通俗来说分读操作和写操作，读操作会使用旧版本的快照，写操作会创建新版本。对于版本的回收，防止数据库中版本无限增长，mvcc会定期回收">
 <meta property="og:type" content="article">
@@ -922,9 +922,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-mapreduce" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-java-synchronized" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">mapreduce</h1>
+        <h1 class="article-title">java-synchronized</h1>
     
     <div class="article-meta">
         
@@ -934,9 +934,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="大数据开发">大数据开发</a> > 
+            <a  data-rel="java">java</a> > 
             
-            <a  data-rel="大数据开发&lt;---&gt;hadoop">hadoop</a>
+            <a  data-rel="java&lt;---&gt;并发编程">并发编程</a>
             
         </span>
         
@@ -944,12 +944,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-09-12 09:46:57'>2023-09-12 09:29</time>
+            Created At : <time class="date" title='Updated At: 2024-02-27 18:27:37'>2024-02-27 17:22</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:181</span>
+        <span>Count:1.1k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -968,7 +968,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mapreduce"><span class="toc-text">mapreduce</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%EF%BC%88%E6%95%B0%E6%8D%AE%EF%BC%89%E8%AE%A1%E7%AE%97"><span class="toc-text">分布式（数据）计算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mapreduce%E7%9A%84%E4%B8%BB%E8%A6%81%E7%BC%96%E7%A8%8B%E6%8E%A5%E5%8F%A3"><span class="toc-text">mapreduce的主要编程接口</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#lock"><span class="toc-text">lock</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#jvm%E7%9A%84%E5%9B%9B%E7%B1%BB%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C"><span class="toc-text">jvm的四类内存屏障</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -984,17 +984,27 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="mapreduce"><a href="#mapreduce" class="headerlink" title="mapreduce"></a>mapreduce</h1><h2 id="分布式（数据）计算"><a href="#分布式（数据）计算" class="headerlink" title="分布式（数据）计算"></a>分布式（数据）计算</h2><p>分散-&gt;汇总模式（mapreduce）</p>
-<p>1.将数据分片，多台服务器各自负责一部分数据处理</p>
-<p>2.然后将各自的结果，进行汇总处理</p>
-<p>3.最终得到想要的计算结果</p>
-<p>中心调度-&gt;步骤执行模式（spark，flink）</p>
-<p>1.由一个节点作为中心调度管理者</p>
-<p>2.将任务划分为几个具体步骤</p>
-<p>3.管理者安排每个机器执行任务</p>
-<p>4.最终得到结果数据</p>
-<h2 id="mapreduce的主要编程接口"><a href="#mapreduce的主要编程接口" class="headerlink" title="mapreduce的主要编程接口"></a>mapreduce的主要编程接口</h2><p>map接口：主要提供分散功能，由服务器分布式处理数据</p>
-<p>reduce接口：主要提供汇总功能，进行数据汇总统计得到结果</p>
+        <h1 id="lock"><a href="#lock" class="headerlink" title="lock"></a>lock</h1><p>jdk1.6为了减少获得锁和释放锁带来的性能消耗，引入了“偏向锁”和“轻量级锁”，因此锁变味了四种状态，无锁，偏向锁，轻量级锁，重量级锁。<strong>锁可以升级但不能降级</strong></p>
+<ul>
+<li>偏向锁：偏向第一个访问锁的线程。<br>在运行过程中，同步锁只有一个线程访问，不存在线程竞争，不需要触发同步，这种情况下给线程加一个偏向锁。当线程第二次到达同步代码块，回判断持有锁的线程是否为自己，正常则继续。因为没有释放过锁，并不需要加锁。<br>如果运行过程中遇到其他线程抢占，则持有偏向锁的线程会被挂起，jvm会消除他身上的偏向锁，变为轻量级锁（撤销偏向锁的时候会导致stw操作）。一旦有第二个线程加入锁竞争，锁就会升级。</li>
+<li>轻量级锁（自旋锁）：如果持有锁的线程能在很短时间内释放锁资源，那么那些等待竞争锁的线程就不需要做内核态和用户态之间的切换进入阻塞挂起状态，它们只需要等一等（自旋），等持有锁的线程释放锁后即可立即获取锁，这样就避免用户线程和内核的切换的消耗。<br>一旦锁竞争严重，线程达到最大自旋次数，会将轻量级锁继续升级为重量级锁。</li>
+<li>重量级锁：当后续线程尝试获取锁时，发现被占用的锁是重量级锁，则直接将自己挂起，等待将来被唤醒。在JDK1.6之前，synchronized直接加重量级锁，很明显现在得到了很好的优化。</li>
+</ul>
+<p><strong>高并发场景下，不建议使用synchronized</strong></p>
+<ul>
+<li><p>由于并发度比较高，因此 synchronized 一定会升级到重量级锁，但是重量级锁的性能是不太高的，因为线程要阻塞再唤醒，需要用户态和内核态之间切换</p>
+</li>
+<li><p>synchronized 没有读写锁优化</p>
+</li>
+<li><p>synchronized 不能对线程唤醒，也就是你线程如果获取不到锁的话会一直阻塞</p>
+</li>
+</ul>
+<p>在使用 synchronized 的时候，一定要 直接将偏向锁给禁掉 ，因为大多数情况下，偏向锁都需要撤销升级为轻量级锁，而偏向锁的撤销性能是比较差的！</p>
+<p>所以如果优化的话，对于第一个点来说，将等待线程阻塞再唤醒，个人感觉优化空间不大</p>
+<p>第二个点就是读写锁的优化，读读之间不互斥，大幅度增强 读多写少 场景下的性能！</p>
+<p>第三个点就是需要一个 tryLock(timeout) 功能，在指定时间获取不到锁的时候，可以直接将线程超时了，不去拿锁了</p>
+<p>** synchrnoized是如何保证可见性的**<br>为了保证数据的一致性，避免其中一个线程修改变量之后，其他线程看不到变量的更新<br>在计算机底层中可见性的保证，是通过mesi协议来保证的，也就是保证多个处理器和内存之间数据一致性。两个关键机制<strong>flush和refresh</strong>，修改了刷新高速缓存中的值，读取时发生变量被更新，从其他的高速缓存读取最新的值更新到自己的高速缓存。<br>也就是强制去读取最新值以及将最新值刷回主内存，在有内存保障的地方强制线程去执行refresh和flush动作，从而保证数据的一致性。<br>而<strong>synchrnoized保证可见性</strong>也就是通过内存屏障来保证的。进入同步代码块和退出的时候，都会插入内存屏障。也就是在进入的时候强制执行refresh，退出的时候强制执行flush</p>
+<h2 id="jvm的四类内存屏障"><a href="#jvm的四类内存屏障" class="headerlink" title="jvm的四类内存屏障"></a>jvm的四类内存屏障</h2><p>loadload：屏障前load先于屏障后load<br>storestore：屏障前store先于屏障后store<br>loadstore：屏障前load先于屏障后store<br>storeload：确保屏障之前的所有内存访问操作(包括Store和Load)完成之后，才执行屏障之后的内存访问操作。全能型屏障，会屏蔽屏障前后所有指令的重排</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
