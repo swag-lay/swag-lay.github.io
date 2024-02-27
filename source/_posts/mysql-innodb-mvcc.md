@@ -2,9 +2,9 @@
 title: mysql-innodb-mvcc
 date: 2024-02-27 10:10:01
 categories:
-tags:
 - 数据库
 - mysql
+tags:
 ---
 
 # innodb对mvcc的实现
