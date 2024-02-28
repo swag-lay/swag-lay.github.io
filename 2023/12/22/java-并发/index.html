@@ -8,13 +8,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="lockjdk1.6为了减少获得锁和释放锁带来的性能消耗，引入了“偏向锁”和“轻量级锁”，因此锁变味了四种状态，无锁，偏向锁，轻量级锁，重量级锁。锁可以升级但不能降级  偏向锁：偏向第一个访问锁的线程。在运行过程中，同步锁只有一个线程访问，不存在线程竞争，不需要触发同步，这种情况下给线程加一个偏向锁。当线程第二次到达同步代码块，回判断持有锁的线程是否为自己，正常则继续。因为没有释放过锁，并不需要加">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java-synchronized">
-<meta property="og:url" content="http://example.com/2024/02/27/java-synchronized/index.html">
+<meta property="og:title" content="java-lock">
+<meta property="og:url" content="http://example.com/2024/02/27/java-lock/index.html">
 <meta property="og:site_name" content="mhen">
 <meta property="og:description" content="lockjdk1.6为了减少获得锁和释放锁带来的性能消耗，引入了“偏向锁”和“轻量级锁”，因此锁变味了四种状态，无锁，偏向锁，轻量级锁，重量级锁。锁可以升级但不能降级  偏向锁：偏向第一个访问锁的线程。在运行过程中，同步锁只有一个线程访问，不存在线程竞争，不需要触发同步，这种情况下给线程加一个偏向锁。当线程第二次到达同步代码块，回判断持有锁的线程是否为自己，正常则继续。因为没有释放过锁，并不需要加">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2024-02-27T09:22:13.000Z">
-<meta property="article:modified_time" content="2024-02-27T10:27:37.047Z">
+<meta property="article:modified_time" content="2024-02-28T07:05:49.631Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
 
@@ -453,7 +453,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="39">
-<input type="hidden" id="yelog_site_word_count" value="24.8k">
+<input type="hidden" id="yelog_site_word_count" value="25k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -549,10 +549,10 @@
         
         
         <a  class="All java 并发编程 "
-           href="/2024/02/27/java-synchronized/"
+           href="/2024/02/27/java-lock/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="java-synchronized">java-synchronized</span>
+            <span class="post-title" title="java-lock">java-lock</span>
             <span class="post-date" title="2024-02-27 17:22:13">2024/02/27</span>
         </a>
         
@@ -938,12 +938,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-12-22 19:04:15'>2023-12-22 15:02</time>
+            Created At : <time class="date" title='Updated At: 2024-02-28 14:35:56'>2023-12-22 15:02</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:720</span>
+        <span>Count:792</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -962,7 +962,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80"><span class="toc-text">并发编程线程基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E9%80%9A%E7%9F%A5%E5%92%8C%E7%AD%89%E5%BE%85"><span class="toc-text">线程的通知和等待</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-text">线程上下文切换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81"><span class="toc-text">线程死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B%E5%92%8C%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B"><span class="toc-text">守护线程和用户线程</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80"><span class="toc-text">并发编程线程基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E7%9A%84%E9%80%9A%E7%9F%A5%E5%92%8C%E7%AD%89%E5%BE%85"><span class="toc-text">线程的通知和等待</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%87%E6%8D%A2"><span class="toc-text">线程上下文切换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E6%AD%BB%E9%94%81"><span class="toc-text">线程死锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B%E5%92%8C%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B"><span class="toc-text">守护线程和用户线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%9D%E8%AF%81%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E6%80%9D%E8%B7%AF"><span class="toc-text">保证线程安全的思路</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1013,6 +1013,20 @@
 <li>环路等待<br>synchronized 是 Java 中的关键字，用于控制多线程访问共享资源时的同步。它可以保证同一时间只有一个线程执行特定代码区块，从而避免并发问题如数据不一致或竞态条件。原子性内置锁，线程的执行代码在进行synchronized代码块前会自动获取内部锁，这时候其他线程访问该同步代码块时会被阻塞挂起。拿到内部锁的线程会在正常退出同步代码块或者抛出异常后或者在同步块内调用了该内置锁资源的wait系列方法时释放该内置锁。</li>
 </ol>
 <h2 id="守护线程和用户线程"><a href="#守护线程和用户线程" class="headerlink" title="守护线程和用户线程"></a>守护线程和用户线程</h2><p>守护线程和用户线程的区别：当最后一个非守护线程结束时，jvm会正常退出，而不管当前时候有守护线程<br>ThreadLocal：线程的局部变量，ThreadLocal的变量只有当前自身线程可以访问，别的线程都访问不了</p>
+<h2 id="保证线程安全的思路"><a href="#保证线程安全的思路" class="headerlink" title="保证线程安全的思路"></a>保证线程安全的思路</h2><ol>
+<li>使用没有共享资源的模型</li>
+<li>使用共享资源只读不写的模型：<ol>
+<li>不需要写共享资源的模型</li>
+<li>使用不可变对象</li>
+</ol>
+</li>
+<li>直面线程安全<ol>
+<li>保证原子性</li>
+<li>保证顺序性</li>
+<li>保证可见性</li>
+</ol>
+</li>
+</ol>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
