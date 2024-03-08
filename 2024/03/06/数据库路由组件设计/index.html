@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>debug-skill | mhen</title>
-  <meta name="keywords" content=" debug , idea ">
-  <meta name="description" content="debug-skill | mhen">
+  <title>数据库路由组件设计 | mhen</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="数据库路由组件设计 | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="业务背景业务体量的增加，原先的库表存储不能支撑海量的并发请求。需要考虑分库分表。初期的分库分表还是中期的分库分表迁移，出发点现有技术无法实现个性化的业务需求，并且自研组件小而精，易于迭代维护，后续也可能加入其他的功能 水平拆分：直接拆分数据库垂直拆分：拆分数据表 技术调研分库分表的组件 基于代理在应用和数据之间加一个代理层，应用程序所有的数据请求都交给代理层处理，代理层负责分离读写请求，将它们路由">
 <meta property="og:type" content="article">
@@ -987,9 +987,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-debug-skill" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-数据库路由组件设计" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">debug-skill</h1>
+        <h1 class="article-title">数据库路由组件设计</h1>
     
     <div class="article-meta">
         
@@ -999,33 +999,22 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="工具">工具</a> > 
+            <a  data-rel="系统设计">系统设计</a> > 
             
-            <a  data-rel="工具&lt;---&gt;idea">idea</a> > 
-            
-            <a  data-rel="工具&lt;---&gt;idea&lt;---&gt;debug">debug</a>
+            <a  data-rel="系统设计&lt;---&gt;数据库路由组件">数据库路由组件</a>
             
         </span>
         
         
-        <span class="tag">
-            <i class="iconfont icon-tag"></i>
-            
-            <a class="color1">debug</a>
-            
-            <a class="color5">idea</a>
-            
-        </span>
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2024-03-06 11:20:30'>2024-03-06 10:56</time>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-05-13 15:46:55'>2023-05-12 12:35</time>
-        
-    </div>
-    <div class="article-meta">
-        
-        <span>Count:109</span>
+        <span>Count:440</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1044,7 +1033,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#idea%E4%B8%AD%E5%88%A9%E7%94%A8%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD%E5%BF%AB%E9%80%9F%E5%AE%9A%E4%BD%8D%E5%88%97%E8%A1%A8%E5%85%83%E7%B4%A0"><span class="toc-text">idea中利用条件判断快速定位列表元素</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%9A%E5%8A%A1%E8%83%8C%E6%99%AF"><span class="toc-text">业务背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E8%B0%83%E7%A0%94"><span class="toc-text">技术调研</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E4%BB%A3%E7%90%86"><span class="toc-text">基于代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E7%BB%84%E4%BB%B6"><span class="toc-text">基于组件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E8%AE%BE%E8%AE%A1"><span class="toc-text">方案设计</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1060,19 +1049,23 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="idea中利用条件判断快速定位列表元素"><a href="#idea中利用条件判断快速定位列表元素" class="headerlink" title="idea中利用条件判断快速定位列表元素"></a>idea中利用条件判断快速定位列表元素</h1><p>例如在发布问题默认用户时，假设首先通过页面控制台得到question.id&#x3D;&#x3D;3</p>
-<p>我们此时找到QuestionService中 list方法，</p>
-<pre><code class="java">for (Question question : questions) &#123;
-            User user = userMapper.selectByPrimaryKey(question.getCreator());
-            QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(question, questionDTO);
-            questionDTO.setUser(user);
-            questionDTOList.add(questionDTO);
-        &#125;
-</code></pre>
-<p>在第二句中打上断点，并加入condition如下图</p>
-<p><img src="/../images/image-20230512124224225.png" alt="image-20230512124224225"></p>
-<p>即可直接在id为3时调试bug</p>
+        <h1 id="业务背景"><a href="#业务背景" class="headerlink" title="业务背景"></a>业务背景</h1><p>业务体量的增加，原先的库表存储不能支撑海量的并发请求。需要考虑分库分表。<br>初期的分库分表还是中期的分库分表迁移，出发点<strong>现有技术无法实现个性化的业务需求，并且自研组件小而精，易于迭代维护，后续也可能加入其他的功能</strong></p>
+<p>水平拆分：<br>直接拆分数据库<br>垂直拆分：<br>拆分数据表</p>
+<h1 id="技术调研"><a href="#技术调研" class="headerlink" title="技术调研"></a>技术调研</h1><p>分库分表的组件</p>
+<h2 id="基于代理"><a href="#基于代理" class="headerlink" title="基于代理"></a>基于代理</h2><p>在应用和数据之间加一个代理层，应用程序所有的数据请求都交给代理层处理，代理层负责分离读写请求，将它们路由到对应的数据库中。类似的中间件有Mysql Router，Atlas，MaxScale，MyCat。</p>
+<h2 id="基于组件"><a href="#基于组件" class="headerlink" title="基于组件"></a>基于组件</h2><p>基于独立的jar包就可以开发，不用部署，运维成本低，不需要代理层的二次转发请求，性能很高，比较经典的就是Sharding-JDBC</p>
+<h1 id="方案设计"><a href="#方案设计" class="headerlink" title="方案设计"></a>方案设计</h1><ul>
+<li>如何在组件中实现动态数据源切换</li>
+<li>如何实现比较均匀的路由散列算法</li>
+<li>如何拦截并修改SQL</li>
+</ul>
+<p><img src="/..%5Cimages%5Cimage-20240306111639672.png" alt="image-20240306111639672"><br>主要包括</p>
+<ul>
+<li>aop切面编程：拦截需要使用DB路由的方法，这里采用自定义注解</li>
+<li>数据库连接池配置：分库分表需要按需配置数据库连接源，在这些连接池的集合中进行<strong>动态数据源切换</strong></li>
+<li>路由哈希算法设计：在路由设计时，需要根据分库分表字段进行路由计算，让数据均匀地分布至各个库表之中，参考HashMap的扰动函数设计</li>
+<li>mybatis拦截器：实现sql动态拦截和修改</li>
+</ul>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
