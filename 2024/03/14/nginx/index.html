@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>constraint | mhen</title>
-  <meta name="keywords" content=" mysql ">
-  <meta name="description" content="constraint | mhen">
+  <title>nginx | mhen</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="nginx | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="nginx是如何处理http头部的过程请求之前，将nginx和客户端建立连接，然后接收用户发送的http请求，然后接收所有header，然后决定哪些http模块处理请求 建立连接-分配内存池-http设置请求超时时间 当用户发送请到来之后，发送ack回复，事件模块拿到请求，回调ngx_http_wait_request_handler，请求变为用户态，分配内存池（这段内存是从连接内存池分配的） 处">
 <meta property="og:type" content="article">
@@ -1034,9 +1034,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-constraint" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-nginx" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">constraint</h1>
+        <h1 class="article-title">nginx</h1>
     
     <div class="article-meta">
         
@@ -1046,27 +1046,22 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="数据库">数据库</a>
+            <a  data-rel="网络编程">网络编程</a> > 
+            
+            <a  data-rel="网络编程&lt;---&gt;nginx">nginx</a>
             
         </span>
         
         
-        <span class="tag">
-            <i class="iconfont icon-tag"></i>
-            
-            <a class="color1">mysql</a>
-            
-        </span>
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2024-03-14 14:10:41'>2024-03-14 13:09</time>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-08-28 13:50:17'>2023-08-28 12:25</time>
-        
-    </div>
-    <div class="article-meta">
-        
-        <span>Count:491</span>
+        <span>Count:809</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1085,7 +1080,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql%E7%BA%A6%E6%9D%9F"><span class="toc-text">mysql约束</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#nginx%E6%98%AF%E5%A6%82%E4%BD%95%E5%A4%84%E7%90%86http%E5%A4%B4%E9%83%A8%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-text">nginx是如何处理http头部的过程</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1101,90 +1096,31 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="mysql约束"><a href="#mysql约束" class="headerlink" title="mysql约束"></a>mysql约束</h1><p>约束是作用于表中字段上的规则，用于限制存储在表中的数据。为了保证数据库中数据的正确，有效性和完整性。</p>
-<table>
-<thead>
-<tr>
-<th>约束</th>
-<th>描述</th>
-<th>关键字</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>非空约束</td>
-<td>限制该字段的数据不能为null</td>
-<td>not null</td>
-</tr>
-<tr>
-<td>唯一约束</td>
-<td>唯一，不重复的</td>
-<td>unique</td>
-</tr>
-<tr>
-<td>主键约束</td>
-<td>唯一标识，要求非空且唯一</td>
-<td>primary key</td>
-</tr>
-<tr>
-<td>默认</td>
-<td></td>
-<td>default</td>
-</tr>
-<tr>
-<td>检查约束（8.0.16之后）</td>
-<td>保证字段值满足某一个条件</td>
-<td>check</td>
-</tr>
-<tr>
-<td>外键约束</td>
-<td>用来让两张表的数据之间建立连接，保证数据的一致性和完整性</td>
-<td>foreign key</td>
-</tr>
-</tbody></table>
-<p>注意：约束是作用于表中字段上的，可以在创建表&#x2F;修改表的时候添加约束。</p>
-<p>外键约束：</p>
-<pre><code class="mysql">create table 表名(
-    字段名 数据类型,
-    ...
-    [constraint] [外键名称] foreign key(外键字段名) references 主表(主表列名)
-);
--- 添加外键
-alter table 表名 add constraint 外键名称 foreign key(外键字段名) references 主表(主表列名);
-
--- 删除外键
-alter table 表名 drop foreign key 外键名称;
-</code></pre>
-<p>删除&#x2F;更新行为</p>
-<table>
-<thead>
-<tr>
-<th>行为</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>no action</td>
-<td>当在父表中删除&#x2F;更新对应记录时，首先检查该记录是否有对应外键，如果有则不允许删除&#x2F;更新。（与restrict一致）</td>
-</tr>
-<tr>
-<td>restrict</td>
-<td>。。。 ，首先检查该记录是否有对应外键，如果有则不允许删除&#x2F;更新。（与no action一致）</td>
-</tr>
-<tr>
-<td>cascade</td>
-<td>。。。，首先检查该记录是否有对应外键，如果有，则也删除&#x2F;更新外键在子表中的记录</td>
-</tr>
-<tr>
-<td>set null</td>
-<td>。。。，首先检查该记录是否有对应外键，如果有则设置子表中该外键为null（这就要求该外键允许曲null）</td>
-</tr>
-<tr>
-<td>set default</td>
-<td>父表有变更时，子表将外键列设置为一个默认的值（Innodb不支持）</td>
-</tr>
-</tbody></table>
-<pre><code class="mysql">alter table 表名 add constraint 外键名称 foreign key (外键名称) references 主表名（主表字段名） on update cascade on delete cascade;
-</code></pre>
+        <h1 id="nginx是如何处理http头部的过程"><a href="#nginx是如何处理http头部的过程" class="headerlink" title="nginx是如何处理http头部的过程"></a>nginx是如何处理http头部的过程</h1><p>请求之前，将nginx和客户端建立连接，<br>然后接收用户发送的http请求，<br>然后接收所有header，<br>然后决定哪些http模块处理请求</p>
+<p><img src="/..%5Cimages%5Cimage-20240314131424122.png" alt="image-20240314131424122"><br>建立连接-分配内存池-http设置请求超时时间</p>
+<p><img src="/..%5Cimages%5Cimage-20240314131919911.png" alt="image-20240314131919911"><br>当用户发送请到来之后，发送ack回复，事件模块拿到请求，回调ngx_http_wait_request_handler，请求变为用户态，分配内存池（这段内存是从连接内存池分配的）</p>
+<p><img src="/..%5Cimages%5Cimage-20240314132417225.png" alt="image-20240314132417225"><br>处理请求只需要放入nginx内存中就行，同时需要做大量的上下文分析，所以许哟啊分配请求内存池。<br>在状态机解析请求行时，不断分批大内存。<br>分批完大内存之后，开始识别header，确定哪一个server块去处理请求，然后移除超时定时器，接下来开始核心的11个阶段http请求处理阶段</p>
+<ol>
+<li>Read Request Headers：解析请求头。</li>
+<li>Identify Configuration Block：识别由哪一个 location 进行处理，匹配 URL。</li>
+<li>Apply Rate Limits：判断是否限速。例如可能这个请求并发的连接数太多超过了限制，或者 QPS 太高。</li>
+<li>Perform Authentication：连接控制，验证请求。例如可能根据 Referrer 头部做一些防盗链的设置，或者验证用户的权限。</li>
+<li>Generate Content：生成返回给用户的响应。为了生成这个响应，做反向代理的时候可能会和上游服务（Upstream Services）进行通信，然后这个过程中还可能会有些子请求或者重定向，那么还会走一下这个过程（Internal redirects and subrequests）。</li>
+<li>Response Filters：过滤返回给用户的响应。比如压缩响应，或者对图片进行处理。</li>
+<li>Log：记录日志。</li>
+<li>POST_READ：在 read 完请求的头部之后，在没有对头部做任何处理之前，想要获取到一些原始的值，就应该在这个阶段进行处理。这里面会涉及到一个 realip 模块。</li>
+<li>SERVER_REWRITE：和下面的 REWRITE 阶段一样，都只有一个模块叫 rewrite 模块，一般没有第三方模块会处理这个阶段。</li>
+<li>FIND_CONFIG：做 location 的匹配，暂时没有模块会用到。</li>
+<li>REWRITE：对 URL 做一些处理。</li>
+<li>POST_WRITE：处于 REWRITE 之后，也是暂时没有模块会在这个阶段出现。<br>接下来是确认用户访问权限的三个模块：</li>
+<li>PREACCESS：是在 ACCESS 之前要做一些工作，例如并发连接和 QPS 需要进行限制，涉及到两个模块：limt_conn 和 limit_req</li>
+<li>ACCESS：核心要解决的是用户能不能访问的问题，例如 auth_basic 是用户名和密码，access 是用户访问 IP，auth_request 根据第三方服务返回是否可以去访问。</li>
+<li>POST_ACCESS：是在 ACCESS 之后会做一些事情，同样暂时没有模块会用到。<br>最后的三个阶段处理响应和日志：</li>
+<li>PRECONTENT：在处理 CONTENT 之前会做一些事情，例如会把子请求发送给第三方的服务去处理，try_files 模块也是在这个阶段中。</li>
+<li>CONTENT：这个阶段涉及到的模块就非常多了，例如 index, autoindex, concat 等都是在这个阶段生效的。</li>
+<li>LOG：记录日志 access_log 模块。</li>
+</ol>
+<p><img src="/..%5Cimages%5Cimage-20240314140800523.png" alt="image-20240314140800523"></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
