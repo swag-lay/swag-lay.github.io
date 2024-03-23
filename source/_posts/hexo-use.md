@@ -7,8 +7,8 @@ categories:
 tags:
 - hexo
 ---
-
 ## 创建新文章
+
 hexo new <>
 
 git
@@ -18,3 +18,5 @@ git push origin public
 
 发布网站并推送静态文件到master分支
 hexo g -d
+
+注意当需要将_config.yml同级目录下的node_modules/.bin和node_modules/hexo/bin加入环境变量中，否则可能无法运行hexo
