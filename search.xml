@@ -4,6 +4,111 @@
   
     
     <entry>
+      <title>network-websocket</title>
+      <link href="/2024/03/25/network-websocket/"/>
+      <url>/2024/03/25/network-websocket/</url>
+      
+        <content type="html"><![CDATA[<h1 id="websocket"><a href="#websocket" class="headerlink" title="websocket"></a>websocket</h1><p>基于tcp连接的全双工通信协议，也就是客户端和服务器可以同时发送和接收数据<br>用于弥补HTTP协议在持久通信上的不足，客户端和服务器仅需握手一次，两者就可以创建持久性的连接，进行双向数据传输<br>常用于实时任务：聊天，弹幕，协同编辑</p><h2 id="工程流程"><a href="#工程流程" class="headerlink" title="工程流程"></a>工程流程</h2><ol><li>客户端向服务器端发送http请求，请求头中包含<strong>Upgrade:websocket</strong>，和<strong>Sec-WebSocket-Key</strong>等字段。</li><li>服务器接收到请求后，进行协议的升级，如果支持WebSocket，回复http 101，响应头包含<strong>Connection:Upgrade</strong>和<strong>Sec-WebSocket-Accept:xxx</strong>等字段，表示成功升级到WebSocket协议</li><li>建立双向连接，数据以帧的形式进行传送。（在连接过程中，通过心跳机制保持连接的稳定性和活跃性）</li><li>客户端或服务器主动发送一个关闭帧，表示要断开连接，另一方收到后，也会回复一个关闭帧，然后关闭tcp连接。</li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机网络 </category>
+          
+          <category> WebSocket </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>network-http</title>
+      <link href="/2024/03/25/network-http/"/>
+      <url>/2024/03/25/network-http/</url>
+      
+        <content type="html"><![CDATA[<h1 id="http-amp-https"><a href="#http-amp-https" class="headerlink" title="http &amp; https"></a>http &amp; https</h1><h2 id="http是如何保存用户的状态"><a href="#http是如何保存用户的状态" class="headerlink" title="http是如何保存用户的状态"></a>http是如何保存用户的状态</h2><p>http本身是一种无状态协议，也就是说http协议自身不对请求和响应之间的通信状态进行保存。而session机制就是为了保存用户状态，session通过服务端记录用户的状态。常见保存session的方法有内存和数据库（比如redis），如何session进行跟踪，一般是通过是在cookie中附加一个session id。当cookie被禁用时，通常利用url重写把session id直接附加在url路径后面</p><h2 id="从输入url到页面展示的过程"><a href="#从输入url到页面展示的过程" class="headerlink" title="从输入url到页面展示的过程"></a>从输入url到页面展示的过程</h2><p><img src="/..%5Cimages%5Cimage-20240325164540430.png" alt="image-20240325164540430"></p><ol><li>通过dns协议，获取域名对应ip</li><li>根据ip和端口，向目标服务器发送tcp请求</li><li>在tcp连接上，向服务器发送http请求报文，获取网页内容</li><li>服务器接收http请求报文，处理请求，返回响应报文</li><li>浏览器收到http响应报文，解析响应体的html代码，渲染网页，如果有需要加载的其他资源再次发送http请求，获取资源，直到网页全部加载</li><li>不需要通信时，关闭tcp连接</li></ol><p>http状态码</p><p>|状态码|类别|原因|<br>|—|—|<br>|1xx |information |接收请求正在处理|<br>|2xx|success|完成|<br>|3xx|redirection|重定向，需要附加操作以完成|<br>|4xx|client error|服务器无法处理|<br>|5xx|server error|服务器请求错误|</p><h2 id="http和https的区别"><a href="#http和https的区别" class="headerlink" title="http和https的区别"></a>http和https的区别</h2><p>端口号：http是80，https是443<br>url前缀：http:&#x2F;&#x2F;,https:&#x2F;&#x2F;<br>安全性和资源消耗：http运行在tcp上，所有传输内容为明文，客户端和用户端都无法验证对方的身份。https是运行在ssl&#x2F;tls上的，ssl&#x2F;tls又是运行在tcp上的。所有传输的内容都经过加密，加密采用对称加密，但对称加密的密钥用服务器的证书进行了非对称加密<br>搜索引擎优化：搜索引擎通常会更青睐使用https协议的网站，因为https能够提供更高的安全性和用户隐私保护。使用https协议的网站在搜索结果中可能会被优先显示，从而对seo产生影响。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机网络 </category>
+          
+          <category> http </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>network-base</title>
+      <link href="/2024/03/25/network-base/"/>
+      <url>/2024/03/25/network-base/</url>
+      
+        <content type="html"><![CDATA[<h1 id="TCP-x2F-IP五层模型"><a href="#TCP-x2F-IP五层模型" class="headerlink" title="TCP&#x2F;IP五层模型"></a>TCP&#x2F;IP五层模型</h1><p>应用层：拿到数据</p><ul><li>常见协议：http，smtp，imap，ftp，telnet，ssh，rtp，dns<br>传输层：从哪到哪，起点终点</li><li>常见协议：tcp，udp<br>网络层：起点到终点的路线</li><li>常见协议：ip，arp，icmp，nat，ospf，rip，bgp<br>数据链路层：路线中每个点怎么传输数据<br>物理层：物理基本协议</li></ul><h1 id="OSI七层模型"><a href="#OSI七层模型" class="headerlink" title="OSI七层模型"></a>OSI七层模型</h1><p>应用<br>表示<br>会话<br>传输<br>网络<br>数据链路<br>物理</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机网络 </category>
+          
+          <category> 网络基础 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>virtual-memory</title>
+      <link href="/2024/03/25/virtual-memory/"/>
+      <url>/2024/03/25/virtual-memory/</url>
+      
+        <content type="html"><![CDATA[<h1 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h1><p>本质上它只是逻辑存在的，是一个假想出来的内存空间，主要作用是作为进程访问主存（物理内存）的桥梁并简化内存管理<br>进程-&gt;虚拟内存-&gt;主存<br>功能：</p><ul><li>隔离进程</li><li>提高物理内存利用率</li><li>简化内存管理</li><li>多个进程共享物理内存</li><li>提高内存使用安全性</li><li>提供更大的可使用内存空间</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 操作系统 </category>
+          
+          <category> 内存管理 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>process</title>
+      <link href="/2024/03/23/process/"/>
+      <url>/2024/03/23/process/</url>
+      
+        <content type="html"><![CDATA[<h1 id="进程和线程"><a href="#进程和线程" class="headerlink" title="进程和线程"></a>进程和线程</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><p>进程：资源分配的基本单位，是调动运行的基本单位。在运行程序的时候，系统创建进程，分配资源，放入就绪队列，通过调度算法选中，分配cpu及相关资源，才运行。也就是说进程是系统中并发执行的单位。</p><p>线程：在采用微内核的系统中，线程变为资源调度的基本单位。此时并发执行的单位变为线程。</p><ul><li>线程就是完成该进程的子任务之一</li><li>一个线程挂掉会导致整个进程挂掉</li><li>编程复杂，调试复杂</li><li>适用于多核分布式</li></ul><h2 id="进程的相关问题"><a href="#进程的相关问题" class="headerlink" title="进程的相关问题"></a>进程的相关问题</h2><h3 id="进程之间的通信"><a href="#进程之间的通信" class="headerlink" title="进程之间的通信"></a>进程之间的通信</h3><ol><li>管道：</li></ol><ul><li>有名管道：半双工通信，但允许无亲属关系的进程通信，在go中通常用于协程之间的数据传递，同步等高级通信方式，比如生成者-消费者模式</li><li>无名管道：半双工通信，数据单向流动，仅在具有亲缘关系的进程间使用，通过用于两个不同进程之间的通信</li></ul><ol start="2"><li>信号量<br>计数器，控制多个线程对共享资源的访问，用于多线程之间的同步，通常作为一个锁机制，防止某一进程访问资源时其他进程也访问该资源，因此主要作为进程间以及同一进程内不同线程的同步手段</li><li>信号<br>用于通知接受进程某个事件已经发生<br>比较复杂后面遇到再补充</li><li>消息队列<br>消息的链表，由消息队列标识符标识，unix下不同进程间可实现共享资源的一种机制。unix允许不同进程将格式化的数据流以消息队列发送给任意进程。</li><li>共享内存<br>映射一段能够被其他进程访问的内存，这段内存由一个进程创建，但多个进程都可以访问，是所有进程间通信方式（IPC）最快的</li><li>套接字</li></ol><h2 id="线程的相关问题"><a href="#线程的相关问题" class="headerlink" title="线程的相关问题"></a>线程的相关问题</h2><h3 id="线程之间的通信"><a href="#线程之间的通信" class="headerlink" title="线程之间的通信"></a>线程之间的通信</h3><ol><li>锁机制</li></ol><ul><li>互斥锁：提供了排他方式防止数据结构被并发修改</li><li>条件变量：原子操作阻塞进程，对条件的测试是再互斥锁的保护下进行，条件变量始终和互斥锁一起使用</li><li>读写锁：允许多个线程同时读共享数据，但对写操作是互斥的</li></ul><ol start="2"><li>信号量机制：无名线程信号量和命名线程信号量</li><li>信号机制：类似进程间的信号处理<br>线程进行通信的目的是用于线程同步，所欲线程没有像进程通信中的用于数据交换的通信机制</li></ol><h2 id="一个进程最多可以创建多少线程？"><a href="#一个进程最多可以创建多少线程？" class="headerlink" title="一个进程最多可以创建多少线程？"></a>一个进程最多可以创建多少线程？</h2><p>首先需要考虑：</p><ul><li>进程的虚拟内存空间上限：因为创建线程会开辟栈，占用虚拟内存。虚拟空间通常被分为内核空间和用户空间两部分</li><li>系统参数限制</li></ul><p>不同位数linux系统中，地址空间不一样</p><p><img src="/../images/1711190901751.png" alt="1711190901751"></p><p>比如32位linux系统中，一个进程的虚拟空间是4G，内核是1G，剩余3G，可以采用ulimit -a查看stack size，假设一个线程占用10M的虚拟空间，那就是3G&#x2F;10M&#x3D;300个线程</p><p>在64位操作系统中，如果按照10M的线程虚拟内存占用理论上可以创建无数个线程<br>但是下面三个内核参数的大小会限制线程的上线</p><ul><li>&#x2F;proc&#x2F;sys&#x2F;kernel&#x2F;threads-max：系统支持的最大线程数，默认值14553</li><li>&#x2F;proc&#x2F;sys&#x2F;kernel&#x2F;pid_max：系统全局PID号数值的限制，每个进程或线程都有ID，默认32768</li><li>&#x2F;proc&#x2F;sys&#x2F;vm&#x2F;max_map_count：表示一个进程可以拥有的虚拟内存区域的数量，默认65530</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 操作系统 </category>
+          
+          <category> 进程和线程 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>redis-lock</title>
       <link href="/2024/03/22/redis-lock/"/>
       <url>/2024/03/22/redis-lock/</url>
@@ -941,7 +1046,7 @@
       <link href="/2023/05/09/hexo-use/"/>
       <url>/2023/05/09/hexo-use/</url>
       
-        <content type="html"><![CDATA[<h2 id="创建新文章"><a href="#创建新文章" class="headerlink" title="创建新文章"></a>创建新文章</h2><p>hexo new &lt;&gt;</p><p>git<br>git add .<br>git commit -m “”<br>git push origin public</p><p>发布网站并推送静态文件到master分支<br>hexo g -d</p>]]></content>
+        <content type="html"><![CDATA[<h2 id="创建新文章"><a href="#创建新文章" class="headerlink" title="创建新文章"></a>创建新文章</h2><p>hexo new &lt;&gt;</p><p>git<br>git add .<br>git commit -m “”<br>git push origin public</p><p>发布网站并推送静态文件到master分支<br>hexo g -d</p><p>注意当需要将_config.yml同级目录下的node_modules&#x2F;.bin和node_modules&#x2F;hexo&#x2F;bin加入环境变量中，否则可能无法运行hexo</p>]]></content>
       
       
       <categories>
