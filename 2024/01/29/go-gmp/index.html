@@ -6,15 +6,15 @@
   <meta name="keywords" content="">
   <meta name="description" content="go_gmp | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="websocket基于tcp连接的全双工通信协议，也就是客户端和服务器可以同时发送和接收数据用于弥补HTTP协议在持久通信上的不足，客户端和服务器仅需握手一次，两者就可以创建持久性的连接，进行双向数据传输常用于实时任务：聊天，弹幕，协同编辑 工程流程 客户端向服务器端发送http请求，请求头中包含Upgrade:websocket，和Sec-WebSocket-Key等字段。 服务器接收到请求后，">
+<meta name="description" content="tcp三次握手刚开始客户端处于closed的状态，服务端处于listen状态第一次握手，客户端发送syn报文，指明序列号为lsn，此时客户端处于syn_send状态第二次握手，服务器收到syn报文，发送syn报文给客户端，序列号为lsn，将客户端你的lsn+1作为ack，此时服务器处于syn_recv状态第三次握手，客户端收到syn报文，将lsn+1作为ack发送给服务端，此时客户端处于estab">
 <meta property="og:type" content="article">
-<meta property="og:title" content="network-websocket">
-<meta property="og:url" content="http://example.com/2024/03/25/network-websocket/index.html">
+<meta property="og:title" content="tcp&#x2F;ip">
+<meta property="og:url" content="http://example.com/2024/03/26/tcp-ip/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="websocket基于tcp连接的全双工通信协议，也就是客户端和服务器可以同时发送和接收数据用于弥补HTTP协议在持久通信上的不足，客户端和服务器仅需握手一次，两者就可以创建持久性的连接，进行双向数据传输常用于实时任务：聊天，弹幕，协同编辑 工程流程 客户端向服务器端发送http请求，请求头中包含Upgrade:websocket，和Sec-WebSocket-Key等字段。 服务器接收到请求后，">
+<meta property="og:description" content="tcp三次握手刚开始客户端处于closed的状态，服务端处于listen状态第一次握手，客户端发送syn报文，指明序列号为lsn，此时客户端处于syn_send状态第二次握手，服务器收到syn报文，发送syn报文给客户端，序列号为lsn，将客户端你的lsn+1作为ack，此时服务器处于syn_recv状态第三次握手，客户端收到syn报文，将lsn+1作为ack发送给服务端，此时客户端处于estab">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-03-25T10:21:21.000Z">
-<meta property="article:modified_time" content="2024-03-25T10:37:33.587Z">
+<meta property="article:published_time" content="2024-03-26T05:26:23.000Z">
+<meta property="article:modified_time" content="2024-03-26T05:50:34.937Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
 
@@ -90,7 +90,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(49)</small>
+                <small>(50)</small>
             
         </div>
     </li>
@@ -329,7 +329,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         计算机网络
-                        <small>(3)</small>
+                        <small>(4)</small>
                         
                     </div>
                     
@@ -351,6 +351,18 @@
                                     <div data-rel="计算机网络<--->http">
                                         
                                         http
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="计算机网络<--->tcp/ip协议">
+                                        
+                                        tcp/ip协议
                                         
                                             <small>(1
                                                 )</small>
@@ -678,6 +690,10 @@
             
         
     
+        
+            
+        
+    
 </ul>
 <div class="left-bottom">
     <div class="menus">
@@ -691,8 +707,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="49">
-<input type="hidden" id="yelog_site_word_count" value="30.2k">
+<input type="hidden" id="yelog_site_posts_number" value="50">
+<input type="hidden" id="yelog_site_word_count" value="30.7k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -785,6 +801,15 @@
     </div>
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="All 计算机网络 tcp/ip协议 "
+           href="/2024/03/26/tcp-ip/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="tcp/ip">tcp/ip</span>
+            <span class="post-date" title="2024-03-26 13:26:23">2024/03/26</span>
+        </a>
         
         
         <a  class="All 计算机网络 WebSocket "
