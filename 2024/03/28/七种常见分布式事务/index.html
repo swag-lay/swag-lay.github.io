@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>七种常见分布式事务 | mhen</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="七种常见分布式事务 | mhen">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="七种常见分布式事务2pc：两阶段提交，准备阶段和提交阶段准备阶段：由事务协调者询问通知每个事务参与者，是否准备好执行事务 提交阶段：所有参与l参与者都同意，意味着完成事务，要么都commit要么都rollback   问题：可靠性和数据一致性问题 3pc：针对2pc进行改进协调者和参与者引入超时机制；第一阶段和第二阶段中间插入一个准备阶段，保证在最后提交阶段之前各参与节点的状态保持一致 分为Can">
+<meta property="og:type" content="article">
+<meta property="og:title" content="七种常见分布式事务">
+<meta property="og:url" content="http://example.com/2024/03/28/%E4%B8%83%E7%A7%8D%E5%B8%B8%E8%A7%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/index.html">
+<meta property="og:site_name" content="mhen">
+<meta property="og:description" content="七种常见分布式事务2pc：两阶段提交，准备阶段和提交阶段准备阶段：由事务协调者询问通知每个事务参与者，是否准备好执行事务 提交阶段：所有参与l参与者都同意，意味着完成事务，要么都commit要么都rollback   问题：可靠性和数据一致性问题 3pc：针对2pc进行改进协调者和参与者引入超时机制；第一阶段和第二阶段中间插入一个准备阶段，保证在最后提交阶段之前各参与节点的状态保持一致 分为Can">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328121635423.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328121719108.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328121738963.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328122005515.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328140033077.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328140545363.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328141627493.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328141959187.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328143239908.png">
+<meta property="article:published_time" content="2024-03-28T03:49:41.000Z">
+<meta property="article:modified_time" content="2024-03-28T06:36:03.784Z">
+<meta property="article:author" content="mhen">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/..%5Cimages%5Cimage-20240328121635423.png">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>mhen</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="github"
+               href="https://github.com/"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="All">All
+            
+                <small>(51)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                <li>
+                    <div data-rel="工具">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        工具
+                        <small>(3)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="工具<--->git">
+                                        
+                                        git
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="工具<--->hexo">
+                                        
+                                        hexo
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="工具<--->idea">
+                                        <i class="fold iconfont icon-right"></i>
+                                        
+                                        idea
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                        <ul class="sub hide">
+                                            
+                                                <li>
+                                                    <div data-rel="工具<--->ideadebug">
+                                                        
+                                                        debug
+                                                        
+                                                            <small>(1)</small>
+                                                        
+                                                    </div>
+                                                </li>
+                                            
+                                        </ul>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="数据库">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        数据库
+                        <small>(16)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="数据库<--->mysql">
+                                        
+                                        mysql
+                                        
+                                            <small>(15
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="操作系统">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        操作系统
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="操作系统<--->进程和线程">
+                                        
+                                        进程和线程
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="操作系统<--->内存管理">
+                                        
+                                        内存管理
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="大数据开发">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        大数据开发
+                        <small>(5)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="大数据开发<--->hadoop">
+                                        
+                                        hadoop
+                                        
+                                            <small>(3
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="大数据开发<--->hive">
+                                        
+                                        hive
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="分布式&amp;微服务">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        分布式&amp;微服务
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="分布式&amp;微服务<--->服务注册">
+                                        
+                                        服务注册
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="服务器">
+                        
+                        服务器
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="计算机网络">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        计算机网络
+                        <small>(4)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="计算机网络<--->网络基础">
+                                        
+                                        网络基础
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="计算机网络<--->http">
+                                        
+                                        http
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="计算机网络<--->tcp/ip协议">
+                                        
+                                        tcp/ip协议
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="计算机网络<--->WebSocket">
+                                        
+                                        WebSocket
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="网络编程">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        网络编程
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="网络编程<--->nginx">
+                                        
+                                        nginx
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="系统设计">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        系统设计
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="系统设计<--->认证授权">
+                                        
+                                        认证授权
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="系统设计<--->数据库路由组件">
+                                        
+                                        数据库路由组件
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="golang">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        golang
+                        <small>(4)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="golang<--->并发编程">
+                                        
+                                        并发编程
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="java">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        java
+                        <small>(5)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="java<--->并发编程">
+                                        
+                                        并发编程
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="java<--->jdk8">
+                                        
+                                        jdk8
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="java<--->jvm">
+                                        
+                                        jvm
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="leetcode">
+                        
+                        leetcode
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="Mybatis">
+                        
+                        Mybatis
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="rabbitmq">
+                        
+                        rabbitmq
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="redis">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        redis
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="redis<--->分布式锁">
+                                        
+                                        分布式锁
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="51">
+<input type="hidden" id="yelog_site_word_count" value="31.5k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        Links
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">All</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>动态规划</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>类加载</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>bug</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>construct</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>debug</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>git</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>idea</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>mysql</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <div id="local-search-result">
+
+    </div>
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="All 分布式&amp;微服务 "
+           href="/2024/03/28/%E4%B8%83%E7%A7%8D%E5%B8%B8%E8%A7%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="七种常见分布式事务">七种常见分布式事务</span>
+            <span class="post-date" title="2024-03-28 11:49:41">2024/03/28</span>
+        </a>
+        
+        
+        <a  class="All 计算机网络 tcp/ip协议 "
+           href="/2024/03/26/tcp-ip/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="tcp/ip">tcp/ip</span>
+            <span class="post-date" title="2024-03-26 13:26:23">2024/03/26</span>
+        </a>
+        
+        
+        <a  class="All 计算机网络 WebSocket "
+           href="/2024/03/25/network-websocket/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="network-websocket">network-websocket</span>
+            <span class="post-date" title="2024-03-25 18:21:21">2024/03/25</span>
+        </a>
+        
+        
+        <a  class="All 计算机网络 http "
+           href="/2024/03/25/network-http/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="network-http">network-http</span>
+            <span class="post-date" title="2024-03-25 16:42:30">2024/03/25</span>
+        </a>
+        
+        
+        <a  class="All 计算机网络 网络基础 "
+           href="/2024/03/25/network-base/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="network-base">network-base</span>
+            <span class="post-date" title="2024-03-25 16:35:15">2024/03/25</span>
+        </a>
+        
+        
+        <a  class="All 操作系统 内存管理 "
+           href="/2024/03/25/virtual-memory/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="virtual-memory">virtual-memory</span>
+            <span class="post-date" title="2024-03-25 16:06:41">2024/03/25</span>
+        </a>
+        
+        
+        <a  class="All 操作系统 进程和线程 "
+           href="/2024/03/23/process/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="process">process</span>
+            <span class="post-date" title="2024-03-23 14:15:55">2024/03/23</span>
+        </a>
+        
+        
+        <a  class="All redis 分布式锁 "
+           href="/2024/03/22/redis-lock/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="redis-lock">redis-lock</span>
+            <span class="post-date" title="2024-03-22 11:30:11">2024/03/22</span>
+        </a>
+        
+        
+        <a  class="All redis "
+           href="/2024/03/14/redis/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="redis">redis</span>
+            <span class="post-date" title="2024-03-14 14:13:40">2024/03/14</span>
+        </a>
+        
+        
+        <a  class="All 网络编程 nginx "
+           href="/2024/03/14/nginx/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="nginx">nginx</span>
+            <span class="post-date" title="2024-03-14 13:09:09">2024/03/14</span>
+        </a>
+        
+        
+        <a  class="All 系统设计 数据库路由组件 "
+           href="/2024/03/06/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%B7%AF%E7%94%B1%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="数据库路由组件设计">数据库路由组件设计</span>
+            <span class="post-date" title="2024-03-06 10:56:57">2024/03/06</span>
+        </a>
+        
+        
+        <a  class="All 系统设计 认证授权 "
+           href="/2024/03/05/auth/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="auth">auth</span>
+            <span class="post-date" title="2024-03-05 16:42:08">2024/03/05</span>
+        </a>
+        
+        
+        <a  class="All java 并发编程 "
+           href="/2024/02/27/java-lock/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="java-lock">java-lock</span>
+            <span class="post-date" title="2024-02-27 17:22:13">2024/02/27</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2024/02/27/mysql-innodb-mvcc/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-innodb-mvcc">mysql-innodb-mvcc</span>
+            <span class="post-date" title="2024-02-27 10:10:01">2024/02/27</span>
+        </a>
+        
+        
+        <a  class="All golang 并发编程 "
+           href="/2024/01/29/go-gmp/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="go_gmp">go_gmp</span>
+            <span class="post-date" title="2024-01-29 15:16:43">2024/01/29</span>
+        </a>
+        
+        
+        <a  class="All rabbitmq "
+           href="/2024/01/23/rabbitmq/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="rabbitmq">rabbitmq</span>
+            <span class="post-date" title="2024-01-23 14:57:17">2024/01/23</span>
+        </a>
+        
+        
+        <a  class="All 服务器 "
+           href="/2023/12/26/tomcat/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="tomcat+nginx">tomcat+nginx</span>
+            <span class="post-date" title="2023-12-26 13:28:01">2023/12/26</span>
+        </a>
+        
+        
+        <a  class="All 分布式&amp;微服务 服务注册 "
+           href="/2023/12/26/%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="服务治理">服务治理</span>
+            <span class="post-date" title="2023-12-26 10:03:05">2023/12/26</span>
+        </a>
+        
+        
+        <a  class="All java 并发编程 "
+           href="/2023/12/22/java-%E5%B9%B6%E5%8F%91/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="java_并发">java_并发</span>
+            <span class="post-date" title="2023-12-22 15:02:42">2023/12/22</span>
+        </a>
+        
+        
+        <a  class="All java jdk8 "
+           href="/2023/12/20/java8-new/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="java8_new">java8_new</span>
+            <span class="post-date" title="2023-12-20 17:15:39">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="All golang "
+           href="/2023/12/19/go-goroutine/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="go_goroutine">go_goroutine</span>
+            <span class="post-date" title="2023-12-19 15:52:12">2023/12/19</span>
+        </a>
+        
+        
+        <a  class="All golang "
+           href="/2023/12/19/go-channel/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="go_channel">go_channel</span>
+            <span class="post-date" title="2023-12-19 10:34:35">2023/12/19</span>
+        </a>
+        
+        
+        <a  class="All golang "
+           href="/2023/10/27/golang/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="golang">golang</span>
+            <span class="post-date" title="2023-10-27 13:13:53">2023/10/27</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hive "
+           href="/2023/09/12/hive/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="hive">hive</span>
+            <span class="post-date" title="2023-09-12 15:18:18">2023/09/12</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hadoop "
+           href="/2023/09/12/yarn/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="yarn">yarn</span>
+            <span class="post-date" title="2023-09-12 09:47:14">2023/09/12</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hadoop "
+           href="/2023/09/12/mapreduce/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mapreduce">mapreduce</span>
+            <span class="post-date" title="2023-09-12 09:29:03">2023/09/12</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hadoop "
+           href="/2023/09/07/hadoop-server/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="hadoop_server">hadoop_server</span>
+            <span class="post-date" title="2023-09-07 13:38:52">2023/09/07</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/05/sql-lock/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_lock">sql_lock</span>
+            <span class="post-date" title="2023-09-05 14:35:13">2023/09/05</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/05/sql-trigger/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_trigger">sql_trigger</span>
+            <span class="post-date" title="2023-09-05 10:29:54">2023/09/05</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/04/sql-stored/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_stored">sql_stored</span>
+            <span class="post-date" title="2023-09-04 10:38:27">2023/09/04</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/01/sql-view/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_view">sql_view</span>
+            <span class="post-date" title="2023-09-01 12:59:44">2023/09/01</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/01/sql-optimize/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_optimize">sql_optimize</span>
+            <span class="post-date" title="2023-09-01 09:30:42">2023/09/01</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/29/mysql-index/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-index">mysql-index</span>
+            <span class="post-date" title="2023-08-29 10:36:41">2023/08/29</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/29/mysql-engine/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-storage-engine">mysql-storage-engine</span>
+            <span class="post-date" title="2023-08-29 09:37:33">2023/08/29</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/28/transaction-sql/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="transaction_sql">transaction_sql</span>
+            <span class="post-date" title="2023-08-28 17:00:31">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/28/select-tables/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="select_tables">select_tables</span>
+            <span class="post-date" title="2023-08-28 13:53:25">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 "
+           href="/2023/08/28/constraint/"
+           data-tag="mysql"
+           data-author="" >
+            <span class="post-title" title="constraint">constraint</span>
+            <span class="post-date" title="2023-08-28 12:25:25">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/28/mysql-funs/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-funs">mysql-funs</span>
+            <span class="post-date" title="2023-08-28 09:19:42">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/25/mysql-dcl/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-dcl">mysql-dcl</span>
+            <span class="post-date" title="2023-08-25 18:32:55">2023/08/25</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/25/mysql-dql/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-dql">mysql-dql</span>
+            <span class="post-date" title="2023-08-25 18:32:47">2023/08/25</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/25/mysql-dml/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-dml">mysql-dml</span>
+            <span class="post-date" title="2023-08-25 18:14:33">2023/08/25</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/25/mysql-ddl/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-ddl">mysql-ddl</span>
+            <span class="post-date" title="2023-08-25 16:41:00">2023/08/25</span>
+        </a>
+        
+        
+        <a  class="All leetcode "
+           href="/2023/06/12/constructTree/"
+           data-tag="construct"
+           data-author="" >
+            <span class="post-title" title="constructTree">constructTree</span>
+            <span class="post-date" title="2023-06-12 12:35:42">2023/06/12</span>
+        </a>
+        
+        
+        <a  class="All java jvm "
+           href="/2023/05/24/jvm-class-loading-process/"
+           data-tag="类加载"
+           data-author="" >
+            <span class="post-title" title="jvm-class-loading-process">jvm-class-loading-process</span>
+            <span class="post-date" title="2023-05-24 15:56:37">2023/05/24</span>
+        </a>
+        
+        
+        <a  class="All java jvm "
+           href="/2023/05/23/jvm-learn/"
+           data-tag="jvm"
+           data-author="" >
+            <span class="post-title" title="jvm-learn">jvm-learn</span>
+            <span class="post-date" title="2023-05-23 16:32:08">2023/05/23</span>
+        </a>
+        
+        
+        <a  class="All 工具 idea debug "
+           href="/2023/05/12/debug-skill/"
+           data-tag="debug,idea"
+           data-author="" >
+            <span class="post-title" title="debug-skill">debug-skill</span>
+            <span class="post-date" title="2023-05-12 12:35:32">2023/05/12</span>
+        </a>
+        
+        
+        <a  class="All 工具 git "
+           href="/2023/05/10/git-learning/"
+           data-tag="git"
+           data-author="" >
+            <span class="post-title" title="git-learning">git-learning</span>
+            <span class="post-date" title="2023-05-10 18:14:02">2023/05/10</span>
+        </a>
+        
+        
+        <a  class="All Mybatis "
+           href="/2023/05/10/MybatisMapperXML%E6%96%87%E4%BB%B6%E6%8A%A5%E9%94%99/"
+           data-tag="bug"
+           data-author="" >
+            <span class="post-title" title="Mybatis:MapperXML文件报错(Unable to resolve table &#39;limit&#39;)">Mybatis:MapperXML文件报错(Unable to resolve table &#39;limit&#39;)</span>
+            <span class="post-date" title="2023-05-10 14:33:43">2023/05/10</span>
+        </a>
+        
+        
+        <a  class="All leetcode "
+           href="/2023/05/10/leetcode-%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2/"
+           data-tag="动态规划"
+           data-author="" >
+            <span class="post-title" title="leetcode-最长回文子串">leetcode-最长回文子串</span>
+            <span class="post-date" title="2023-05-10 10:51:43">2023/05/10</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hive "
+           href="/2023/05/09/Hive-SQL%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="hexo-use">hexo-use</span>
+            <span class="post-date" title="2023-05-09 22:03:50">2023/05/09</span>
+        </a>
+        
+        
+        <a  class="All 工具 hexo "
+           href="/2023/05/09/hexo-use/"
+           data-tag="hexo"
+           data-author="" >
+            <span class="post-title" title="hexo-use">hexo-use</span>
+            <span class="post-date" title="2023-05-09 22:03:50">2023/05/09</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-七种常见分布式事务" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">七种常见分布式事务</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="分布式&amp;微服务">分布式&amp;微服务</a>
+            
+        </span>
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2024-03-28 14:36:03'>2024-03-28 11:49</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>Count:804</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E7%A7%8D%E5%B8%B8%E8%A7%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="toc-text">七种常见分布式事务</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2pc%EF%BC%9A%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4%EF%BC%8C%E5%87%86%E5%A4%87%E9%98%B6%E6%AE%B5%E5%92%8C%E6%8F%90%E4%BA%A4%E9%98%B6%E6%AE%B5"><span class="toc-text">2pc：两阶段提交，准备阶段和提交阶段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3pc%EF%BC%9A%E9%92%88%E5%AF%B92pc%E8%BF%9B%E8%A1%8C%E6%94%B9%E8%BF%9B"><span class="toc-text">3pc：针对2pc进行改进</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tcc"><span class="toc-text">tcc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#saga"><span class="toc-text">saga</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E6%B6%88%E6%81%AF%E8%A1%A8"><span class="toc-text">本地消息表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MQ%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF"><span class="toc-text">MQ事务消息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%A4%A7%E5%8A%AA%E5%8A%9B%E9%80%9A%E7%9F%A5%EF%BC%88%E5%AE%9A%E6%9C%9F%E6%A0%A1%E5%AF%B9%EF%BC%89"><span class="toc-text">最大努力通知（定期校对）</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-6 i,
+    .toc-level-6 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="七种常见分布式事务"><a href="#七种常见分布式事务" class="headerlink" title="七种常见分布式事务"></a>七种常见分布式事务</h1><h2 id="2pc：两阶段提交，准备阶段和提交阶段"><a href="#2pc：两阶段提交，准备阶段和提交阶段" class="headerlink" title="2pc：两阶段提交，准备阶段和提交阶段"></a>2pc：两阶段提交，准备阶段和提交阶段</h2><p>准备阶段：由事务协调者询问通知每个事务参与者，是否准备好执行事务</p>
+<p><img src="/..%5Cimages%5Cimage-20240328121635423.png" alt="image-20240328121635423">提交阶段：所有参与l参与者都同意，意味着完成事务，要么都commit要么都rollback</p>
+<p><img src="/..%5Cimages%5Cimage-20240328121719108.png" alt="image-20240328121719108"></p>
+<p><img src="/..%5Cimages%5Cimage-20240328121738963.png" alt="image-20240328121738963"></p>
+<p>问题：可靠性和数据一致性问题</p>
+<h2 id="3pc：针对2pc进行改进"><a href="#3pc：针对2pc进行改进" class="headerlink" title="3pc：针对2pc进行改进"></a>3pc：针对2pc进行改进</h2><p>协调者和参与者引入超时机制；第一阶段和第二阶段中间插入一个准备阶段，保证在最后提交阶段之前各参与节点的状态保持一致</p>
+<p>分为CanCommit，PreCommit，DoCommit阶段</p>
+<p><img src="/..%5Cimages%5Cimage-20240328122005515.png" alt="image-20240328122005515"></p>
+<p>precommit：</p>
+<ol>
+<li>执行事务：假如所有参与者反馈yes，协调者预执行事务，</li>
+</ol>
+<ul>
+<li>发送预提交请求：协调者向参与者发送precommit请求，进入准备阶段</li>
+<li>事务预处理：参与者接收到precommit请求后，执行本地事务操作，并将undo和redo信息记录到事务日志中。（并不提交事务）</li>
+<li>提交反馈：如果参与者成功的执行了事务操作，返回ack响应，同时等待最终命令</li>
+</ul>
+<p><img src="/..%5Cimages%5Cimage-20240328140033077.png" alt="image-20240328140033077"><br>2. 中断事务：假设其中任何一个参与者反馈了no，或者等待超时，那么就执行事务中断。</p>
+<ul>
+<li>发送中断请求：协调者向所有参与者发送abort请求</li>
+<li>中断事务：参与者收到abort请求后，执行事务中断</li>
+</ul>
+<p><img src="/..%5Cimages%5Cimage-20240328140545363.png" alt="image-20240328140545363"></p>
+<p>docommit:</p>
+<ol>
+<li>提交事务：</li>
+</ol>
+<ul>
+<li>发送提交请求：接收到所有参与者的ack确认，从预提交变为提交，从所有参与者发送docommit</li>
+<li>本地事务提交：参与者接收到docommit请求之后，执行正式事务，提交之后释放事务资源</li>
+<li>响应反馈：事务提交完，向协调者发送ack响应</li>
+<li>完成事务：协调者接收到所有参与者的ack响应之后，完成事务</li>
+</ul>
+<p><img src="/..%5Cimages%5Cimage-20240328141627493.png" alt="image-20240328141627493"></p>
+<ol start="2">
+<li>中断事务：任何一个参与者反馈no，或者等待超时</li>
+</ol>
+<ul>
+<li>发送中断请求：协调者向参与者发送abort请求</li>
+<li>事务回滚：参与者接收abort之后，利用undo信息回滚，释放资源</li>
+<li>反馈结果：完成回滚之后，向协调者反馈ack消息</li>
+<li>中断事务：协调者接收到所有ack消息后，中断事务</li>
+</ul>
+<p><img src="/..%5Cimages%5Cimage-20240328141959187.png" alt="image-20240328141959187"><br>3pc依然无法解决数据不一致问题，当参与者收到precommit请求后等待docommit指令时，如果协调者请求中断事务，而协调者因为网络问题无法与参与者正常通信，会导致参与者继续提交事务，造成数据不一致。</p>
+<h2 id="tcc"><a href="#tcc" class="headerlink" title="tcc"></a>tcc</h2><h2 id="saga"><a href="#saga" class="headerlink" title="saga"></a>saga</h2><h2 id="本地消息表"><a href="#本地消息表" class="headerlink" title="本地消息表"></a>本地消息表</h2><h2 id="MQ事务消息"><a href="#MQ事务消息" class="headerlink" title="MQ事务消息"></a>MQ事务消息</h2><p>基于mq的分布式事务本质上是对本地消息表的封装，整体流程与本地消息表一致，唯一不同的将本地消息存在了mq内部，而不是业务数据库中</p>
+<p><img src="/..%5Cimages%5Cimage-20240328143239908.png" alt="image-20240328143239908"></p>
+<h2 id="最大努力通知（定期校对）"><a href="#最大努力通知（定期校对）" class="headerlink" title="最大努力通知（定期校对）"></a>最大努力通知（定期校对）</h2><p>对mq事务的优化，在事务主动方增加了消息校对的接口，如果事务被动方没有接收到主动方发送的消息，此时可以调用事务主动方提供的消息校对的接口主动获取。</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
+    </div>
+</article>
+
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2023 Mhen
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("black_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+        $('pre code').each(function(){
+            var lines = $(this).text().trim().split('\n').length, widther='';
+            if (lines>99) {
+                widther = 'widther'
+            }
+            var $numbering = $('<ul/>').addClass('pre-numbering ' + widther).attr("unselectable","on");
+            $(this).addClass('has-numbering ' + widther)
+                    .parent()
+                    .append($numbering);
+            for(var i=1;i<=lines;i++){
+                $numbering.append($('<li/>').text(i));
+            }
+        });
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<style>
+    pre{
+        position: relative;
+        margin-bottom: 24px;
+        border-radius: 10px;
+        border: 1px solid #e2dede;
+        background: #FFF;
+        overflow: hidden;
+    }
+    code.has-numbering{
+        margin-left: 30px;
+    }
+    code.has-numbering.widther{
+        margin-left: 35px;
+    }
+    .pre-numbering{
+        margin: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        padding: 0.5em 3px 0.7em 5px;
+        border-right: 1px solid #C3CCD0;
+        text-align: right;
+        color: #AAA;
+        background-color: #fafafa;
+    }
+    .pre-numbering.widther {
+        width: 35px;
+    }
+</style>
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>

@@ -6,17 +6,27 @@
   <meta name="keywords" content="">
   <meta name="description" content="hexo-use | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="tcp三次握手刚开始客户端处于closed的状态，服务端处于listen状态第一次握手，客户端发送syn报文，指明序列号为lsn，此时客户端处于syn_send状态第二次握手，服务器收到syn报文，发送syn报文给客户端，序列号为lsn，将客户端你的lsn+1作为ack，此时服务器处于syn_recv状态第三次握手，客户端收到syn报文，将lsn+1作为ack发送给服务端，此时客户端处于estab">
+<meta name="description" content="七种常见分布式事务2pc：两阶段提交，准备阶段和提交阶段准备阶段：由事务协调者询问通知每个事务参与者，是否准备好执行事务 提交阶段：所有参与l参与者都同意，意味着完成事务，要么都commit要么都rollback   问题：可靠性和数据一致性问题 3pc：针对2pc进行改进协调者和参与者引入超时机制；第一阶段和第二阶段中间插入一个准备阶段，保证在最后提交阶段之前各参与节点的状态保持一致 分为Can">
 <meta property="og:type" content="article">
-<meta property="og:title" content="tcp&#x2F;ip">
-<meta property="og:url" content="http://example.com/2024/03/26/tcp-ip/index.html">
+<meta property="og:title" content="七种常见分布式事务">
+<meta property="og:url" content="http://example.com/2024/03/28/%E4%B8%83%E7%A7%8D%E5%B8%B8%E8%A7%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="tcp三次握手刚开始客户端处于closed的状态，服务端处于listen状态第一次握手，客户端发送syn报文，指明序列号为lsn，此时客户端处于syn_send状态第二次握手，服务器收到syn报文，发送syn报文给客户端，序列号为lsn，将客户端你的lsn+1作为ack，此时服务器处于syn_recv状态第三次握手，客户端收到syn报文，将lsn+1作为ack发送给服务端，此时客户端处于estab">
+<meta property="og:description" content="七种常见分布式事务2pc：两阶段提交，准备阶段和提交阶段准备阶段：由事务协调者询问通知每个事务参与者，是否准备好执行事务 提交阶段：所有参与l参与者都同意，意味着完成事务，要么都commit要么都rollback   问题：可靠性和数据一致性问题 3pc：针对2pc进行改进协调者和参与者引入超时机制；第一阶段和第二阶段中间插入一个准备阶段，保证在最后提交阶段之前各参与节点的状态保持一致 分为Can">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-03-26T05:26:23.000Z">
-<meta property="article:modified_time" content="2024-03-26T05:50:34.937Z">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328121635423.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328121719108.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328121738963.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328122005515.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328140033077.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328140545363.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328141627493.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328141959187.png">
+<meta property="og:image" content="http://example.com/..%5Cimages%5Cimage-20240328143239908.png">
+<meta property="article:published_time" content="2024-03-28T03:49:41.000Z">
+<meta property="article:modified_time" content="2024-03-28T06:36:03.784Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/..%5Cimages%5Cimage-20240328121635423.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -90,7 +100,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(50)</small>
+                <small>(51)</small>
             
         </div>
     </li>
@@ -294,11 +304,28 @@
             
                 <li>
                     <div data-rel="分布式&amp;微服务">
+                        <i class="fold iconfont icon-right"></i>
                         
                         分布式&amp;微服务
-                        <small>(1)</small>
+                        <small>(2)</small>
                         
                     </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="分布式&amp;微服务<--->服务注册">
+                                        
+                                        服务注册
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
                     
                 </li>
             
@@ -319,6 +346,10 @@
                     </div>
                     
                 </li>
+            
+        
+    
+        
             
         
     
@@ -707,8 +738,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="50">
-<input type="hidden" id="yelog_site_word_count" value="30.7k">
+<input type="hidden" id="yelog_site_posts_number" value="51">
+<input type="hidden" id="yelog_site_word_count" value="31.5k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -801,6 +832,15 @@
     </div>
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="All 分布式&amp;微服务 "
+           href="/2024/03/28/%E4%B8%83%E7%A7%8D%E5%B8%B8%E8%A7%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="七种常见分布式事务">七种常见分布式事务</span>
+            <span class="post-date" title="2024-03-28 11:49:41">2024/03/28</span>
+        </a>
         
         
         <a  class="All 计算机网络 tcp/ip协议 "
@@ -947,7 +987,7 @@
         </a>
         
         
-        <a  class="All 分布式&amp;微服务 "
+        <a  class="All 分布式&amp;微服务 服务注册 "
            href="/2023/12/26/%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86/"
            data-tag=""
            data-author="" >
