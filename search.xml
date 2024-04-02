@@ -4,6 +4,46 @@
   
     
     <entry>
+      <title>go-context</title>
+      <link href="/2024/04/01/go-context/"/>
+      <url>/2024/04/01/go-context/</url>
+      
+        <content type="html"><![CDATA[<h1 id="context详解"><a href="#context详解" class="headerlink" title="context详解"></a>context详解</h1><p>go1.7中引入的context类型。系统中可以使用context传递请求范围的元数据，例如不同函数，线程甚至进程的请求ID。<br>通过携带键值对用于传输过程和API请求相关的数据</p><p>通过http传递当前context，则需要把自己序列化为context。在接收端，解析传入的请求并将值放入当前context中。一旦我们需要跨越线程传播context，需要进行手动操作以将context置于同一条线上。同时，将其从传播线路上解析到接收端的context。<br>在http中，我们可以将请求ID转储为header，大多数context元数据可以作为header传输。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> golang </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>redis分布式锁</title>
+      <link href="/2024/03/29/redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/"/>
+      <url>/2024/03/29/redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/</url>
+      
+        <content type="html"><![CDATA[<h1 id="redis实现分布式锁"><a href="#redis实现分布式锁" class="headerlink" title="redis实现分布式锁"></a>redis实现分布式锁</h1><h2 id="方案一：setnx-expire"><a href="#方案一：setnx-expire" class="headerlink" title="方案一：setnx+expire"></a>方案一：setnx+expire</h2><p>setnx key value，如果key不存在，则setnx成功返回1，如果这个key以及存在，则返回0<br>比如电商的秒杀活动，key可以设置为key_resource_id，value设置为任意值。</p><pre><code class="c#">if（jedis.setnx(key_resource_id,lock_value) == 1）&#123; //加锁    expire（key_resource_id，100）; //设置过期时间    try &#123;        do something  //业务请求    &#125;catch()&#123;  &#125;  finally &#123;       jedis.del(key_resource_id); //释放锁    &#125;&#125;</code></pre><p>此时并没有保证原子性，当设置过期时间时，进程crash或者重启了，那么这个锁就永远存在，<strong>导致别的锁永远获取不到锁</strong>。</p><h2 id="方案二：setnx-value值是（系统时间-过期时间）"><a href="#方案二：setnx-value值是（系统时间-过期时间）" class="headerlink" title="方案二：setnx+value值是（系统时间+过期时间）"></a>方案二：setnx+value值是（系统时间+过期时间）</h2><p>直接将过期时间值放入setnx中的value中，当加锁失败，再拿出value值校验一下即可</p><pre><code class="c#">long expires = System.currentTimeMillis() + expireTime; //系统时间+设置的过期时间String expiresStr = String.valueOf(expires);// 如果当前锁不存在，返回加锁成功if (jedis.setnx(key_resource_id, expiresStr) == 1) &#123;        return true;&#125; // 如果锁已经存在，获取锁的过期时间String currentValueStr = jedis.get(key_resource_id);// 如果获取到的过期时间，小于系统当前时间，表示已经过期if (currentValueStr != null &amp;&amp; Long.parseLong(currentValueStr) &lt; System.currentTimeMillis()) &#123;     // 锁已过期，获取上一个锁的过期时间，并设置现在锁的过期时间（不了解redis的getSet命令的小伙伴，可以去官网看下哈）    String oldValueStr = jedis.getSet(key_resource_id, expiresStr);        if (oldValueStr != null &amp;&amp; oldValueStr.equals(currentValueStr)) &#123;         // 考虑多线程并发的情况，只有一个线程的设置值和当前值相同，它才可以加锁         return true;    &#125;&#125;        //其他情况，均返回加锁失败return false;&#125;</code></pre><p>问题：</p><ul><li>分布式环境下客户端时间必须同步</li><li>当锁过期的时候，并发多个客户端同时请求过来，都执行getSet()，最终只能有一个客户端加锁成功，但是该客户端的过期时间，可能被别的客户端覆盖。</li><li>锁没有保存持有者的唯一标识，可能被别的客户端释放&#x2F;解锁。</li></ul><h2 id="使用lua脚本（setnx-expire）"><a href="#使用lua脚本（setnx-expire）" class="headerlink" title="使用lua脚本（setnx+expire）"></a>使用lua脚本（setnx+expire）</h2><p>lua脚本保证原子性</p><pre><code class="vb">if redis.call(&#39;setnx&#39;,KEYS[1],ARGV[1]) == 1 then   redis.call(&#39;expire&#39;,KEYS[1],ARGV[2])else   return 0end;</code></pre><pre><code class="javascript"> String lua_scripts = &quot;if redis.call(&#39;setnx&#39;,KEYS[1],ARGV[1]) == 1 then&quot; +            &quot; redis.call(&#39;expire&#39;,KEYS[1],ARGV[2]) return 1 else return 0 end&quot;;   Object result = jedis.eval(lua_scripts, Collections.singletonList(key_resource_id), Collections.singletonList(values));//判断是否成功return result.equals(1L);</code></pre><h2 id="set的扩展命令（set-ex-px-nx）"><a href="#set的扩展命令（set-ex-px-nx）" class="headerlink" title="set的扩展命令（set ex px nx）"></a>set的扩展命令（set ex px nx）</h2><p>set key value [EX seconds]  [PX milliseconds] [nx|xx]</p><pre><code class="c#">if（jedis.set(key_resource_id, lock_value, &quot;NX&quot;, &quot;EX&quot;, 100s) == 1）&#123; //加锁    try &#123;        do something  //业务处理    &#125;catch()&#123;  &#125;  finally &#123;       jedis.del(key_resource_id); //释放锁    &#125;&#125;</code></pre><p>问题</p><ul><li>锁过期释放，业务没有执行完成。</li><li>锁被其他的线程误删</li></ul><h2 id="set-ex-px-nx-校验唯一随机值，再删除"><a href="#set-ex-px-nx-校验唯一随机值，再删除" class="headerlink" title="set ex px nx + 校验唯一随机值，再删除"></a>set ex px nx + 校验唯一随机值，再删除</h2><p>为解决误删问题，给value值设置一个标记当前线程唯一的随机数，在删除的时候进行校验</p><pre><code class="c#">if（jedis.set(key_resource_id, uni_request_id, &quot;NX&quot;, &quot;EX&quot;, 100s) == 1）&#123; //加锁    try &#123;        do something  //业务处理    &#125;catch()&#123;  &#125;  finally &#123;       //判断是不是当前线程加的锁,是才释放       if (uni_request_id.equals(jedis.get(key_resource_id))) &#123;        jedis.del(lockKey); //释放锁        &#125;    &#125;&#125;</code></pre><p>同样在判断唯一和释放的时候，并不是原子性<br>一般也采用lua脚本执行</p><pre><code class="vb">if redis.call(&#39;get&#39;,KEYS[1]) == ARGV[1] then    return redis.call(&#39;del&#39;,KEYS[1]) else   return 0end;</code></pre><h2 id="redisson框架"><a href="#redisson框架" class="headerlink" title="redisson框架"></a>redisson框架</h2><p><img src="/..%5Cimages%5C640(1).png" alt="6401"></p><p>只要线程一加锁成功，就会启动一个<code>watch dog</code>看门狗，它是一个后台线程，会每隔10秒检查一下，如果线程1还持有锁，那么就会不断的延长锁key的生存时间。因此，Redisson就是使用Redisson解决了<strong>锁过期释放，业务没执行完</strong>问题。</p><h2 id="多机实现分布式锁Redlock-Redisson"><a href="#多机实现分布式锁Redlock-Redisson" class="headerlink" title="多机实现分布式锁Redlock+Redisson"></a>多机实现分布式锁Redlock+Redisson</h2><p>![640 (1)](..\images\640 (1).png)</p><p>如果线程一在Redis的master节点上拿到了锁，但是加锁的key还没同步到slave节点。恰好这时，master节点发生故障，一个slave节点就会升级为master节点。线程二就可以获取同个key的锁啦，但线程一也已经拿到锁了，锁的安全性就没了。</p><p>为了解决这个问题，Redis作者 antirez提出一种高级的分布式锁算法：Redlock。Redlock核心思想是这样的：</p><p>搞多个Redis master部署，以保证它们不会同时宕掉。并且这些master节点是完全相互独立的，相互之间不存在数据同步。同时，需要确保在这多个master实例上，是与在Redis单实例，使用相同方法来获取和释放锁。</p><p>我们假设当前有5个Redis master节点，在5台服务器上面运行这些Redis实例。</p><p>![640 (2)](..\images\640 (2).png)</p><p>RedLock的实现步骤:如下</p><blockquote><ul><li>1.获取当前时间，以毫秒为单位。</li><li>2.按顺序向5个master节点请求加锁。客户端设置网络连接和响应超时时间，并且超时时间要小于锁的失效时间。（假设锁自动失效时间为10秒，则超时时间一般在5-50毫秒之间,我们就假设超时时间是50ms吧）。如果超时，跳过该master节点，尽快去尝试下一个master节点。</li><li>3.客户端使用当前时间减去开始获取锁时间（即步骤1记录的时间），得到获取锁使用的时间。当且仅当超过一半（N&#x2F;2+1，这里是5&#x2F;2+1&#x3D;3个节点）的Redis master节点都获得锁，并且使用的时间小于锁失效时间时，锁才算获取成功。（如上图，10s&gt; 30ms+40ms+50ms+4m0s+50ms）</li><li>如果取到了锁，key的真正有效时间就变啦，需要减去获取锁所使用的时间。</li><li>如果获取锁失败（没有在至少N&#x2F;2+1个master实例取到锁，有或者获取锁时间已经超过了有效时间），客户端要在所有的master节点上解锁（即便有些master节点根本就没有加锁成功，也需要解锁，以防止有些漏网之鱼）</li></ul></blockquote><p>简化下步骤就是：</p><ul><li>按顺序向5个master节点请求加锁</li><li>根据设置的超时时间来判断，是不是要跳过该master节点。</li><li>如果大于等于3个节点加锁成功，并且使用的时间小于锁的有效期，即可认定加锁成功啦。</li><li>如果获取锁失败，解锁！s</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 分布式微服务 </category>
+          
+          <category> redis分布式锁 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>七种常见分布式事务</title>
       <link href="/2024/03/28/%E4%B8%83%E7%A7%8D%E5%B8%B8%E8%A7%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/"/>
       <url>/2024/03/28/%E4%B8%83%E7%A7%8D%E5%B8%B8%E8%A7%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/</url>

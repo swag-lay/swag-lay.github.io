@@ -1,0 +1,1722 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>redis分布式锁 | mhen</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="redis分布式锁 | mhen">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="context详解go1.7中引入的context类型。系统中可以使用context传递请求范围的元数据，例如不同函数，线程甚至进程的请求ID。通过携带键值对用于传输过程和API请求相关的数据 通过http传递当前context，则需要把自己序列化为context。在接收端，解析传入的请求并将值放入当前context中。一旦我们需要跨越线程传播context，需要进行手动操作以将context置于">
+<meta property="og:type" content="article">
+<meta property="og:title" content="go-context">
+<meta property="og:url" content="http://example.com/2024/04/01/go-context/index.html">
+<meta property="og:site_name" content="mhen">
+<meta property="og:description" content="context详解go1.7中引入的context类型。系统中可以使用context传递请求范围的元数据，例如不同函数，线程甚至进程的请求ID。通过携带键值对用于传输过程和API请求相关的数据 通过http传递当前context，则需要把自己序列化为context。在接收端，解析传入的请求并将值放入当前context中。一旦我们需要跨越线程传播context，需要进行手动操作以将context置于">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-04-01T09:29:31.000Z">
+<meta property="article:modified_time" content="2024-04-01T09:42:08.807Z">
+<meta property="article:author" content="mhen">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/avatar.jpg">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/atom-light.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>mhen</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="github"
+               href="https://github.com/"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+</div>
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="All">All
+            
+                <small>(53)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                <li>
+                    <div data-rel="工具">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        工具
+                        <small>(3)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="工具<--->git">
+                                        
+                                        git
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="工具<--->hexo">
+                                        
+                                        hexo
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="工具<--->idea">
+                                        <i class="fold iconfont icon-right"></i>
+                                        
+                                        idea
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                        <ul class="sub hide">
+                                            
+                                                <li>
+                                                    <div data-rel="工具<--->ideadebug">
+                                                        
+                                                        debug
+                                                        
+                                                            <small>(1)</small>
+                                                        
+                                                    </div>
+                                                </li>
+                                            
+                                        </ul>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="数据库">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        数据库
+                        <small>(16)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="数据库<--->mysql">
+                                        
+                                        mysql
+                                        
+                                            <small>(15
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="操作系统">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        操作系统
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="操作系统<--->进程和线程">
+                                        
+                                        进程和线程
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="操作系统<--->内存管理">
+                                        
+                                        内存管理
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="大数据开发">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        大数据开发
+                        <small>(5)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="大数据开发<--->hadoop">
+                                        
+                                        hadoop
+                                        
+                                            <small>(3
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="大数据开发<--->hive">
+                                        
+                                        hive
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="分布式微服务">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        分布式微服务
+                        <small>(3)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="分布式微服务<--->服务注册">
+                                        
+                                        服务注册
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="分布式微服务<--->redis分布式锁">
+                                        
+                                        redis分布式锁
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="服务器">
+                        
+                        服务器
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="计算机网络">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        计算机网络
+                        <small>(4)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="计算机网络<--->网络基础">
+                                        
+                                        网络基础
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="计算机网络<--->http">
+                                        
+                                        http
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="计算机网络<--->tcp/ip协议">
+                                        
+                                        tcp/ip协议
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="计算机网络<--->WebSocket">
+                                        
+                                        WebSocket
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="网络编程">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        网络编程
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="网络编程<--->nginx">
+                                        
+                                        nginx
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="系统设计">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        系统设计
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="系统设计<--->认证授权">
+                                        
+                                        认证授权
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="系统设计<--->数据库路由组件">
+                                        
+                                        数据库路由组件
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="golang">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        golang
+                        <small>(5)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="golang<--->并发编程">
+                                        
+                                        并发编程
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="java">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        java
+                        <small>(5)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="java<--->并发编程">
+                                        
+                                        并发编程
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="java<--->jdk8">
+                                        
+                                        jdk8
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="java<--->jvm">
+                                        
+                                        jvm
+                                        
+                                            <small>(2
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="leetcode">
+                        
+                        leetcode
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="Mybatis">
+                        
+                        Mybatis
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="rabbitmq">
+                        
+                        rabbitmq
+                        <small>(1)</small>
+                        
+                    </div>
+                    
+                </li>
+            
+        
+    
+        
+            
+                <li>
+                    <div data-rel="redis">
+                        <i class="fold iconfont icon-right"></i>
+                        
+                        redis
+                        <small>(2)</small>
+                        
+                    </div>
+                    
+                        <ul class="sub hide">
+                            
+                                <li>
+                                    <div data-rel="redis<--->分布式锁">
+                                        
+                                        分布式锁
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                        </ul>
+                    
+                </li>
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+        
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="53">
+<input type="hidden" id="yelog_site_word_count" value="33.3k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        Links
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">All</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>动态规划</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>类加载</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>bug</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>construct</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>debug</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>git</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>idea</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>mysql</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <div id="local-search-result">
+
+    </div>
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="All golang "
+           href="/2024/04/01/go-context/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="go-context">go-context</span>
+            <span class="post-date" title="2024-04-01 17:29:31">2024/04/01</span>
+        </a>
+        
+        
+        <a  class="All 分布式微服务 redis分布式锁 "
+           href="/2024/03/29/redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="redis分布式锁">redis分布式锁</span>
+            <span class="post-date" title="2024-03-29 15:00:16">2024/03/29</span>
+        </a>
+        
+        
+        <a  class="All 分布式微服务 "
+           href="/2024/03/28/%E4%B8%83%E7%A7%8D%E5%B8%B8%E8%A7%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="七种常见分布式事务">七种常见分布式事务</span>
+            <span class="post-date" title="2024-03-28 11:49:41">2024/03/28</span>
+        </a>
+        
+        
+        <a  class="All 计算机网络 tcp/ip协议 "
+           href="/2024/03/26/tcp-ip/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="tcp/ip">tcp/ip</span>
+            <span class="post-date" title="2024-03-26 13:26:23">2024/03/26</span>
+        </a>
+        
+        
+        <a  class="All 计算机网络 WebSocket "
+           href="/2024/03/25/network-websocket/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="network-websocket">network-websocket</span>
+            <span class="post-date" title="2024-03-25 18:21:21">2024/03/25</span>
+        </a>
+        
+        
+        <a  class="All 计算机网络 http "
+           href="/2024/03/25/network-http/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="network-http">network-http</span>
+            <span class="post-date" title="2024-03-25 16:42:30">2024/03/25</span>
+        </a>
+        
+        
+        <a  class="All 计算机网络 网络基础 "
+           href="/2024/03/25/network-base/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="network-base">network-base</span>
+            <span class="post-date" title="2024-03-25 16:35:15">2024/03/25</span>
+        </a>
+        
+        
+        <a  class="All 操作系统 内存管理 "
+           href="/2024/03/25/virtual-memory/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="virtual-memory">virtual-memory</span>
+            <span class="post-date" title="2024-03-25 16:06:41">2024/03/25</span>
+        </a>
+        
+        
+        <a  class="All 操作系统 进程和线程 "
+           href="/2024/03/23/process/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="process">process</span>
+            <span class="post-date" title="2024-03-23 14:15:55">2024/03/23</span>
+        </a>
+        
+        
+        <a  class="All redis 分布式锁 "
+           href="/2024/03/22/redis-lock/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="redis-lock">redis-lock</span>
+            <span class="post-date" title="2024-03-22 11:30:11">2024/03/22</span>
+        </a>
+        
+        
+        <a  class="All redis "
+           href="/2024/03/14/redis/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="redis">redis</span>
+            <span class="post-date" title="2024-03-14 14:13:40">2024/03/14</span>
+        </a>
+        
+        
+        <a  class="All 网络编程 nginx "
+           href="/2024/03/14/nginx/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="nginx">nginx</span>
+            <span class="post-date" title="2024-03-14 13:09:09">2024/03/14</span>
+        </a>
+        
+        
+        <a  class="All 系统设计 数据库路由组件 "
+           href="/2024/03/06/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%B7%AF%E7%94%B1%E7%BB%84%E4%BB%B6%E8%AE%BE%E8%AE%A1/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="数据库路由组件设计">数据库路由组件设计</span>
+            <span class="post-date" title="2024-03-06 10:56:57">2024/03/06</span>
+        </a>
+        
+        
+        <a  class="All 系统设计 认证授权 "
+           href="/2024/03/05/auth/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="auth">auth</span>
+            <span class="post-date" title="2024-03-05 16:42:08">2024/03/05</span>
+        </a>
+        
+        
+        <a  class="All java 并发编程 "
+           href="/2024/02/27/java-lock/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="java-lock">java-lock</span>
+            <span class="post-date" title="2024-02-27 17:22:13">2024/02/27</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2024/02/27/mysql-innodb-mvcc/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-innodb-mvcc">mysql-innodb-mvcc</span>
+            <span class="post-date" title="2024-02-27 10:10:01">2024/02/27</span>
+        </a>
+        
+        
+        <a  class="All golang 并发编程 "
+           href="/2024/01/29/go-gmp/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="go_gmp">go_gmp</span>
+            <span class="post-date" title="2024-01-29 15:16:43">2024/01/29</span>
+        </a>
+        
+        
+        <a  class="All rabbitmq "
+           href="/2024/01/23/rabbitmq/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="rabbitmq">rabbitmq</span>
+            <span class="post-date" title="2024-01-23 14:57:17">2024/01/23</span>
+        </a>
+        
+        
+        <a  class="All 服务器 "
+           href="/2023/12/26/tomcat/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="tomcat+nginx">tomcat+nginx</span>
+            <span class="post-date" title="2023-12-26 13:28:01">2023/12/26</span>
+        </a>
+        
+        
+        <a  class="All 分布式微服务 服务注册 "
+           href="/2023/12/26/%E6%9C%8D%E5%8A%A1%E6%B2%BB%E7%90%86/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="服务治理">服务治理</span>
+            <span class="post-date" title="2023-12-26 10:03:05">2023/12/26</span>
+        </a>
+        
+        
+        <a  class="All java 并发编程 "
+           href="/2023/12/22/java-%E5%B9%B6%E5%8F%91/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="java_并发">java_并发</span>
+            <span class="post-date" title="2023-12-22 15:02:42">2023/12/22</span>
+        </a>
+        
+        
+        <a  class="All java jdk8 "
+           href="/2023/12/20/java8-new/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="java8_new">java8_new</span>
+            <span class="post-date" title="2023-12-20 17:15:39">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="All golang "
+           href="/2023/12/19/go-goroutine/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="go_goroutine">go_goroutine</span>
+            <span class="post-date" title="2023-12-19 15:52:12">2023/12/19</span>
+        </a>
+        
+        
+        <a  class="All golang "
+           href="/2023/12/19/go-channel/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="go_channel">go_channel</span>
+            <span class="post-date" title="2023-12-19 10:34:35">2023/12/19</span>
+        </a>
+        
+        
+        <a  class="All golang "
+           href="/2023/10/27/golang/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="golang">golang</span>
+            <span class="post-date" title="2023-10-27 13:13:53">2023/10/27</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hive "
+           href="/2023/09/12/hive/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="hive">hive</span>
+            <span class="post-date" title="2023-09-12 15:18:18">2023/09/12</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hadoop "
+           href="/2023/09/12/yarn/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="yarn">yarn</span>
+            <span class="post-date" title="2023-09-12 09:47:14">2023/09/12</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hadoop "
+           href="/2023/09/12/mapreduce/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mapreduce">mapreduce</span>
+            <span class="post-date" title="2023-09-12 09:29:03">2023/09/12</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hadoop "
+           href="/2023/09/07/hadoop-server/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="hadoop_server">hadoop_server</span>
+            <span class="post-date" title="2023-09-07 13:38:52">2023/09/07</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/05/sql-lock/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_lock">sql_lock</span>
+            <span class="post-date" title="2023-09-05 14:35:13">2023/09/05</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/05/sql-trigger/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_trigger">sql_trigger</span>
+            <span class="post-date" title="2023-09-05 10:29:54">2023/09/05</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/04/sql-stored/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_stored">sql_stored</span>
+            <span class="post-date" title="2023-09-04 10:38:27">2023/09/04</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/01/sql-view/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_view">sql_view</span>
+            <span class="post-date" title="2023-09-01 12:59:44">2023/09/01</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/09/01/sql-optimize/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="sql_optimize">sql_optimize</span>
+            <span class="post-date" title="2023-09-01 09:30:42">2023/09/01</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/29/mysql-index/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-index">mysql-index</span>
+            <span class="post-date" title="2023-08-29 10:36:41">2023/08/29</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/29/mysql-engine/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-storage-engine">mysql-storage-engine</span>
+            <span class="post-date" title="2023-08-29 09:37:33">2023/08/29</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/28/transaction-sql/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="transaction_sql">transaction_sql</span>
+            <span class="post-date" title="2023-08-28 17:00:31">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/28/select-tables/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="select_tables">select_tables</span>
+            <span class="post-date" title="2023-08-28 13:53:25">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 "
+           href="/2023/08/28/constraint/"
+           data-tag="mysql"
+           data-author="" >
+            <span class="post-title" title="constraint">constraint</span>
+            <span class="post-date" title="2023-08-28 12:25:25">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/28/mysql-funs/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-funs">mysql-funs</span>
+            <span class="post-date" title="2023-08-28 09:19:42">2023/08/28</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/25/mysql-dcl/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-dcl">mysql-dcl</span>
+            <span class="post-date" title="2023-08-25 18:32:55">2023/08/25</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/25/mysql-dql/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-dql">mysql-dql</span>
+            <span class="post-date" title="2023-08-25 18:32:47">2023/08/25</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/25/mysql-dml/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-dml">mysql-dml</span>
+            <span class="post-date" title="2023-08-25 18:14:33">2023/08/25</span>
+        </a>
+        
+        
+        <a  class="All 数据库 mysql "
+           href="/2023/08/25/mysql-ddl/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-ddl">mysql-ddl</span>
+            <span class="post-date" title="2023-08-25 16:41:00">2023/08/25</span>
+        </a>
+        
+        
+        <a  class="All leetcode "
+           href="/2023/06/12/constructTree/"
+           data-tag="construct"
+           data-author="" >
+            <span class="post-title" title="constructTree">constructTree</span>
+            <span class="post-date" title="2023-06-12 12:35:42">2023/06/12</span>
+        </a>
+        
+        
+        <a  class="All java jvm "
+           href="/2023/05/24/jvm-class-loading-process/"
+           data-tag="类加载"
+           data-author="" >
+            <span class="post-title" title="jvm-class-loading-process">jvm-class-loading-process</span>
+            <span class="post-date" title="2023-05-24 15:56:37">2023/05/24</span>
+        </a>
+        
+        
+        <a  class="All java jvm "
+           href="/2023/05/23/jvm-learn/"
+           data-tag="jvm"
+           data-author="" >
+            <span class="post-title" title="jvm-learn">jvm-learn</span>
+            <span class="post-date" title="2023-05-23 16:32:08">2023/05/23</span>
+        </a>
+        
+        
+        <a  class="All 工具 idea debug "
+           href="/2023/05/12/debug-skill/"
+           data-tag="debug,idea"
+           data-author="" >
+            <span class="post-title" title="debug-skill">debug-skill</span>
+            <span class="post-date" title="2023-05-12 12:35:32">2023/05/12</span>
+        </a>
+        
+        
+        <a  class="All 工具 git "
+           href="/2023/05/10/git-learning/"
+           data-tag="git"
+           data-author="" >
+            <span class="post-title" title="git-learning">git-learning</span>
+            <span class="post-date" title="2023-05-10 18:14:02">2023/05/10</span>
+        </a>
+        
+        
+        <a  class="All Mybatis "
+           href="/2023/05/10/MybatisMapperXML%E6%96%87%E4%BB%B6%E6%8A%A5%E9%94%99/"
+           data-tag="bug"
+           data-author="" >
+            <span class="post-title" title="Mybatis:MapperXML文件报错(Unable to resolve table &#39;limit&#39;)">Mybatis:MapperXML文件报错(Unable to resolve table &#39;limit&#39;)</span>
+            <span class="post-date" title="2023-05-10 14:33:43">2023/05/10</span>
+        </a>
+        
+        
+        <a  class="All leetcode "
+           href="/2023/05/10/leetcode-%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2/"
+           data-tag="动态规划"
+           data-author="" >
+            <span class="post-title" title="leetcode-最长回文子串">leetcode-最长回文子串</span>
+            <span class="post-date" title="2023-05-10 10:51:43">2023/05/10</span>
+        </a>
+        
+        
+        <a  class="All 大数据开发 hive "
+           href="/2023/05/09/Hive-SQL%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="hexo-use">hexo-use</span>
+            <span class="post-date" title="2023-05-09 22:03:50">2023/05/09</span>
+        </a>
+        
+        
+        <a  class="All 工具 hexo "
+           href="/2023/05/09/hexo-use/"
+           data-tag="hexo"
+           data-author="" >
+            <span class="post-title" title="hexo-use">hexo-use</span>
+            <span class="post-date" title="2023-05-09 22:03:50">2023/05/09</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-redis分布式锁" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">redis分布式锁</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="分布式微服务">分布式微服务</a> > 
+            
+            <a  data-rel="分布式微服务&lt;---&gt;redis分布式锁">redis分布式锁</a>
+            
+        </span>
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2024-03-29 15:42:04'>2024-03-29 15:00</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>Count:1.6k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#redis%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-text">redis实现分布式锁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E4%B8%80%EF%BC%9Asetnx-expire"><span class="toc-text">方案一：setnx+expire</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E4%BA%8C%EF%BC%9Asetnx-value%E5%80%BC%E6%98%AF%EF%BC%88%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4-%E8%BF%87%E6%9C%9F%E6%97%B6%E9%97%B4%EF%BC%89"><span class="toc-text">方案二：setnx+value值是（系统时间+过期时间）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8lua%E8%84%9A%E6%9C%AC%EF%BC%88setnx-expire%EF%BC%89"><span class="toc-text">使用lua脚本（setnx+expire）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#set%E7%9A%84%E6%89%A9%E5%B1%95%E5%91%BD%E4%BB%A4%EF%BC%88set-ex-px-nx%EF%BC%89"><span class="toc-text">set的扩展命令（set ex px nx）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#set-ex-px-nx-%E6%A0%A1%E9%AA%8C%E5%94%AF%E4%B8%80%E9%9A%8F%E6%9C%BA%E5%80%BC%EF%BC%8C%E5%86%8D%E5%88%A0%E9%99%A4"><span class="toc-text">set ex px nx + 校验唯一随机值，再删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redisson%E6%A1%86%E6%9E%B6"><span class="toc-text">redisson框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E6%9C%BA%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81Redlock-Redisson"><span class="toc-text">多机实现分布式锁Redlock+Redisson</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-6 i,
+    .toc-level-6 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="redis实现分布式锁"><a href="#redis实现分布式锁" class="headerlink" title="redis实现分布式锁"></a>redis实现分布式锁</h1><h2 id="方案一：setnx-expire"><a href="#方案一：setnx-expire" class="headerlink" title="方案一：setnx+expire"></a>方案一：setnx+expire</h2><p>setnx key value，如果key不存在，则setnx成功返回1，如果这个key以及存在，则返回0<br>比如电商的秒杀活动，key可以设置为key_resource_id，value设置为任意值。</p>
+<pre><code class="c#">if（jedis.setnx(key_resource_id,lock_value) == 1）&#123; //加锁
+    expire（key_resource_id，100）; //设置过期时间
+    try &#123;
+        do something  //业务请求
+    &#125;catch()&#123;
+  &#125;
+  finally &#123;
+       jedis.del(key_resource_id); //释放锁
+    &#125;
+&#125;
+</code></pre>
+<p>此时并没有保证原子性，当设置过期时间时，进程crash或者重启了，那么这个锁就永远存在，<strong>导致别的锁永远获取不到锁</strong>。</p>
+<h2 id="方案二：setnx-value值是（系统时间-过期时间）"><a href="#方案二：setnx-value值是（系统时间-过期时间）" class="headerlink" title="方案二：setnx+value值是（系统时间+过期时间）"></a>方案二：setnx+value值是（系统时间+过期时间）</h2><p>直接将过期时间值放入setnx中的value中，当加锁失败，再拿出value值校验一下即可</p>
+<pre><code class="c#">long expires = System.currentTimeMillis() + expireTime; //系统时间+设置的过期时间
+String expiresStr = String.valueOf(expires);
+
+// 如果当前锁不存在，返回加锁成功
+if (jedis.setnx(key_resource_id, expiresStr) == 1) &#123;
+        return true;
+&#125; 
+// 如果锁已经存在，获取锁的过期时间
+String currentValueStr = jedis.get(key_resource_id);
+
+// 如果获取到的过期时间，小于系统当前时间，表示已经过期
+if (currentValueStr != null &amp;&amp; Long.parseLong(currentValueStr) &lt; System.currentTimeMillis()) &#123;
+
+     // 锁已过期，获取上一个锁的过期时间，并设置现在锁的过期时间（不了解redis的getSet命令的小伙伴，可以去官网看下哈）
+    String oldValueStr = jedis.getSet(key_resource_id, expiresStr);
+    
+    if (oldValueStr != null &amp;&amp; oldValueStr.equals(currentValueStr)) &#123;
+         // 考虑多线程并发的情况，只有一个线程的设置值和当前值相同，它才可以加锁
+         return true;
+    &#125;
+&#125;
+        
+//其他情况，均返回加锁失败
+return false;
+&#125;
+</code></pre>
+<p>问题：</p>
+<ul>
+<li>分布式环境下客户端时间必须同步</li>
+<li>当锁过期的时候，并发多个客户端同时请求过来，都执行getSet()，最终只能有一个客户端加锁成功，但是该客户端的过期时间，可能被别的客户端覆盖。</li>
+<li>锁没有保存持有者的唯一标识，可能被别的客户端释放&#x2F;解锁。</li>
+</ul>
+<h2 id="使用lua脚本（setnx-expire）"><a href="#使用lua脚本（setnx-expire）" class="headerlink" title="使用lua脚本（setnx+expire）"></a>使用lua脚本（setnx+expire）</h2><p>lua脚本保证原子性</p>
+<pre><code class="vb">if redis.call(&#39;setnx&#39;,KEYS[1],ARGV[1]) == 1 then
+   redis.call(&#39;expire&#39;,KEYS[1],ARGV[2])
+else
+   return 0
+end;
+</code></pre>
+<pre><code class="javascript"> String lua_scripts = &quot;if redis.call(&#39;setnx&#39;,KEYS[1],ARGV[1]) == 1 then&quot; +
+            &quot; redis.call(&#39;expire&#39;,KEYS[1],ARGV[2]) return 1 else return 0 end&quot;;   
+Object result = jedis.eval(lua_scripts, Collections.singletonList(key_resource_id), Collections.singletonList(values));
+//判断是否成功
+return result.equals(1L);
+</code></pre>
+<h2 id="set的扩展命令（set-ex-px-nx）"><a href="#set的扩展命令（set-ex-px-nx）" class="headerlink" title="set的扩展命令（set ex px nx）"></a>set的扩展命令（set ex px nx）</h2><p>set key value [EX seconds]  [PX milliseconds] [nx|xx]</p>
+<pre><code class="c#">if（jedis.set(key_resource_id, lock_value, &quot;NX&quot;, &quot;EX&quot;, 100s) == 1）&#123; //加锁
+    try &#123;
+        do something  //业务处理
+    &#125;catch()&#123;
+  &#125;
+  finally &#123;
+       jedis.del(key_resource_id); //释放锁
+    &#125;
+&#125;
+</code></pre>
+<p>问题</p>
+<ul>
+<li>锁过期释放，业务没有执行完成。</li>
+<li>锁被其他的线程误删</li>
+</ul>
+<h2 id="set-ex-px-nx-校验唯一随机值，再删除"><a href="#set-ex-px-nx-校验唯一随机值，再删除" class="headerlink" title="set ex px nx + 校验唯一随机值，再删除"></a>set ex px nx + 校验唯一随机值，再删除</h2><p>为解决误删问题，给value值设置一个标记当前线程唯一的随机数，在删除的时候进行校验</p>
+<pre><code class="c#">if（jedis.set(key_resource_id, uni_request_id, &quot;NX&quot;, &quot;EX&quot;, 100s) == 1）&#123; //加锁
+    try &#123;
+        do something  //业务处理
+    &#125;catch()&#123;
+  &#125;
+  finally &#123;
+       //判断是不是当前线程加的锁,是才释放
+       if (uni_request_id.equals(jedis.get(key_resource_id))) &#123;
+        jedis.del(lockKey); //释放锁
+        &#125;
+    &#125;
+&#125;
+</code></pre>
+<p>同样在判断唯一和释放的时候，并不是原子性<br>一般也采用lua脚本执行</p>
+<pre><code class="vb">if redis.call(&#39;get&#39;,KEYS[1]) == ARGV[1] then 
+   return redis.call(&#39;del&#39;,KEYS[1]) 
+else
+   return 0
+end;
+</code></pre>
+<h2 id="redisson框架"><a href="#redisson框架" class="headerlink" title="redisson框架"></a>redisson框架</h2><p><img src="/..%5Cimages%5C640(1).png" alt="6401"></p>
+<p>只要线程一加锁成功，就会启动一个<code>watch dog</code>看门狗，它是一个后台线程，会每隔10秒检查一下，如果线程1还持有锁，那么就会不断的延长锁key的生存时间。因此，Redisson就是使用Redisson解决了<strong>锁过期释放，业务没执行完</strong>问题。</p>
+<h2 id="多机实现分布式锁Redlock-Redisson"><a href="#多机实现分布式锁Redlock-Redisson" class="headerlink" title="多机实现分布式锁Redlock+Redisson"></a>多机实现分布式锁Redlock+Redisson</h2><p>![640 (1)](..\images\640 (1).png)</p>
+<p>如果线程一在Redis的master节点上拿到了锁，但是加锁的key还没同步到slave节点。恰好这时，master节点发生故障，一个slave节点就会升级为master节点。线程二就可以获取同个key的锁啦，但线程一也已经拿到锁了，锁的安全性就没了。</p>
+<p>为了解决这个问题，Redis作者 antirez提出一种高级的分布式锁算法：Redlock。Redlock核心思想是这样的：</p>
+<p>搞多个Redis master部署，以保证它们不会同时宕掉。并且这些master节点是完全相互独立的，相互之间不存在数据同步。同时，需要确保在这多个master实例上，是与在Redis单实例，使用相同方法来获取和释放锁。</p>
+<p>我们假设当前有5个Redis master节点，在5台服务器上面运行这些Redis实例。</p>
+<p>![640 (2)](..\images\640 (2).png)</p>
+<p>RedLock的实现步骤:如下</p>
+<blockquote>
+<ul>
+<li>1.获取当前时间，以毫秒为单位。</li>
+<li>2.按顺序向5个master节点请求加锁。客户端设置网络连接和响应超时时间，并且超时时间要小于锁的失效时间。（假设锁自动失效时间为10秒，则超时时间一般在5-50毫秒之间,我们就假设超时时间是50ms吧）。如果超时，跳过该master节点，尽快去尝试下一个master节点。</li>
+<li>3.客户端使用当前时间减去开始获取锁时间（即步骤1记录的时间），得到获取锁使用的时间。当且仅当超过一半（N&#x2F;2+1，这里是5&#x2F;2+1&#x3D;3个节点）的Redis master节点都获得锁，并且使用的时间小于锁失效时间时，锁才算获取成功。（如上图，10s&gt; 30ms+40ms+50ms+4m0s+50ms）</li>
+<li>如果取到了锁，key的真正有效时间就变啦，需要减去获取锁所使用的时间。</li>
+<li>如果获取锁失败（没有在至少N&#x2F;2+1个master实例取到锁，有或者获取锁时间已经超过了有效时间），客户端要在所有的master节点上解锁（即便有些master节点根本就没有加锁成功，也需要解锁，以防止有些漏网之鱼）</li>
+</ul>
+</blockquote>
+<p>简化下步骤就是：</p>
+<ul>
+<li>按顺序向5个master节点请求加锁</li>
+<li>根据设置的超时时间来判断，是不是要跳过该master节点。</li>
+<li>如果大于等于3个节点加锁成功，并且使用的时间小于锁的有效期，即可认定加锁成功啦。</li>
+<li>如果获取锁失败，解锁！s</li>
+</ul>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
+    </div>
+</article>
+
+
+
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2023 Mhen
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("black_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+        $('pre code').each(function(){
+            var lines = $(this).text().trim().split('\n').length, widther='';
+            if (lines>99) {
+                widther = 'widther'
+            }
+            var $numbering = $('<ul/>').addClass('pre-numbering ' + widther).attr("unselectable","on");
+            $(this).addClass('has-numbering ' + widther)
+                    .parent()
+                    .append($numbering);
+            for(var i=1;i<=lines;i++){
+                $numbering.append($('<li/>').text(i));
+            }
+        });
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<style>
+    pre{
+        position: relative;
+        margin-bottom: 24px;
+        border-radius: 10px;
+        border: 1px solid #e2dede;
+        background: #FFF;
+        overflow: hidden;
+    }
+    code.has-numbering{
+        margin-left: 30px;
+    }
+    code.has-numbering.widther{
+        margin-left: 35px;
+    }
+    .pre-numbering{
+        margin: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        padding: 0.5em 3px 0.7em 5px;
+        border-right: 1px solid #C3CCD0;
+        text-align: right;
+        color: #AAA;
+        background-color: #fafafa;
+    }
+    .pre-numbering.widther {
+        width: 35px;
+    }
+</style>
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+</style>
+
+
+
+
+
+
+
+</html>
