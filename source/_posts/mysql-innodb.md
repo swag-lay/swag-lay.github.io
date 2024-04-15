@@ -1,5 +1,5 @@
 ---
-title: mysql-innodb-mvcc
+title: mysql-innodb
 date: 2024-02-27 10:10:01
 categories:
 - 数据库
@@ -7,6 +7,10 @@ categories:
 tags:
 ---
 
+# innodb
+默认级别可重复读，但在很大程度上避免了幻读现象，解决的方案由两种：
+- 针对**快照读**（普通select语句），通过**MVCC的方式解决幻读**，在可重复读隔离级别下，事务执行过程中看到的数据，一直跟这个事务启动时看到的数据是一致的，即使中途有其他事务插入了一条数据，是查询不出这条数据的，所以很好的避免了幻读现象
+- 针对**当前读**（select...for update等语句），通过**next-key lock（记录锁+间隙锁）方式解决了幻读**，当执行select...for update语句的时候，会加上next-key lock，如果有其他事务在next-key lock锁范围内插入了一条记录，那么这个插入语句就会被阻塞，无法成功插入，所以就很好避免了幻读问题。
 # innodb对mvcc的实现
 
 ## mvcc
