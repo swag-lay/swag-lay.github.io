@@ -4,6 +4,48 @@
   
     
     <entry>
+      <title>mysql-lock</title>
+      <link href="/2024/04/16/mysql-lock/"/>
+      <url>/2024/04/16/mysql-lock/</url>
+      
+        <content type="html"><![CDATA[<h1 id="锁的分类"><a href="#锁的分类" class="headerlink" title="锁的分类"></a>锁的分类</h1><ul><li>全局锁：ftwrl</li><li>表级锁</li></ul><ol><li>表锁</li><li>元数据锁</li><li>意向锁</li><li>auto-inc锁</li></ol><ul><li>行级锁</li><li>record lock</li><li>gap lock</li><li>next-key lock</li></ul><h1 id="mysql怎么加锁"><a href="#mysql怎么加锁" class="headerlink" title="mysql怎么加锁"></a>mysql怎么加锁</h1><h2 id="行级锁的加入"><a href="#行级锁的加入" class="headerlink" title="行级锁的加入"></a>行级锁的加入</h2><p>innodb是默认支持行级锁的<br>普通的select不会对记录加锁（除非串行化隔离级别），因为它属于快照读，是通过mvcc实现<br>如果要在查询时对记录加行级锁，可以通过以下两种方式，这两种查询会加锁的语句称为锁定读</p><pre><code class="mysql">// 对读取的记录加共享锁（s锁）select ... lock in share mode;// 对读取的记录加独占锁（x锁）select ... for update;</code></pre><p>update和delete也会加行级锁，且锁的类型都是独占锁（x锁）<br>s锁满足读读共享，读写互斥，x锁满足写写互斥，读写互斥</p><h2 id="mysql怎么加行级锁"><a href="#mysql怎么加行级锁" class="headerlink" title="mysql怎么加行级锁"></a>mysql怎么加行级锁</h2><p><strong>加锁的对象是索引，加锁的基本单位是next-key lock，next-key lock是前开后闭区间，而间隙锁是前开后开区间</strong><br><strong>当使用记录锁或者间隙锁能够避免幻读的场景下，next-key lock就会退化为记录锁或间隙锁</strong><br>用select * from performance_schema.data_locks\G;可以查看加锁的过程<br>如果LOCK_MODE为x，说明是next-key锁<br>如果LOCK_MODE为x,REC_NOT_GAP，说明是记录锁<br>如果LOCK_MODE为x,GAP，说明是间隙锁</p><p><img src="/..%5Cimages%5C%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95%E5%8A%A0%E9%94%81%E6%B5%81%E7%A8%8B.jpeg" alt="img"></p><p><img src="/..%5Cimages%5C%E9%9D%9E%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95%E5%8A%A0%E9%94%81%E6%B5%81%E7%A8%8B.jpeg" alt="img"><br><strong>当在update语句的where条件没有使用索引，就会全表扫描，于是就会给所有记录加上next-key锁，相当于把整张表锁住了</strong></p><p>那update语句的where带上索引就能避免全表记录加锁了吗？<br>并不是，<strong>关键还得看这条语句在执行过程中，优化器最终选择的是索引扫描还是全表扫描，如果走了全表扫描，就会对全表的记录加锁了</strong></p><p>两个事务即使生成的间隙锁的范围是一样的，也不会发生冲突，因为间隙锁目的是为了防止其他事务插入数据，因此间隙锁与间隙锁之间是相互兼容的。<br>在执行插入语句时，如果插入的记录在其他事务持有间隙锁范围内，插入语句就会被阻塞，因为插入语句在碰到间隙锁时，会生成一个插入意向锁，然后插入意向锁和间隙锁之间是互斥的关系。<br>如果两个事务分别向对方持有的间隙锁范围内插入一条记录，而插入操作为了获取到插入意向锁，都在等待对方事务的间隙锁释放，于是就造成了循环等待，满足了死锁的四个条件：互斥、占有且等待、不可强占用、循环等待，因此发生了死锁。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+          <category> mysql </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>cookie-session-token</title>
+      <link href="/2024/04/10/cookie-session-token/"/>
+      <url>/2024/04/10/cookie-session-token/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Cookie和Session"><a href="#Cookie和Session" class="headerlink" title="Cookie和Session"></a>Cookie和Session</h1><p>因为http是无状态的协议，所以服务器不知道客户端的历史请求记录，session和cookie的目的是为了弥补http的无状态特性</p><h2 id="session"><a href="#session" class="headerlink" title="session"></a>session</h2><p>保存会话<br>客户端请求服务器，服务器会开辟一块内存空间，这个对象便是session对象，存储结构是ConcurrentHashMap，弥补了http的无状态特性，服务器可以利用session存储客户端在同一个会话期间的一些操作记录</p><p>session判断是否是同一会话</p><p><img src="/..%5Cimages%5Cimage-20240410171934809.png" alt="image-20240410171934809"><br>第一次请求开辟内存空间，设置sessionId，通过响应头的Set-Cookie：JSESSIONID&#x3D;xxxxxx，向客户端发送设置cookie的响应，客户端设置cookie，该cookie的过期时间为浏览器会话结束<br>接下来每一次请求都会携带cookie（包含sessionId）</p><p>缺点：当一台服务器A存储Session，做了负载均衡之后，加入一段时间内A服务器的访问量激增，转发到B访问，此时B里面并没有Session</p><h2 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h2><p>http协议的cookie包括Web Cookie和浏览器Cookie，他是服务器发送到web浏览器的一小块数据。服务器发送到浏览器的Cookie，浏览器会存储，并与下一个请求一起发送到服务器。通常用于判断两个请求是否来自同一个浏览器，例如用户保持登录状态<br>三个目的：</p><ul><li>会话管理</li><li>个性化</li><li>跟踪<br>两种类型cookies，一种session cookies，一种persistent cookies<br>session cookies：会话cookies，不包含到期时间，存储在内存中，不会写入磁盘，浏览器关闭cookie消失</li></ul><h2 id="jwt"><a href="#jwt" class="headerlink" title="jwt"></a>jwt</h2><p>作用</p><ul><li>认证</li><li>信息交换</li></ul><p>Header：令牌类型和签名算法</p><pre><code class="json">&#123;    &quot;alg&quot;:&quot;HS256&quot;,    &quot;typ&quot;:&quot;JWT&quot;&#125;</code></pre><p>Payload：有关实体（通常是用户）和其他数据的声明<br>Signature：签证信息包括</p><ul><li>header（base64之后）</li><li>payload（base64之后）</li><li>secret</li></ul><p>jwt具有加密签名，session cookies没有；<br>无状态，声明被存储在客户端，而不是服务器内存<br>可扩展性更强<br>支持跨越认知</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机网络 </category>
+          
+          <category> cookie&amp;session&amp;token </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>redis分布式缓存</title>
       <link href="/2024/04/08/redis%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/"/>
       <url>/2024/04/08/redis%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/</url>
@@ -126,18 +168,18 @@
     
     
     <entry>
-      <title>network-http</title>
+      <title>network-http&amp;https</title>
       <link href="/2024/03/25/network-http/"/>
       <url>/2024/03/25/network-http/</url>
       
-        <content type="html"><![CDATA[<h1 id="http-amp-https"><a href="#http-amp-https" class="headerlink" title="http &amp; https"></a>http &amp; https</h1><h2 id="http是如何保存用户的状态"><a href="#http是如何保存用户的状态" class="headerlink" title="http是如何保存用户的状态"></a>http是如何保存用户的状态</h2><p>http本身是一种无状态协议，也就是说http协议自身不对请求和响应之间的通信状态进行保存。而session机制就是为了保存用户状态，session通过服务端记录用户的状态。常见保存session的方法有内存和数据库（比如redis），如何session进行跟踪，一般是通过是在cookie中附加一个session id。当cookie被禁用时，通常利用url重写把session id直接附加在url路径后面</p><h2 id="从输入url到页面展示的过程"><a href="#从输入url到页面展示的过程" class="headerlink" title="从输入url到页面展示的过程"></a>从输入url到页面展示的过程</h2><p><img src="/..%5Cimages%5Cimage-20240325164540430.png" alt="image-20240325164540430"></p><ol><li>通过dns协议，获取域名对应ip</li><li>根据ip和端口，向目标服务器发送tcp请求</li><li>在tcp连接上，向服务器发送http请求报文，获取网页内容</li><li>服务器接收http请求报文，处理请求，返回响应报文</li><li>浏览器收到http响应报文，解析响应体的html代码，渲染网页，如果有需要加载的其他资源再次发送http请求，获取资源，直到网页全部加载</li><li>不需要通信时，关闭tcp连接</li></ol><p>http状态码</p><p>|状态码|类别|原因|<br>|—|—|<br>|1xx |information |接收请求正在处理|<br>|2xx|success|完成|<br>|3xx|redirection|重定向，需要附加操作以完成|<br>|4xx|client error|服务器无法处理|<br>|5xx|server error|服务器请求错误|</p><h2 id="http和https的区别"><a href="#http和https的区别" class="headerlink" title="http和https的区别"></a>http和https的区别</h2><p>端口号：http是80，https是443<br>url前缀：http:&#x2F;&#x2F;,https:&#x2F;&#x2F;<br>安全性和资源消耗：http运行在tcp上，所有传输内容为明文，客户端和用户端都无法验证对方的身份。https是运行在ssl&#x2F;tls上的，ssl&#x2F;tls又是运行在tcp上的。所有传输的内容都经过加密，加密采用对称加密，但对称加密的密钥用服务器的证书进行了非对称加密<br>搜索引擎优化：搜索引擎通常会更青睐使用https协议的网站，因为https能够提供更高的安全性和用户隐私保护。使用https协议的网站在搜索结果中可能会被优先显示，从而对seo产生影响。</p>]]></content>
+        <content type="html"><![CDATA[<h1 id="http-amp-https"><a href="#http-amp-https" class="headerlink" title="http &amp; https"></a>http &amp; https</h1><h2 id="http是如何保存用户的状态"><a href="#http是如何保存用户的状态" class="headerlink" title="http是如何保存用户的状态"></a>http是如何保存用户的状态</h2><p>http本身是一种无状态协议，也就是说http协议自身不对请求和响应之间的通信状态进行保存。而session机制就是为了保存用户状态，session通过服务端记录用户的状态。常见保存session的方法有内存和数据库（比如redis），如何session进行跟踪，一般是通过是在cookie中附加一个session id。当cookie被禁用时，通常利用url重写把session id直接附加在url路径后面</p><h2 id="从输入url到页面展示的过程"><a href="#从输入url到页面展示的过程" class="headerlink" title="从输入url到页面展示的过程"></a>从输入url到页面展示的过程</h2><p><img src="/..%5Cimages%5Cimage-20240325164540430.png" alt="image-20240325164540430"></p><ol><li>通过dns协议，获取域名对应ip</li><li>根据ip和端口，向目标服务器发送tcp请求</li><li>在tcp连接上，向服务器发送http请求报文，获取网页内容</li><li>服务器接收http请求报文，处理请求，返回响应报文</li><li>浏览器收到http响应报文，解析响应体的html代码，渲染网页，如果有需要加载的其他资源再次发送http请求，获取资源，直到网页全部加载</li><li>不需要通信时，关闭tcp连接</li></ol><p>http状态码</p><p>|状态码|类别|原因|<br>|—|—|<br>|1xx |information |接收请求正在处理|<br>|2xx|success|完成|<br>|3xx|redirection|重定向，需要附加操作以完成|<br>|4xx|client error|服务器无法处理|<br>|5xx|server error|服务器请求错误|</p><h2 id="http标头"><a href="#http标头" class="headerlink" title="http标头"></a>http标头</h2><p>http1.1的标头有四种，<strong>通用标头，实体标头，请求标头，响应标头</strong></p><ul><li>通用标头<br>传递有关消息本身的信息，通用标头不会限制于是请求还是响应报文，但是某些通用标头大部分或全部用于一种特定类型的请求中。</li></ul><ol><li>Cache-Control</li><li>Connection：keep-alive 持久性连接</li><li>Date：比北京时间慢八小时<br>。。。</li></ol><ul><li>请求标头</li></ul><ol><li>Accept 告知客户端能够接受的MME类型</li><li>Accpet-Charset 客户端接受的字符编码</li><li>Accpet-Encoding 客户端希望服务端返回的内容编码</li><li>Authorization</li></ol><ul><li>响应标头</li></ul><ol><li>Accept-Ranges bytes表示可以处理 none表示不能处理</li><li>Age 告诉客户端源服务器在多久之前创建了响应，单位秒，通常接近0</li><li>ETag 对于条件请求非常重要，因为条件请求是根据ETag的值进行匹配的</li><li>Location 表示url需要重定向页面，仅仅与3xx（重定向）和201（已创建）一起使用</li><li>Access-Contrl-Allow-Origin 指定一个来源，告诉浏览器允许该来源进行资源访问</li></ol><ul><li>实体标头<br>用于http请求和http响应中<br>实体标头不局限于请求标头或者响应标头<br>一般Content-开头都是实体标头</li></ul><h2 id="https流程"><a href="#https流程" class="headerlink" title="https流程"></a>https流程</h2><p><img src="/..%5Cimages%5Cimage-20240410144518114.png" alt="image-20240410144518114"></p><p>http三次tcp握手<br>ClientHello：客户端通过服务器发送hello消息来发起握手过程<br>ServerHello<br>认证：客户端的证书颁发机构会认证SSL证书，然后发送Certificate报文，报文中包含公开密钥证书。最后服务器发送ServerHelloDone作为hello请求的响应。第一部分握手阶段结束<br>加密阶段：第一个阶段握手完成后，客户端会发送ClientKeyExchange作为响应，这个响应中包含一种称为The premaster secret的密钥字符串，这个字符串就是使用上面公开密钥证书进行加密的字符串。随后客户端发送ChangeCipherSpec，告诉服务端使用私钥解密这个premaster secret的字符串，然后客户端发送finished告诉服务端自己发送完成<br>实现安全的非对称加密：然后，服务器发送ChangeCipherSpec和Finished告诉客户端解密完成，至此实现RSA的非对称加密。</p><h2 id="http和https的区别"><a href="#http和https的区别" class="headerlink" title="http和https的区别"></a>http和https的区别</h2><p>https就是http+tsl&#x2F;ssl组合<br>端口号：http是80，https是443<br>url前缀：http:&#x2F;&#x2F;,https:&#x2F;&#x2F;<br>安全性和资源消耗：http运行在tcp上，所有传输内容为明文，客户端和用户端都无法验证对方的身份。https是运行在ssl&#x2F;tls上的，ssl&#x2F;tls又是运行在tcp上的。所有传输的内容都经过加密，加密采用对称加密，但对称加密的密钥用服务器的证书进行了非对称加密<br>搜索引擎优化：搜索引擎通常会更青睐使用https协议的网站，因为https能够提供更高的安全性和用户隐私保护。使用https协议的网站在搜索结果中可能会被优先显示，从而对seo产生影响。</p><h2 id="TLS"><a href="#TLS" class="headerlink" title="TLS"></a>TLS</h2><p>由记录协议，握手协议，警告协议，变更密码规范协议，扩展协议等几个子协议组成<br>比如ECDHE-ECDSA-AES256-GCM-SHA384<br>基本格式<strong>密钥交换算法-签名算法-对称加密算法-摘要算法</strong>组成，有时候还有分组模式<br>TLS从根本上使用对称加密和非对称加密两种形式</p>]]></content>
       
       
       <categories>
           
           <category> 计算机网络 </category>
           
-          <category> http </category>
+          <category> http&amp;https </category>
           
       </categories>
       
@@ -334,11 +376,11 @@
     
     
     <entry>
-      <title>mysql-innodb-mvcc</title>
-      <link href="/2024/02/27/mysql-innodb-mvcc/"/>
-      <url>/2024/02/27/mysql-innodb-mvcc/</url>
+      <title>mysql-innodb</title>
+      <link href="/2024/02/27/mysql-innodb/"/>
+      <url>/2024/02/27/mysql-innodb/</url>
       
-        <content type="html"><![CDATA[<h1 id="innodb对mvcc的实现"><a href="#innodb对mvcc的实现" class="headerlink" title="innodb对mvcc的实现"></a>innodb对mvcc的实现</h1><h2 id="mvcc"><a href="#mvcc" class="headerlink" title="mvcc"></a>mvcc</h2><p>多版本并发控制，用于在多个并发事务同时读写数据库时保持数据的一致性和隔离性。主要通过<strong>在每个数据行上维护多个版本的数据</strong>来实现的。当某个事务要对数据库中的数据进行修改时，mvcc会为该事务创建一个数据快照，而不是直接修改实际的数据行。</p><p>通俗来说分读操作和写操作，读操作会使用旧版本的快照，写操作会创建新版本。<br>对于版本的回收，防止数据库中版本无限增长，mvcc会定期回收</p><h2 id="一致性非锁定读"><a href="#一致性非锁定读" class="headerlink" title="一致性非锁定读"></a>一致性非锁定读</h2><p>一致性非锁定读通常做法是加一个版本号或者时间戳字段，在更新数据的同时版本号+1或者更新时间戳。查询时，将当前可见的版本号与对应记录的版本号进行比对，如果记录的版本小于可见版本，则改记录可见。<br>在innodb中，多版本孔子就是对非锁定读的实现，如果读取的行正在执行delete和update操作，这时读操作不会去等待行上锁的释放。而是会去读取行的一个快照数据，对于这种读取历史数据的方式，我们叫他快照读。<br>**innodb在实现repeatable read时，如果执行的是当前读，则会对读取的记录使用next-key lock，来防止其他事务在间隙间插入数据。</p><h2 id="innodb对mvcc的实现-1"><a href="#innodb对mvcc的实现-1" class="headerlink" title="innodb对mvcc的实现"></a>innodb对mvcc的实现</h2><p>隐藏字段，read view，undo log<br>不同事务下mvcc的差异<br>rc事务下会在每次查询时生成一个read view列表（m_ids列表），也就是说会更新不应该看到的事务列表<br>rr事务下只会在事务开始后第一次查询生成一个read view列表。</p>]]></content>
+        <content type="html"><![CDATA[<h1 id="innodb"><a href="#innodb" class="headerlink" title="innodb"></a>innodb</h1><p>默认级别可重复读，但在很大程度上避免了幻读现象，解决的方案由两种：</p><ul><li>针对<strong>快照读</strong>（普通select语句），通过<strong>MVCC的方式解决幻读</strong>，在可重复读隔离级别下，事务执行过程中看到的数据，一直跟这个事务启动时看到的数据是一致的，即使中途有其他事务插入了一条数据，是查询不出这条数据的，所以很好的避免了幻读现象</li><li>针对<strong>当前读</strong>（select…for update等语句），通过<strong>next-key lock（记录锁+间隙锁）方式解决了幻读</strong>，当执行select…for update语句的时候，会加上next-key lock，如果有其他事务在next-key lock锁范围内插入了一条记录，那么这个插入语句就会被阻塞，无法成功插入，所以就很好避免了幻读问题。</li></ul><h1 id="innodb对mvcc的实现"><a href="#innodb对mvcc的实现" class="headerlink" title="innodb对mvcc的实现"></a>innodb对mvcc的实现</h1><h2 id="mvcc"><a href="#mvcc" class="headerlink" title="mvcc"></a>mvcc</h2><p>多版本并发控制，用于在多个并发事务同时读写数据库时保持数据的一致性和隔离性。主要通过<strong>在每个数据行上维护多个版本的数据</strong>来实现的。当某个事务要对数据库中的数据进行修改时，mvcc会为该事务创建一个数据快照，而不是直接修改实际的数据行。</p><p>通俗来说分读操作和写操作，读操作会使用旧版本的快照，写操作会创建新版本。<br>对于版本的回收，防止数据库中版本无限增长，mvcc会定期回收</p><h2 id="一致性非锁定读"><a href="#一致性非锁定读" class="headerlink" title="一致性非锁定读"></a>一致性非锁定读</h2><p>一致性非锁定读通常做法是加一个版本号或者时间戳字段，在更新数据的同时版本号+1或者更新时间戳。查询时，将当前可见的版本号与对应记录的版本号进行比对，如果记录的版本小于可见版本，则改记录可见。<br>在innodb中，多版本孔子就是对非锁定读的实现，如果读取的行正在执行delete和update操作，这时读操作不会去等待行上锁的释放。而是会去读取行的一个快照数据，对于这种读取历史数据的方式，我们叫他快照读。<br>**innodb在实现repeatable read时，如果执行的是当前读，则会对读取的记录使用next-key lock，来防止其他事务在间隙间插入数据。</p><h2 id="innodb对mvcc的实现-1"><a href="#innodb对mvcc的实现-1" class="headerlink" title="innodb对mvcc的实现"></a>innodb对mvcc的实现</h2><p>隐藏字段，read view，undo log<br>不同事务下mvcc的差异<br>rc事务下会在每次查询时生成一个read view列表（m_ids列表），也就是说会更新不应该看到的事务列表<br>rr事务下只会在事务开始后第一次查询生成一个read view列表。</p>]]></content>
       
       
       <categories>

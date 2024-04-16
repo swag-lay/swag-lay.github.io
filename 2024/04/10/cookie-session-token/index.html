@@ -2,21 +2,24 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>mhen</title>
+  <title>cookie-session-token | mhen</title>
   <meta name="keywords" content="">
-  <meta name="description" content="mhen">
+  <meta name="description" content="cookie-session-token | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="分布式缓存高并发下的分布式缓存通常都是b&#x2F;s架构，中间挂一个服务器，后面挂一个数据库当并发量加大，首先达到瓶颈的应该是数据库，这就会导致客户端的访问速度，访问效率降低通常采用加缓冲层的方式，我们把经常访问的数据称之为热点数据，存放在缓存中 缓存通常包括：  本地缓存：Ehcache，Guava Cache，Spring Cache 分布式缓存：通常使用redis 多级缓存  redis集">
+<meta name="description" content="锁的分类 全局锁：ftwrl 表级锁   表锁 元数据锁 意向锁 auto-inc锁   行级锁 record lock gap lock next-key lock  mysql怎么加锁行级锁的加入innodb是默认支持行级锁的普通的select不会对记录加锁（除非串行化隔离级别），因为它属于快照读，是通过mvcc实现如果要在查询时对记录加行级锁，可以通过以下两种方式，这两种查询会加锁的语句称为">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redis分布式缓存">
-<meta property="og:url" content="http://example.com/2024/04/08/redis%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/index.html">
+<meta property="og:title" content="mysql-lock">
+<meta property="og:url" content="http://example.com/2024/04/16/mysql-lock/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="分布式缓存高并发下的分布式缓存通常都是b&#x2F;s架构，中间挂一个服务器，后面挂一个数据库当并发量加大，首先达到瓶颈的应该是数据库，这就会导致客户端的访问速度，访问效率降低通常采用加缓冲层的方式，我们把经常访问的数据称之为热点数据，存放在缓存中 缓存通常包括：  本地缓存：Ehcache，Guava Cache，Spring Cache 分布式缓存：通常使用redis 多级缓存  redis集">
+<meta property="og:description" content="锁的分类 全局锁：ftwrl 表级锁   表锁 元数据锁 意向锁 auto-inc锁   行级锁 record lock gap lock next-key lock  mysql怎么加锁行级锁的加入innodb是默认支持行级锁的普通的select不会对记录加锁（除非串行化隔离级别），因为它属于快照读，是通过mvcc实现如果要在查询时对记录加行级锁，可以通过以下两种方式，这两种查询会加锁的语句称为">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-04-08T03:35:16.000Z">
-<meta property="article:modified_time" content="2024-04-08T06:54:28.266Z">
+<meta property="og:image" content="http://example.com/..%5Cimages%5C%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95%E5%8A%A0%E9%94%81%E6%B5%81%E7%A8%8B.jpeg">
+<meta property="og:image" content="http://example.com/..%5Cimages%5C%E9%9D%9E%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95%E5%8A%A0%E9%94%81%E6%B5%81%E7%A8%8B.jpeg">
+<meta property="article:published_time" content="2024-04-16T07:43:18.000Z">
+<meta property="article:modified_time" content="2024-04-16T10:07:36.915Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/..%5Cimages%5C%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95%E5%8A%A0%E9%94%81%E6%B5%81%E7%A8%8B.jpeg">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -56,7 +59,7 @@
 
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/"
    class="avatar_target">
@@ -90,7 +93,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(54)</small>
+                <small>(56)</small>
             
         </div>
     </li>
@@ -172,7 +175,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         数据库
-                        <small>(16)</small>
+                        <small>(17)</small>
                         
                     </div>
                     
@@ -183,7 +186,7 @@
                                         
                                         mysql
                                         
-                                            <small>(15
+                                            <small>(16
                                                 )</small>
                                         
                                     </div>
@@ -366,7 +369,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         计算机网络
-                        <small>(4)</small>
+                        <small>(5)</small>
                         
                     </div>
                     
@@ -385,9 +388,21 @@
                                 </li>
                             
                                 <li>
-                                    <div data-rel="计算机网络<--->http">
+                                    <div data-rel="计算机网络<--->cookie&amp;session&amp;token">
                                         
-                                        http
+                                        cookie&amp;session&amp;token
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="计算机网络<--->http&amp;https">
+                                        
+                                        http&amp;https
                                         
                                             <small>(1
                                                 )</small>
@@ -517,6 +532,10 @@
                         </ul>
                     
                 </li>
+            
+        
+    
+        
             
         
     
@@ -760,8 +779,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="54">
-<input type="hidden" id="yelog_site_word_count" value="34.9k">
+<input type="hidden" id="yelog_site_posts_number" value="56">
+<input type="hidden" id="yelog_site_word_count" value="37k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -856,6 +875,24 @@
     <nav id="title-list-nav">
         
         
+        <a  class="All 数据库 mysql "
+           href="/2024/04/16/mysql-lock/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-lock">mysql-lock</span>
+            <span class="post-date" title="2024-04-16 15:43:18">2024/04/16</span>
+        </a>
+        
+        
+        <a  class="All 计算机网络 cookie&amp;session&amp;token "
+           href="/2024/04/10/cookie-session-token/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="cookie-session-token">cookie-session-token</span>
+            <span class="post-date" title="2024-04-10 15:27:24">2024/04/10</span>
+        </a>
+        
+        
         <a  class="All redis 分布式缓存 "
            href="/2024/04/08/redis%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98/"
            data-tag=""
@@ -910,11 +947,11 @@
         </a>
         
         
-        <a  class="All 计算机网络 http "
+        <a  class="All 计算机网络 http&amp;https "
            href="/2024/03/25/network-http/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="network-http">network-http</span>
+            <span class="post-title" title="network-http&amp;https">network-http&amp;https</span>
             <span class="post-date" title="2024-03-25 16:42:30">2024/03/25</span>
         </a>
         
@@ -1001,10 +1038,10 @@
         
         
         <a  class="All 数据库 mysql "
-           href="/2024/02/27/mysql-innodb-mvcc/"
+           href="/2024/02/27/mysql-innodb/"
            data-tag=""
            data-author="" >
-            <span class="post-title" title="mysql-innodb-mvcc">mysql-innodb-mvcc</span>
+            <span class="post-title" title="mysql-innodb">mysql-innodb</span>
             <span class="post-date" title="2024-02-27 10:10:01">2024/02/27</span>
         </a>
         
@@ -1357,12 +1394,55 @@
         </div>
     </div>
 </aside>
-<div id="post" class="index">
+<div id="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-cookie-session-token" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Why-Blog"><span class="toc-text">Why Blog</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E5%8D%9A%E5%AE%A2%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">对博客的理解</span></a></li></ol></li></ol>
+        <h1 class="article-title">cookie-session-token</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="计算机网络">计算机网络</a> > 
+            
+            <a  data-rel="计算机网络&lt;---&gt;cookie&amp;session&amp;token">cookie&amp;session&amp;token</a>
+            
+        </span>
+        
+        
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2024-04-10 17:58:02'>2024-04-10 15:27</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>Count:514</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            Views 👀 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Cookie%E5%92%8CSession"><span class="toc-text">Cookie和Session</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#session"><span class="toc-text">session</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cookie"><span class="toc-text">cookie</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jwt"><span class="toc-text">jwt</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1375,22 +1455,55 @@
     }
 </style>
 </div>
-            <h1 id="Why-Blog"><a href="#Why-Blog" class="headerlink" title="Why Blog"></a>Why Blog</h1><h2 id="对博客的理解"><a href="#对博客的理解" class="headerlink" title="对博客的理解"></a>对博客的理解</h2><p>喜欢写Blog的人，会经历三个阶段。</p>
-<blockquote>
-<p>第一阶段，刚接触Blog，觉得很新鲜，试着选择一个免费空间来写。</p>
-</blockquote>
-<blockquote>
-<p>第二阶段，发现免费空间限制太多，就自己购买域名和空间，搭建独立博客。</p>
-</blockquote>
-<blockquote>
-<p>第三阶段，觉得独立博客的管理太麻烦，最好在保留控制权的前提下，让别人来管，自己只负责写文章。</p>
-</blockquote>
-<p>我们每个人的在网络上产生的数据越来越多，这些信息是我们在互联网上存在过的痕迹，值得我们认真对待。但是它们被分散分布在各个网站上。很多时候我们很难将它们聚合在一起，而且各个网站的信息排布方式也没有办法自由控制，所以我们需要一个可以由自己主宰的空间——博客。</p>
-<p>通过博客，我们可以记录自己的生活和成长的轨迹。它不像 Twitter 那样碎片化，也不像 Facebook 那样关系化，它是私人的空间。</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Cookie和Session"><a href="#Cookie和Session" class="headerlink" title="Cookie和Session"></a>Cookie和Session</h1><p>因为http是无状态的协议，所以服务器不知道客户端的历史请求记录，session和cookie的目的是为了弥补http的无状态特性</p>
+<h2 id="session"><a href="#session" class="headerlink" title="session"></a>session</h2><p>保存会话<br>客户端请求服务器，服务器会开辟一块内存空间，这个对象便是session对象，存储结构是ConcurrentHashMap，弥补了http的无状态特性，服务器可以利用session存储客户端在同一个会话期间的一些操作记录</p>
+<p>session判断是否是同一会话</p>
+<p><img src="/..%5Cimages%5Cimage-20240410171934809.png" alt="image-20240410171934809"><br>第一次请求开辟内存空间，设置sessionId，通过响应头的Set-Cookie：JSESSIONID&#x3D;xxxxxx，向客户端发送设置cookie的响应，客户端设置cookie，该cookie的过期时间为浏览器会话结束<br>接下来每一次请求都会携带cookie（包含sessionId）</p>
+<p>缺点：当一台服务器A存储Session，做了负载均衡之后，加入一段时间内A服务器的访问量激增，转发到B访问，此时B里面并没有Session</p>
+<h2 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h2><p>http协议的cookie包括Web Cookie和浏览器Cookie，他是服务器发送到web浏览器的一小块数据。服务器发送到浏览器的Cookie，浏览器会存储，并与下一个请求一起发送到服务器。通常用于判断两个请求是否来自同一个浏览器，例如用户保持登录状态<br>三个目的：</p>
+<ul>
+<li>会话管理</li>
+<li>个性化</li>
+<li>跟踪<br>两种类型cookies，一种session cookies，一种persistent cookies<br>session cookies：会话cookies，不包含到期时间，存储在内存中，不会写入磁盘，浏览器关闭cookie消失</li>
+</ul>
+<h2 id="jwt"><a href="#jwt" class="headerlink" title="jwt"></a>jwt</h2><p>作用</p>
+<ul>
+<li>认证</li>
+<li>信息交换</li>
+</ul>
+<p>Header：令牌类型和签名算法</p>
+<pre><code class="json">&#123;
+    &quot;alg&quot;:&quot;HS256&quot;,
+    &quot;typ&quot;:&quot;JWT&quot;
+&#125;
+</code></pre>
+<p>Payload：有关实体（通常是用户）和其他数据的声明<br>Signature：签证信息包括</p>
+<ul>
+<li>header（base64之后）</li>
+<li>payload（base64之后）</li>
+<li>secret</li>
+</ul>
+<p>jwt具有加密签名，session cookies没有；<br>无状态，声明被存储在客户端，而不是服务器内存<br>可扩展性更强<br>支持跨越认知</p>
 
-        </article>
-        
-        
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
+    </div>
+</article>
+
+
+
+
+
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">
@@ -1399,11 +1512,11 @@
 <p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
 
     </div>
-</div>
-<div class="full-toc">
-    <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
 <a class="" id="rocket" ></a>
 
+    </div>
 </div>
 
 </body>
