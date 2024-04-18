@@ -1516,7 +1516,7 @@
 <p>innodb存储引擎数据是按行进行存放的。</p>
 <p>InnoDB 引擎中，其数据文件本身就是索引文件。相比 MyISAM，索引文件和数据文件是分离的，其表数据文件本身就是按 B+Tree 组织的一个索引结构，树的叶节点 data 域保存了完整的数据记录。这个索引的 key 是数据表的主键，因此 InnoDB 表数据文件本身就是主索引。<strong>这被称为“聚簇索引（聚集索引）”，而其余的索引都作为 辅助索引 ，</strong>辅助索引的 data 域存储相应记录主键的值而不是地址，这也是和 MyISAM 不同的地方。在根据主索引搜索时，直接找到 key 所在的节点即可取出数据；在根据辅助索引查找时，则需要先取出主键的值，再走一遍主索引。 因此，在设计表的时候，不建议使用过长的字段作为主键，也不建议使用非单调的字段作为主键，这样会造成主索引频繁分裂。</p>
 <h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p><img src="/..%5Cimages%5Cinnodb%E6%9E%B6%E6%9E%84.png" alt="image-20230906103426248"></p>
-<h3 id="后台线程"><a href="#后台线程" class="headerlink" title="后台线程"></a>后台线程</h3><p><img src="F:\swag-lay.github.io\source\images\innodb后台线程.png" alt="image-20230906133932389"></p>
+<h3 id="后台线程"><a href="#后台线程" class="headerlink" title="后台线程"></a>后台线程</h3><p><img src="/2023/08/29/mysql-engine/swag-lay.github.io\source\images\innodb后台线程.png" alt="image-20230906133932389"></p>
 <p>master thread</p>
 <p>核心后台线程，负责调度其他线程，还负责将缓冲池中的数据异步刷新到磁盘中，保持数据的一致性，还包括脏页的刷新，合并插入缓存，undo页的回收</p>
 <p>io thread</p>

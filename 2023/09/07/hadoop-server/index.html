@@ -1511,7 +1511,7 @@
 <p>​	namenode不负责数据写入，只负责数据记录和权限审批</p>
 <p>​	客户端直接向一台datanode写数据，这个datanode一般是离客户端最近（网络距离）的那一个</p>
 <p>​	数据块副本的复制工作，由datanode之间自行完成（构建一个pipline，按顺序复制分发）</p>
-<h2 id="数据读取流程"><a href="#数据读取流程" class="headerlink" title="数据读取流程"></a>数据读取流程</h2><p><img src="F:\swag-lay.github.io\source\images\namenode数据读取.png" alt="image-20230911190900682"></p>
+<h2 id="数据读取流程"><a href="#数据读取流程" class="headerlink" title="数据读取流程"></a>数据读取流程</h2><p><img src="/2023/09/07/hadoop-server/swag-lay.github.io\source\images\namenode数据读取.png" alt="image-20230911190900682"></p>
 <p>关键信息点：</p>
 <p>​	数据同样不通过namenode提供</p>
 <p>​	namenode提供的block列表，会基于网络距离计算尽量提供离客户端最近的</p>
