@@ -93,7 +93,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(58)</small>
+                <small>(59)</small>
             
         </div>
     </li>
@@ -718,7 +718,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         redis
-                        <small>(5)</small>
+                        <small>(6)</small>
                         
                     </div>
                     
@@ -779,8 +779,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="58">
-<input type="hidden" id="yelog_site_word_count" value="38k">
+<input type="hidden" id="yelog_site_posts_number" value="59">
+<input type="hidden" id="yelog_site_word_count" value="38.6k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -873,6 +873,15 @@
     </div>
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="All redis "
+           href="/2024/04/19/redis%E9%AB%98%E5%8F%AF%E7%94%A8/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="redis高可用">redis高可用</span>
+            <span class="post-date" title="2024-04-19 13:55:40">2024/04/19</span>
+        </a>
         
         
         <a  class="All redis "
@@ -1436,12 +1445,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-03-25 16:05:45'>2024-03-23 14:15</time>
+            Created At : <time class="date" title='Updated At: 2024-04-22 15:08:41'>2024-03-23 14:15</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:997</span>
+        <span>Count:1.1k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1493,11 +1502,12 @@
 </ul>
 <ol start="2">
 <li>信号量<br>计数器，控制多个线程对共享资源的访问，用于多线程之间的同步，通常作为一个锁机制，防止某一进程访问资源时其他进程也访问该资源，因此主要作为进程间以及同一进程内不同线程的同步手段</li>
-<li>信号<br>用于通知接受进程某个事件已经发生<br>比较复杂后面遇到再补充</li>
+<li>信号<br> 比如linux中的kill -9，kill -l可以看到所有的信号，9代表sigkill信号，再比如ctrl+c运行的是2）sigint信号<br>用于通知接受进程某个事件已经发生<br>比较复杂后面遇到再补充</li>
 <li>消息队列<br>消息的链表，由消息队列标识符标识，unix下不同进程间可实现共享资源的一种机制。unix允许不同进程将格式化的数据流以消息队列发送给任意进程。</li>
 <li>共享内存<br>映射一段能够被其他进程访问的内存，这段内存由一个进程创建，但多个进程都可以访问，是所有进程间通信方式（IPC）最快的</li>
 <li>套接字</li>
 </ol>
+<p>1-5都是用于在同一台主机上进行进程间通信，6是为了跨网络与不同主机上的进程之间通信</p>
 <h2 id="线程的相关问题"><a href="#线程的相关问题" class="headerlink" title="线程的相关问题"></a>线程的相关问题</h2><h3 id="线程之间的通信"><a href="#线程之间的通信" class="headerlink" title="线程之间的通信"></a>线程之间的通信</h3><ol>
 <li>锁机制</li>
 </ol>

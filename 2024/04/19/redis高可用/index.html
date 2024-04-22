@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>sql_view | mhen</title>
+  <title>redis高可用 | mhen</title>
   <meta name="keywords" content="">
-  <meta name="description" content="sql_view | mhen">
+  <meta name="description" content="redis高可用 | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="redis过期删除策略当我们对key设置过期时间之后，我们需要对已过期的键值对进行删除，而做这个工作的就是过期键值删除策略 而redis如何判断key已经过期是通过将key带上过期时间存储到一个过期字典中 typedef struct redisDb&amp;#123;     dict *dict;&#x2F;&#x2F;存key value     dict *expire; &amp;#125;redisDb;  当我们查询某">
 <meta property="og:type" content="article">
@@ -1423,9 +1423,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-sql-view" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-redis高可用" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">sql_view</h1>
+        <h1 class="article-title">redis高可用</h1>
     
     <div class="article-meta">
         
@@ -1435,9 +1435,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="数据库">数据库</a> > 
-            
-            <a  data-rel="数据库&lt;---&gt;mysql">mysql</a>
+            <a  data-rel="redis">redis</a>
             
         </span>
         
@@ -1445,12 +1443,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-09-01 13:45:42'>2023-09-01 12:59</time>
+            Created At : <time class="date" title='Updated At: 2024-04-19 14:38:59'>2024-04-19 13:55</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:428</span>
+        <span>Count:319</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1469,7 +1467,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SQL%E8%A7%86%E5%9B%BE"><span class="toc-text">SQL视图</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA"><span class="toc-text">创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2"><span class="toc-text">查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9"><span class="toc-text">修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4"><span class="toc-text">删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%86%E5%9B%BE%E7%9A%84%E6%A3%80%E6%9F%A5%E9%80%89%E9%A1%B9"><span class="toc-text">视图的检查选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%86%E5%9B%BE%E7%9A%84%E6%9B%B4%E6%96%B0"><span class="toc-text">视图的更新</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#redis%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="toc-text">redis主从复制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%A8%E5%85%B5%E6%9C%BA%E5%88%B6"><span class="toc-text">哨兵机制</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1485,25 +1483,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="SQL视图"><a href="#SQL视图" class="headerlink" title="SQL视图"></a>SQL视图</h1><p>介绍：视图是一种虚拟存储的表，视图中的数据并不在数据库中实际存在，行和列数据来自定义视图的查询中使用的表，并且是在使用视图时动态生成的。通俗来讲，视图只保存了查询的sql逻辑，不保存查询结果。所以我们在创建视图的时候，主要的工作就落在了创建这条sql查询语句上。</p>
-<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><pre><code class="mysql">create [or replace] view 视图名称[(列名列表)] as select语句 [with[cascaded | local] check option]
-</code></pre>
-<h2 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h2><pre><code class="mysql">查看创建视图语句：show create view ...;
-查看视图数据：select * from ...;#表怎么查视图怎么查
-</code></pre>
-<h2 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h2><pre><code class="mysql">create [or replace] view 视图名称[(列名列表)] as select语句 [with[cascaded | local] check option]
-alter view 视图名称[(列名列表)] as select语句 [with[cascaded | local] check option]
-</code></pre>
-<h2 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h2><pre><code class="mysql">drop view [if exists] 视图名称[(列名列表)]
-</code></pre>
-<h2 id="视图的检查选项"><a href="#视图的检查选项" class="headerlink" title="视图的检查选项"></a>视图的检查选项</h2><p>使用with check option子句创建视图时，mysql会通过视图检查正在修改的每一行，例如插入，更新，删除，以使其符合视图的定义。mysql允许基于另一个视图创建视图，它还会检查依赖视图中的规则以保持一致性。为了确定检查的范围，mysql提供了两个选项：cascaded和local，默认值cascaded。</p>
-<p>local 不会把上一个视图也加上一致性检查</p>
-<h2 id="视图的更新"><a href="#视图的更新" class="headerlink" title="视图的更新"></a>视图的更新</h2><p>要使视图可更新，视图中的行与基础表中的行之间必须存在一对一的关系。如果视图中包含以下任何一项，则视图不可更新</p>
-<p>​	聚合函数或窗口函数</p>
-<p>​	distinct</p>
-<p>​	group by</p>
-<p>​	having</p>
-<p>​	union或者union all</p>
+        <h1 id="redis主从复制"><a href="#redis主从复制" class="headerlink" title="redis主从复制"></a>redis主从复制</h1><p>主从服务器之间采用的是读写分离的方式<br>首先客户端可以读写到主服务器，也可以读从服务器，然后主服务器同步写操作给从服务器。</p>
+<p>主从复制第一次同步的过程：</p>
+<ul>
+<li>建立连接，协商同步</li>
+<li>执行bgsave命令（开辟的新进程）生成rdb文件同步数据给从服务器</li>
+<li>缓冲区执行新的写命令，发送新写命令给从服务器（这里不断传输写命令是建立在长连接上的命令传播）</li>
+</ul>
+<p>为了减少主服务器的压力，我们可以设置经理服务器，也可以称为二级服务器，由主服务器依次到各级服务器的顺序进行同步操作</p>
+<p>当网络中途断开的时候，复制的过程采用增量复制，根据redis中设置的参数将这段时间内的操作进行写入</p>
+<h2 id="哨兵机制"><a href="#哨兵机制" class="headerlink" title="哨兵机制"></a>哨兵机制</h2><p>我们通过设置哨兵节点检测主从节点，不断向节点发送ping命令，判断其是否正常运行<br>为了排除主节点压力过大或网络原因没有响应，我们一般设置哨兵集群（最少三台）。</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
