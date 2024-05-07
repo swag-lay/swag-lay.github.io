@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>tomcat+nginx | mhen</title>
+  <title>redis_mysql数据一致性 | mhen</title>
   <meta name="keywords" content="">
-  <meta name="description" content="tomcat+nginx | mhen">
+  <meta name="description" content="redis_mysql数据一致性 | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="保证redis和mysql的数据一致性存在问题的方案：  先写mysql再写redis问题：当高并发场景下，多个mysql执行，某条mysql执行完写入redis迟缓导致数据更新不一致 先写redis再写mysql依然存在写入出现延迟或者迟缓现象导致数据不一致 先删除redis再写mysql当写入mysql之前出现读取操作 导致redis中依然存入之前的信息，数据没有即使更新到mysql导致数据不">
 <meta property="og:type" content="article">
@@ -1445,9 +1445,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-tomcat" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-redis-mysql数据一致性" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">tomcat+nginx</h1>
+        <h1 class="article-title">redis_mysql数据一致性</h1>
     
     <div class="article-meta">
         
@@ -1457,7 +1457,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="服务器">服务器</a>
+            <a  data-rel="redis">redis</a> > 
+            
+            <a  data-rel="redis&lt;---&gt;数据一致性保证">数据一致性保证</a>
             
         </span>
         
@@ -1465,12 +1467,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-12-26 15:56:00'>2023-12-26 13:28</time>
+            Created At : <time class="date" title='Updated At: 2024-05-07 10:39:14'>2024-05-07 10:25</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:522</span>
+        <span>Count:364</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1489,7 +1491,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Tomcat%E4%BB%8B%E7%BB%8D"><span class="toc-text">Tomcat介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#web%E5%AE%B9%E5%99%A8"><span class="toc-text">web容器</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Nginx"><span class="toc-text">Nginx</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">静态资源服务器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="toc-text">反向代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E5%90%91%E4%BB%A3%E7%90%86"><span class="toc-text">正向代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">负载均衡</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%9A%84%E7%AD%96%E7%95%A5"><span class="toc-text">负载均衡的策略</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BF%9D%E8%AF%81redis%E5%92%8Cmysql%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7"><span class="toc-text">保证redis和mysql的数据一致性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E8%A1%8C%E6%80%A7%E6%96%B9%E6%A1%88"><span class="toc-text">可行性方案</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1505,16 +1507,19 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Tomcat介绍"><a href="#Tomcat介绍" class="headerlink" title="Tomcat介绍"></a>Tomcat介绍</h1><h2 id="web容器"><a href="#web容器" class="headerlink" title="web容器"></a>web容器</h2><p>早期web应用主要用于浏览静态页面，http服务器（apache，nginx）向浏览器返回静态html，浏览器解析html，将结构呈现给用户<br>servlet技术简单理解为运行在服务端的java小程序，但是servlet没有main方法，不能独立运行，因此必须把它部署到servlet容器中，由容器来实例化并调用 servlet<br>tomcat就是一个servlet容器，为了方便使用，tomcat同时具有http服务器的功能<br>因此tomcat就是一个http服务器+servlet容器，我们叫它web容器<br><strong>http服务器</strong>：处理http请求并响应结果<br><img src="/..%5Cimages%5Cimage-20231226133449527.png" alt="image-20231226133449527"><br><strong>servlet容器</strong>：http服务器将请求交给servlet容器处理，servlet容器会将请求转发到具体的servlet（servlet容器用来加载和管理业务类）<br>servlet容器会根据web.xml文件中的映射关系，调用相应的servlet，servlet将处理的结果返回给servlet容器，并通过http服务器将响应传输给客户端。<br><img src="/..%5Cimages%5Cimage-20231226133749901.png" alt="image-20231226133749901"></p>
-<h1 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h1><h2 id="静态资源服务器"><a href="#静态资源服务器" class="headerlink" title="静态资源服务器"></a>静态资源服务器</h2><p>将服务器上的静态文件缓存下来，通过http协议展现给客户端。</p>
-<h2 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h2><p>客服端将请求发送到反向代理服务器，由反向代理服务器去选择目标服务器，获取数据后再返回给客户端。对外暴露的是反向代理服务器地址，隐藏了真实服务器ip地址。反向代理”代理“的是目标服务器，这一个过程对于客户端而言是透明的。<br>代理服务器</p>
-<h2 id="正向代理"><a href="#正向代理" class="headerlink" title="正向代理"></a>正向代理</h2><p>代理客户端 如vpn</p>
-<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><p>nginx可以将接收到的客户端请求以一定的规则（负载均衡策略）均匀的分配到这个服务器集群中所有的服务器上，这个就叫做<strong>负载均衡</strong>。其中nginx充当的就是反向代理服务器的作用，负载均衡正是nginx作为反向代理服务器最常见的一个应用。</p>
-<h2 id="负载均衡的策略"><a href="#负载均衡的策略" class="headerlink" title="负载均衡的策略"></a>负载均衡的策略</h2><ul>
-<li>轮询（Round Robin 默认）</li>
-<li>IP哈希</li>
-<li>最小连接数</li>
-</ul>
+        <h1 id="保证redis和mysql的数据一致性"><a href="#保证redis和mysql的数据一致性" class="headerlink" title="保证redis和mysql的数据一致性"></a>保证redis和mysql的数据一致性</h1><p>存在问题的方案：</p>
+<ol>
+<li>先写mysql再写redis<br>问题：当高并发场景下，多个mysql执行，某条mysql执行完写入redis迟缓导致数据更新不一致</li>
+<li>先写redis再写mysql<br>依然存在写入出现延迟或者迟缓现象导致数据不一致</li>
+<li>先删除redis再写mysql<br>当写入mysql之前出现读取操作 导致redis中依然存入之前的信息，数据没有即使更新到mysql导致数据不一致</li>
+</ol>
+<p>以上问题都可以归结于写读操作的并发，无法保证顺序</p>
+<h2 id="可行性方案"><a href="#可行性方案" class="headerlink" title="可行性方案"></a>可行性方案</h2><ol>
+<li>删除redis，写入mysql，删除redis（缓存双删）</li>
+<li>可以采用消息队列的异步或者串行实现最后一次缓存删除，不要无脑sleep线程，同时删除缓存失败可以增加重试机制</li>
+<li>写mysql，再删redis（对于不是强一致性的业务可以，如果是秒杀，库存啥的不可以；比如写入mysql之前有查询操作，并且重写redis发生在删除redis之后导致实际没有删除redis）</li>
+<li>写mysql，通过binlog异步更新redis<br>监听binlog，将binlog相关消息推送给redis，通过顺序消费队列和重试机制进行更新；但依然存在问题，如果中途有请求查询数据，缓存没有数据不会出错，但缓存有数据会直接读取导致数据不一致。</li>
+</ol>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>

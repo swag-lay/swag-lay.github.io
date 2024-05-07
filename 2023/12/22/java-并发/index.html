@@ -6,20 +6,17 @@
   <meta name="keywords" content="">
   <meta name="description" content="java_并发 | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="redis过期删除策略当我们对key设置过期时间之后，我们需要对已过期的键值对进行删除，而做这个工作的就是过期键值删除策略 而redis如何判断key已经过期是通过将key带上过期时间存储到一个过期字典中 typedef struct redisDb&amp;#123;     dict *dict;&#x2F;&#x2F;存key value     dict *expire; &amp;#125;redisDb;  当我们查询某">
+<meta name="description" content="保证redis和mysql的数据一致性存在问题的方案：  先写mysql再写redis问题：当高并发场景下，多个mysql执行，某条mysql执行完写入redis迟缓导致数据更新不一致 先写redis再写mysql依然存在写入出现延迟或者迟缓现象导致数据不一致 先删除redis再写mysql当写入mysql之前出现读取操作 导致redis中依然存入之前的信息，数据没有即使更新到mysql导致数据不">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redis过期删除策略和内存淘汰策略">
-<meta property="og:url" content="http://example.com/2024/04/18/redis%E8%BF%87%E6%9C%9F%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5%E5%92%8C%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5/index.html">
+<meta property="og:title" content="redis_mysql数据一致性">
+<meta property="og:url" content="http://example.com/2024/05/07/redis-mysql%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="redis过期删除策略当我们对key设置过期时间之后，我们需要对已过期的键值对进行删除，而做这个工作的就是过期键值删除策略 而redis如何判断key已经过期是通过将key带上过期时间存储到一个过期字典中 typedef struct redisDb&amp;#123;     dict *dict;&#x2F;&#x2F;存key value     dict *expire; &amp;#125;redisDb;  当我们查询某">
+<meta property="og:description" content="保证redis和mysql的数据一致性存在问题的方案：  先写mysql再写redis问题：当高并发场景下，多个mysql执行，某条mysql执行完写入redis迟缓导致数据更新不一致 先写redis再写mysql依然存在写入出现延迟或者迟缓现象导致数据不一致 先删除redis再写mysql当写入mysql之前出现读取操作 导致redis中依然存入之前的信息，数据没有即使更新到mysql导致数据不">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="http://example.com/%5Credis%E8%BF%87%E6%9C%9F%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5%E5%92%8C%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5%5C%E8%BF%87%E6%9C%9F%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5.jpg">
-<meta property="og:image" content="http://example.com/%5Credis%E8%BF%87%E6%9C%9F%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5%E5%92%8C%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5%5C%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5.jpg">
-<meta property="article:published_time" content="2024-04-18T09:52:18.000Z">
-<meta property="article:modified_time" content="2024-04-18T10:39:15.184Z">
+<meta property="article:published_time" content="2024-05-07T02:25:18.000Z">
+<meta property="article:modified_time" content="2024-05-07T02:39:14.684Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/%5Credis%E8%BF%87%E6%9C%9F%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5%E5%92%8C%E5%86%85%E5%AD%98%E6%B7%98%E6%B1%B0%E7%AD%96%E7%95%A5%5C%E8%BF%87%E6%9C%9F%E5%88%A0%E9%99%A4%E7%AD%96%E7%95%A5.jpg">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -93,7 +90,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(59)</small>
+                <small>(60)</small>
             
         </div>
     </li>
@@ -459,6 +456,10 @@
     
         
             
+        
+    
+        
+            
                 <li>
                     <div data-rel="网络编程">
                         <i class="fold iconfont icon-right"></i>
@@ -718,7 +719,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         redis
-                        <small>(6)</small>
+                        <small>(7)</small>
                         
                     </div>
                     
@@ -740,6 +741,18 @@
                                     <div data-rel="redis<--->分布式锁">
                                         
                                         分布式锁
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="redis<--->数据一致性保证">
+                                        
+                                        数据一致性保证
                                         
                                             <small>(1
                                                 )</small>
@@ -779,8 +792,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="59">
-<input type="hidden" id="yelog_site_word_count" value="38.6k">
+<input type="hidden" id="yelog_site_posts_number" value="60">
+<input type="hidden" id="yelog_site_word_count" value="38.9k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -873,6 +886,15 @@
     </div>
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="All redis 数据一致性保证 "
+           href="/2024/05/07/redis-mysql%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="redis_mysql数据一致性">redis_mysql数据一致性</span>
+            <span class="post-date" title="2024-05-07 10:25:18">2024/05/07</span>
+        </a>
         
         
         <a  class="All redis "
