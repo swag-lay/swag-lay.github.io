@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>constructTree | mhen</title>
-  <meta name="keywords" content=" construct ">
-  <meta name="description" content="constructTree | mhen">
+  <title>线程安全详解 | mhen</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="线程安全详解 | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="线程安全线程安全的定义：当多个线程访问同一个对象，不考虑这些线程的调度和交替执行，也不需要额外的同步，或者在调用方法进行其他协调操作时，调用这个对象可以获得正确的结果，那这个对象就是安全的 如何实现线程安全 互斥同步同步就是一个线程进入监视器（类似于只允许一个线程进入的盒子），其他线程必须等待，直到该线程退出监视器为止。在实现互斥同步的方式中，最常使用的就是synchronized关键字。sync">
 <meta property="og:type" content="article">
@@ -1463,9 +1463,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-constructTree" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-线程安全详解" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">constructTree</h1>
+        <h1 class="article-title">线程安全详解</h1>
     
     <div class="article-meta">
         
@@ -1475,27 +1475,22 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="leetcode">leetcode</a>
+            <a  data-rel="java">java</a> > 
+            
+            <a  data-rel="java&lt;---&gt;并发编程">并发编程</a>
             
         </span>
         
         
-        <span class="tag">
-            <i class="iconfont icon-tag"></i>
-            
-            <a class="color5">construct</a>
-            
-        </span>
+    </div>
+    <div class="article-meta">
+        
+            Created At : <time class="date" title='Updated At: 2024-05-20 15:37:53'>2024-05-20 14:08</time>
         
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-06-12 12:52:48'>2023-06-12 12:35</time>
-        
-    </div>
-    <div class="article-meta">
-        
-        <span>Count:858</span>
+        <span>Count:867</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1514,7 +1509,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E7%A7%8D%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F%E6%9E%84%E9%80%A0%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%80%9A%E8%A7%A3"><span class="toc-text">三种遍历方式构造二叉树的通解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E5%90%8C%E4%B9%8B%E5%A4%84%E4%B8%80%EF%BC%9A%E5%AF%BB%E6%89%BE%E5%BD%93%E5%89%8D%E6%A0%B9%E8%8A%82%E7%82%B9"><span class="toc-text">不同之处一：寻找当前根节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E5%90%8C%E4%B9%8B%E5%A4%84%E4%BA%8C%EF%BC%9A%E5%B7%A6%E5%8F%B3%E9%81%8D%E5%8E%86%E8%8C%83%E5%9B%B4"><span class="toc-text">不同之处二：左右遍历范围</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%EF%BC%9A"><span class="toc-text">代码：</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="toc-text">线程安全</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="toc-text">如何实现线程安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%87%E7%94%A8cas%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">采用cas的问题</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1530,101 +1525,31 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="三种遍历方式构造二叉树的通解"><a href="#三种遍历方式构造二叉树的通解" class="headerlink" title="三种遍历方式构造二叉树的通解"></a>三种遍历方式构造二叉树的通解</h1><h2 id="不同之处一：寻找当前根节点"><a href="#不同之处一：寻找当前根节点" class="headerlink" title="不同之处一：寻找当前根节点"></a>不同之处一：寻找当前根节点</h2><ul>
-<li><p>前+中</p>
-<p>当前根节点为pre[pre_start]，找出它在中序中的位置，然后把左右子树分开。</p>
+        <h1 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h1><p>线程安全的定义：当多个线程访问同一个对象，不考虑这些线程的调度和交替执行，也不需要额外的同步，或者在调用方法进行其他协调操作时，调用这个对象可以获得正确的结果，那这个对象就是安全的</p>
+<h2 id="如何实现线程安全"><a href="#如何实现线程安全" class="headerlink" title="如何实现线程安全"></a>如何实现线程安全</h2><ul>
+<li>互斥同步<br>同步就是一个线程进入监视器（类似于只允许一个线程进入的盒子），其他线程必须等待，直到该线程退出监视器为止。<br>在实现互斥同步的方式中，最常使用的就是synchronized关键字。synchronized实现同步的基础就是：java中的每一个对象都视为锁。具体表现：</li>
+</ul>
+<ol>
+<li>普通的同步方法：锁当前实例对象</li>
+<li>静态同步方法：锁当前类的class对象</li>
+<li>同步方块：锁synchronized代码块中匹配的对象<br>synchronized（悲观锁）实现原理：</li>
+</ol>
+<ul>
+<li><p>编译之后，会在同步块的前后生成monitorenter和monitorexit两个字节码指令。两个字节码指令之后有一个reference类型（存在于栈中的局部变量表中，可以根据reference数据，来操作堆上的具体对象）的参数来指明要锁定和解锁的对象。当执行monitorenter指令时，首先会尝试获取对象的锁，对象没有被锁定，或者当前线程已经包含对象的锁，锁计数器+1。若获取对象失败，当前线程就阻塞等待，直到对象锁被另一个线程释放。</p>
 </li>
-<li><p>中+后</p>
-<p>当前根节点为post[post_end]，找出它在中序中的位置，然后把左右子树分开。</p>
+<li><p>synchronized用的锁是存放在对象头里面的，jdk1.6之后锁有四种状态：无锁状态，偏向锁状态，轻量级锁，重量级锁<br>判断对象的锁的状态，就是通过对象头中的锁状态标志位<br>除了synchronized关键字，还可以使用juc包下的可重入锁来实现同步。</p>
 </li>
-<li><p>前+后</p>
-<p>当前根节点为pre[pre_start]，并在他在后序中的位置为post_end；左子树的根节点为pre[pre_start+1]，因此只要找到他在后序中的位置就可以分开左右子树</p>
+<li><p>非阻塞同步<br>因为采用同步会导致其他线程大量进行阻塞，需要不断挂起和唤醒线程，引起很大的性能问题。<br>非阻塞同步是在需要资源的时候马上发起请求，且马上得到答复，然后继续执行之后的程序，如何得到的不是完整的资源，之后将周期性请求，直到获得所需的资源。<br>cas方法（乐观锁）</p>
+</li>
+<li><p>无同步方案<br>线程本地存储：将共享数据的可见范围限制在一个线程中，这样无需同步也能保证线程之间不出现数据争用问题。经常使用的就是ThreadLocal类。</p>
 </li>
 </ul>
-<h2 id="不同之处二：左右遍历范围"><a href="#不同之处二：左右遍历范围" class="headerlink" title="不同之处二：左右遍历范围"></a>不同之处二：左右遍历范围</h2><ul>
-<li>前+中<br>中序遍历中，我们知道 左子树：[inorder_start,index-1], 右子树：[index+1, inorder_end]<br>在前序遍历中，左子树起始位置为pre_start+1,左子树一共有(index-1 - inorder_start)个，因此左子树：[pre_start+1, pre_start+1 + (index-1 - inorder_start)]<br>右子树起始位置为左子树终止位置+1，终止位置为pre_end，因此右子树：[ pre_start+1 + (index-1 - inorder_start) + 1, pre_end]</li>
-<li>中+后<br>中序遍历中，我们知道 左子树：[inorder_start,index-1], 右子树：[index+1, inorder_end]<br>在后序遍历中，左子树起始位置为post_start，左子树一共有(index-1 - inorder_start)个，因此左子树：[post_start, post_start + (index-1 - inorder_start)]<br>右子树的终止位置为post_end - 1,右子树一共有(inorder_end - (index+1))个,因此右子树:[post_end - 1 - (inorder_end - (index+1)), post_end - 1]</li>
-<li>前+后<br>后序遍历中，我们知道 左子树：[post_start,index], 右子树：[index+1, post_end-1]<br>在前序遍历中，左子树起始位置为pre_start+1,左子树个数一共有(index - post_start)个，因此左子树：[pre_start+1, pre_start+1 + (index - post_start)]<br>右子树起始位置为左子树终止位置+1，终止位置为pre_end，因此右子树：[ pre_start+1 + (index - post_start) + 1, pre_end]</li>
-</ul>
-<h2 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h2><pre><code class="java">//从前序和中序遍历序列构造二叉树
-class Solution &#123;
-    private Map&lt;Integer,Integer&gt; indexMap;
-    int rootIndex=0;
-    public TreeNode myBuildTree(int[] preorder,int[] inorder,int preorderLeft,int preorderRight)&#123;
-        if(preorderLeft&lt;=preorderRight)&#123;
-            int rootVal=preorder[rootIndex++];
-            TreeNode root=new TreeNode(rootVal);
-            root.left=myBuildTree(preorder,inorder,preorderLeft,indexMap.get(rootVal)-1);
-            root.right=myBuildTree(preorder,inorder,indexMap.get(rootVal)+1,preorderRight);
-            return root;
-        &#125;else&#123;
-            return null;
-        &#125;
-    &#125;
-    public TreeNode buildTree(int[] preorder, int[] inorder) &#123;
-        int n=preorder.length;
-        indexMap=new HashMap&lt;&gt;();
-        for(int i=0;i&lt;n;i++)&#123;
-            indexMap.put(inorder[i],i);
-        &#125;
-        return myBuildTree(preorder,inorder,0,n-1);
-    &#125;
-&#125;
-
-//从中序和后序遍历序列构造二叉树
-class Solution &#123;
-    Map&lt;Integer,Integer&gt; map=new HashMap&lt;&gt;();
-    public TreeNode buildTree(int[] inorder, int[] postorder) &#123;
-        int n=inorder.length;
-        for(int i=0;i&lt;n;i++)&#123;
-            map.put(inorder[i],i);
-        &#125;
-        return myBuildTree(inorder,postorder,0,n-1,0,n-1);
-    &#125;
-    public TreeNode myBuildTree(int[] inorder,int[] postorder,int inorderLeft,int inorderRight,int postorderLeft,int postorderRight)&#123;
-        if (postorderLeft &gt; postorderRight) &#123;
-            return null;
-        &#125;
-
-        int postorderRoot = postorderRight;
-        // 在中序遍历中定位根节点
-        int inorderRoot = map.get(postorder[postorderRoot]);
-        
-        // 先把根节点建立出来
-        TreeNode root = new TreeNode(postorder[postorderRoot]);
-        // 得到左子树中的节点数目
-        int size_left_subtree = inorderRoot - inorderLeft;
-        
-        root.left = myBuildTree(inorder, postorder, inorderLeft,inorderRoot-1, postorderLeft, postorderLeft+size_left_subtree-1);
-        
-        root.right = myBuildTree(inorder, postorder, inorderRoot+1, inorderRight, postorderLeft+size_left_subtree, postorderRight-1);
-        return root;
-    &#125;
-&#125;
-
-//从前序和后序遍历构造二叉树
-class Solution &#123;
-    Map&lt;Integer,Integer&gt; map=new HashMap&lt;&gt;();
-    public TreeNode constructFromPrePost(int[] preorder, int[] postorder) &#123;
-        int n=postorder.length;
-        for(int i=0;i&lt;n;i++)&#123;
-            map.put(postorder[i],i);
-        &#125;
-        return myBuildTree(preorder,postorder,0,n-1,0,n-1);
-    &#125;
-    public TreeNode myBuildTree(int[] preorder,int[] postorder,int preorderL,int preorderR,int postorderL,int postorderR)&#123;
-        if(preorderL&gt;postorderR)&#123;
-            return null;
-        &#125;
-        TreeNode root=new TreeNode(preorder[preorderL]);
-        int leftSize=map.get(preorder[preorderL+1])-postorderL+1;
-        root.left=myBuildTree(preorder,postorder,preorderL+1,preorderL+leftSize,postorderL,postorderL+leftSize-1);
-        root.right=myBuildTree(preorder,postorder,preorderL+leftSize+1,preorderR,postorderL+leftSize,postorderR-1);
-        return root;
-
-    &#125;
-&#125;
-</code></pre>
+<p>总结来说，引起线程不安全最根本的原因是：线程对于共享数据的更改会引起程序结果错误。总体的解决策略就是：保护共享数据在多线程的情况下，保持正确的取值。</p>
+<h2 id="采用cas的问题"><a href="#采用cas的问题" class="headerlink" title="采用cas的问题"></a>采用cas的问题</h2><ol>
+<li>只能对单个变量进行同步</li>
+<li>自旋循环时间过长</li>
+<li>ABA问题<br>当变量经历0-2-0的过程，如果指的改动对线程有影响，中间的过程必须让线程感知到。我们可以给变量值加上版本号，任何线程修改一次变量，版本号也加1。取变量值的时候拿到变量值和版本号，通过版本号就能判断是否有其他线程修改过这个变量。</li>
+</ol>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>

@@ -6,15 +6,15 @@
   <meta name="keywords" content="">
   <meta name="description" content="cookie-session-token | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="golang gc回收机制程序在内存上被分为堆，栈，全局数据，代码段，数据区五部分在go中栈上内存由编译器管理回收，堆上的内存由编辑器和垃圾收集器负责管理回收 golang1.3使用标记清除法使用stw暂停程序业务，然后查询可达内存和不可达内存，标记内存，清楚不可达内存，停止stw（后改为标记完就停止stw服务） golang1.5使用三色标记法，将程序对象分为白色，黑色和灰色三类，白色表示暂无对">
+<meta name="description" content="线程安全线程安全的定义：当多个线程访问同一个对象，不考虑这些线程的调度和交替执行，也不需要额外的同步，或者在调用方法进行其他协调操作时，调用这个对象可以获得正确的结果，那这个对象就是安全的 如何实现线程安全 互斥同步同步就是一个线程进入监视器（类似于只允许一个线程进入的盒子），其他线程必须等待，直到该线程退出监视器为止。在实现互斥同步的方式中，最常使用的就是synchronized关键字。sync">
 <meta property="og:type" content="article">
-<meta property="og:title" content="go_gc">
-<meta property="og:url" content="http://example.com/2024/05/07/go-gc/index.html">
+<meta property="og:title" content="线程安全详解">
+<meta property="og:url" content="http://example.com/2024/05/20/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E8%AF%A6%E8%A7%A3/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="golang gc回收机制程序在内存上被分为堆，栈，全局数据，代码段，数据区五部分在go中栈上内存由编译器管理回收，堆上的内存由编辑器和垃圾收集器负责管理回收 golang1.3使用标记清除法使用stw暂停程序业务，然后查询可达内存和不可达内存，标记内存，清楚不可达内存，停止stw（后改为标记完就停止stw服务） golang1.5使用三色标记法，将程序对象分为白色，黑色和灰色三类，白色表示暂无对">
+<meta property="og:description" content="线程安全线程安全的定义：当多个线程访问同一个对象，不考虑这些线程的调度和交替执行，也不需要额外的同步，或者在调用方法进行其他协调操作时，调用这个对象可以获得正确的结果，那这个对象就是安全的 如何实现线程安全 互斥同步同步就是一个线程进入监视器（类似于只允许一个线程进入的盒子），其他线程必须等待，直到该线程退出监视器为止。在实现互斥同步的方式中，最常使用的就是synchronized关键字。sync">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-05-07T03:31:04.000Z">
-<meta property="article:modified_time" content="2024-05-07T03:51:41.166Z">
+<meta property="article:published_time" content="2024-05-20T06:08:03.000Z">
+<meta property="article:modified_time" content="2024-05-20T07:37:53.267Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
 
@@ -90,7 +90,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(61)</small>
+                <small>(62)</small>
             
         </div>
     </li>
@@ -606,7 +606,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         java
-                        <small>(5)</small>
+                        <small>(6)</small>
                         
                     </div>
                     
@@ -617,7 +617,7 @@
                                         
                                         并发编程
                                         
-                                            <small>(2
+                                            <small>(3
                                                 )</small>
                                         
                                     </div>
@@ -792,8 +792,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="61">
-<input type="hidden" id="yelog_site_word_count" value="39.6k">
+<input type="hidden" id="yelog_site_posts_number" value="62">
+<input type="hidden" id="yelog_site_word_count" value="40.7k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -886,6 +886,15 @@
     </div>
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="All java 并发编程 "
+           href="/2024/05/20/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E8%AF%A6%E8%A7%A3/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="线程安全详解">线程安全详解</span>
+            <span class="post-date" title="2024-05-20 14:08:03">2024/05/20</span>
+        </a>
         
         
         <a  class="All golang "
@@ -1476,12 +1485,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-04-10 17:58:02'>2024-04-10 15:27</time>
+            Created At : <time class="date" title='Updated At: 2024-05-20 16:10:15'>2024-04-10 15:27</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:514</span>
+        <span>Count:766</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1500,7 +1509,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Cookie%E5%92%8CSession"><span class="toc-text">Cookie和Session</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#session"><span class="toc-text">session</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cookie"><span class="toc-text">cookie</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jwt"><span class="toc-text">jwt</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Cookie%E5%92%8CSession"><span class="toc-text">Cookie和Session</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#session"><span class="toc-text">session</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cookie"><span class="toc-text">cookie</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jwt"><span class="toc-text">jwt</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#jwt%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C%E7%9A%84"><span class="toc-text">jwt如何工作的</span></a></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1527,7 +1536,7 @@
 <li>个性化</li>
 <li>跟踪<br>两种类型cookies，一种session cookies，一种persistent cookies<br>session cookies：会话cookies，不包含到期时间，存储在内存中，不会写入磁盘，浏览器关闭cookie消失</li>
 </ul>
-<h2 id="jwt"><a href="#jwt" class="headerlink" title="jwt"></a>jwt</h2><p>作用</p>
+<h2 id="jwt"><a href="#jwt" class="headerlink" title="jwt"></a>jwt</h2><p><strong>用于json对象在各方之间安全的传输信息</strong>，此信息可以进行验证和信任，因为他是经过数字签名的。jwt可以使用机密（HMAC算法）或使用RSA或ECDSA的公钥&#x2F;私钥对进行签名。虽然可以对jwt进行加密，以便在各方之间提供保密性，但是我们将关注已签名的token，签名token可以验证其中包含的声明的完整性，而加密token可以向其他方隐藏这些声明。当使用公钥&#x2F;私钥对对令牌进行签名时，该签名还证明只有持有私钥的一方才是对其进行签名的一方（<strong>签名技术是保证传输的信息不被篡改，并不能保证信息传输的安全</strong>）<br>作用</p>
 <ul>
 <li>认证</li>
 <li>信息交换</li>
@@ -1543,6 +1552,12 @@
 <li>header（base64之后）</li>
 <li>payload（base64之后）</li>
 <li>secret</li>
+</ul>
+<h3 id="jwt如何工作的"><a href="#jwt如何工作的" class="headerlink" title="jwt如何工作的"></a>jwt如何工作的</h3><p><img src="/2024/04/10/cookie-session-token/swag-lay.github.io\source_posts\cookie-session-token\image-20240520155050919.png" alt="image-20240520155050919"></p>
+<ul>
+<li>客户端向服务器请求授权</li>
+<li>授予授权后，服务器向应用程序返回访问令牌</li>
+<li>应用程序使用访问令牌访问</li>
 </ul>
 <p>jwt具有加密签名，session cookies没有；<br>无状态，声明被存储在客户端，而不是服务器内存<br>可扩展性更强<br>支持跨越认知</p>
 

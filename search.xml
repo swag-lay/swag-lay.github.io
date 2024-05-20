@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>线程安全详解</title>
+      <link href="/2024/05/20/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E8%AF%A6%E8%A7%A3/"/>
+      <url>/2024/05/20/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E8%AF%A6%E8%A7%A3/</url>
+      
+        <content type="html"><![CDATA[<h1 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h1><p>线程安全的定义：当多个线程访问同一个对象，不考虑这些线程的调度和交替执行，也不需要额外的同步，或者在调用方法进行其他协调操作时，调用这个对象可以获得正确的结果，那这个对象就是安全的</p><h2 id="如何实现线程安全"><a href="#如何实现线程安全" class="headerlink" title="如何实现线程安全"></a>如何实现线程安全</h2><ul><li>互斥同步<br>同步就是一个线程进入监视器（类似于只允许一个线程进入的盒子），其他线程必须等待，直到该线程退出监视器为止。<br>在实现互斥同步的方式中，最常使用的就是synchronized关键字。synchronized实现同步的基础就是：java中的每一个对象都视为锁。具体表现：</li></ul><ol><li>普通的同步方法：锁当前实例对象</li><li>静态同步方法：锁当前类的class对象</li><li>同步方块：锁synchronized代码块中匹配的对象<br>synchronized（悲观锁）实现原理：</li></ol><ul><li><p>编译之后，会在同步块的前后生成monitorenter和monitorexit两个字节码指令。两个字节码指令之后有一个reference类型（存在于栈中的局部变量表中，可以根据reference数据，来操作堆上的具体对象）的参数来指明要锁定和解锁的对象。当执行monitorenter指令时，首先会尝试获取对象的锁，对象没有被锁定，或者当前线程已经包含对象的锁，锁计数器+1。若获取对象失败，当前线程就阻塞等待，直到对象锁被另一个线程释放。</p></li><li><p>synchronized用的锁是存放在对象头里面的，jdk1.6之后锁有四种状态：无锁状态，偏向锁状态，轻量级锁，重量级锁<br>判断对象的锁的状态，就是通过对象头中的锁状态标志位<br>除了synchronized关键字，还可以使用juc包下的可重入锁来实现同步。</p></li><li><p>非阻塞同步<br>因为采用同步会导致其他线程大量进行阻塞，需要不断挂起和唤醒线程，引起很大的性能问题。<br>非阻塞同步是在需要资源的时候马上发起请求，且马上得到答复，然后继续执行之后的程序，如何得到的不是完整的资源，之后将周期性请求，直到获得所需的资源。<br>cas方法（乐观锁）</p></li><li><p>无同步方案<br>线程本地存储：将共享数据的可见范围限制在一个线程中，这样无需同步也能保证线程之间不出现数据争用问题。经常使用的就是ThreadLocal类。</p></li></ul><p>总结来说，引起线程不安全最根本的原因是：线程对于共享数据的更改会引起程序结果错误。总体的解决策略就是：保护共享数据在多线程的情况下，保持正确的取值。</p><h2 id="采用cas的问题"><a href="#采用cas的问题" class="headerlink" title="采用cas的问题"></a>采用cas的问题</h2><ol><li>只能对单个变量进行同步</li><li>自旋循环时间过长</li><li>ABA问题<br>当变量经历0-2-0的过程，如果指的改动对线程有影响，中间的过程必须让线程感知到。我们可以给变量值加上版本号，任何线程修改一次变量，版本号也加1。取变量值的时候拿到变量值和版本号，通过版本号就能判断是否有其他线程修改过这个变量。</li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> java </category>
+          
+          <category> 并发编程 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>go_gc</title>
       <link href="/2024/05/07/go-gc/"/>
       <url>/2024/05/07/go-gc/</url>
@@ -126,7 +147,7 @@
       <link href="/2024/04/10/cookie-session-token/"/>
       <url>/2024/04/10/cookie-session-token/</url>
       
-        <content type="html"><![CDATA[<h1 id="Cookie和Session"><a href="#Cookie和Session" class="headerlink" title="Cookie和Session"></a>Cookie和Session</h1><p>因为http是无状态的协议，所以服务器不知道客户端的历史请求记录，session和cookie的目的是为了弥补http的无状态特性</p><h2 id="session"><a href="#session" class="headerlink" title="session"></a>session</h2><p>保存会话<br>客户端请求服务器，服务器会开辟一块内存空间，这个对象便是session对象，存储结构是ConcurrentHashMap，弥补了http的无状态特性，服务器可以利用session存储客户端在同一个会话期间的一些操作记录</p><p>session判断是否是同一会话</p><p><img src="/..%5Cimages%5Cimage-20240410171934809.png" alt="image-20240410171934809"><br>第一次请求开辟内存空间，设置sessionId，通过响应头的Set-Cookie：JSESSIONID&#x3D;xxxxxx，向客户端发送设置cookie的响应，客户端设置cookie，该cookie的过期时间为浏览器会话结束<br>接下来每一次请求都会携带cookie（包含sessionId）</p><p>缺点：当一台服务器A存储Session，做了负载均衡之后，加入一段时间内A服务器的访问量激增，转发到B访问，此时B里面并没有Session</p><h2 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h2><p>http协议的cookie包括Web Cookie和浏览器Cookie，他是服务器发送到web浏览器的一小块数据。服务器发送到浏览器的Cookie，浏览器会存储，并与下一个请求一起发送到服务器。通常用于判断两个请求是否来自同一个浏览器，例如用户保持登录状态<br>三个目的：</p><ul><li>会话管理</li><li>个性化</li><li>跟踪<br>两种类型cookies，一种session cookies，一种persistent cookies<br>session cookies：会话cookies，不包含到期时间，存储在内存中，不会写入磁盘，浏览器关闭cookie消失</li></ul><h2 id="jwt"><a href="#jwt" class="headerlink" title="jwt"></a>jwt</h2><p>作用</p><ul><li>认证</li><li>信息交换</li></ul><p>Header：令牌类型和签名算法</p><pre><code class="json">&#123;    &quot;alg&quot;:&quot;HS256&quot;,    &quot;typ&quot;:&quot;JWT&quot;&#125;</code></pre><p>Payload：有关实体（通常是用户）和其他数据的声明<br>Signature：签证信息包括</p><ul><li>header（base64之后）</li><li>payload（base64之后）</li><li>secret</li></ul><p>jwt具有加密签名，session cookies没有；<br>无状态，声明被存储在客户端，而不是服务器内存<br>可扩展性更强<br>支持跨越认知</p>]]></content>
+        <content type="html"><![CDATA[<h1 id="Cookie和Session"><a href="#Cookie和Session" class="headerlink" title="Cookie和Session"></a>Cookie和Session</h1><p>因为http是无状态的协议，所以服务器不知道客户端的历史请求记录，session和cookie的目的是为了弥补http的无状态特性</p><h2 id="session"><a href="#session" class="headerlink" title="session"></a>session</h2><p>保存会话<br>客户端请求服务器，服务器会开辟一块内存空间，这个对象便是session对象，存储结构是ConcurrentHashMap，弥补了http的无状态特性，服务器可以利用session存储客户端在同一个会话期间的一些操作记录</p><p>session判断是否是同一会话</p><p><img src="/..%5Cimages%5Cimage-20240410171934809.png" alt="image-20240410171934809"><br>第一次请求开辟内存空间，设置sessionId，通过响应头的Set-Cookie：JSESSIONID&#x3D;xxxxxx，向客户端发送设置cookie的响应，客户端设置cookie，该cookie的过期时间为浏览器会话结束<br>接下来每一次请求都会携带cookie（包含sessionId）</p><p>缺点：当一台服务器A存储Session，做了负载均衡之后，加入一段时间内A服务器的访问量激增，转发到B访问，此时B里面并没有Session</p><h2 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h2><p>http协议的cookie包括Web Cookie和浏览器Cookie，他是服务器发送到web浏览器的一小块数据。服务器发送到浏览器的Cookie，浏览器会存储，并与下一个请求一起发送到服务器。通常用于判断两个请求是否来自同一个浏览器，例如用户保持登录状态<br>三个目的：</p><ul><li>会话管理</li><li>个性化</li><li>跟踪<br>两种类型cookies，一种session cookies，一种persistent cookies<br>session cookies：会话cookies，不包含到期时间，存储在内存中，不会写入磁盘，浏览器关闭cookie消失</li></ul><h2 id="jwt"><a href="#jwt" class="headerlink" title="jwt"></a>jwt</h2><p><strong>用于json对象在各方之间安全的传输信息</strong>，此信息可以进行验证和信任，因为他是经过数字签名的。jwt可以使用机密（HMAC算法）或使用RSA或ECDSA的公钥&#x2F;私钥对进行签名。虽然可以对jwt进行加密，以便在各方之间提供保密性，但是我们将关注已签名的token，签名token可以验证其中包含的声明的完整性，而加密token可以向其他方隐藏这些声明。当使用公钥&#x2F;私钥对对令牌进行签名时，该签名还证明只有持有私钥的一方才是对其进行签名的一方（<strong>签名技术是保证传输的信息不被篡改，并不能保证信息传输的安全</strong>）<br>作用</p><ul><li>认证</li><li>信息交换</li></ul><p>Header：令牌类型和签名算法</p><pre><code class="json">&#123;    &quot;alg&quot;:&quot;HS256&quot;,    &quot;typ&quot;:&quot;JWT&quot;&#125;</code></pre><p>Payload：有关实体（通常是用户）和其他数据的声明<br>Signature：签证信息包括</p><ul><li>header（base64之后）</li><li>payload（base64之后）</li><li>secret</li></ul><h3 id="jwt如何工作的"><a href="#jwt如何工作的" class="headerlink" title="jwt如何工作的"></a>jwt如何工作的</h3><p><img src="/2024/04/10/cookie-session-token/swag-lay.github.io\source_posts\cookie-session-token\image-20240520155050919.png" alt="image-20240520155050919"></p><ul><li>客户端向服务器请求授权</li><li>授予授权后，服务器向应用程序返回访问令牌</li><li>应用程序使用访问令牌访问</li></ul><p>jwt具有加密签名，session cookies没有；<br>无状态，声明被存储在客户端，而不是服务器内存<br>可扩展性更强<br>支持跨越认知</p>]]></content>
       
       
       <categories>
