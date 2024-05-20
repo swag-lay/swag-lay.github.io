@@ -6,15 +6,15 @@
   <meta name="keywords" content="">
   <meta name="description" content="golang | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="保证redis和mysql的数据一致性存在问题的方案：  先写mysql再写redis问题：当高并发场景下，多个mysql执行，某条mysql执行完写入redis迟缓导致数据更新不一致 先写redis再写mysql依然存在写入出现延迟或者迟缓现象导致数据不一致 先删除redis再写mysql当写入mysql之前出现读取操作 导致redis中依然存入之前的信息，数据没有即使更新到mysql导致数据不">
+<meta name="description" content="golang gc回收机制程序在内存上被分为堆，栈，全局数据，代码段，数据区五部分在go中栈上内存由编译器管理回收，堆上的内存由编辑器和垃圾收集器负责管理回收 golang1.3使用标记清除法使用stw暂停程序业务，然后查询可达内存和不可达内存，标记内存，清楚不可达内存，停止stw（后改为标记完就停止stw服务） golang1.5使用三色标记法，将程序对象分为白色，黑色和灰色三类，白色表示暂无对">
 <meta property="og:type" content="article">
-<meta property="og:title" content="redis_mysql数据一致性">
-<meta property="og:url" content="http://example.com/2024/05/07/redis-mysql%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7/index.html">
+<meta property="og:title" content="go_gc">
+<meta property="og:url" content="http://example.com/2024/05/07/go-gc/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="保证redis和mysql的数据一致性存在问题的方案：  先写mysql再写redis问题：当高并发场景下，多个mysql执行，某条mysql执行完写入redis迟缓导致数据更新不一致 先写redis再写mysql依然存在写入出现延迟或者迟缓现象导致数据不一致 先删除redis再写mysql当写入mysql之前出现读取操作 导致redis中依然存入之前的信息，数据没有即使更新到mysql导致数据不">
+<meta property="og:description" content="golang gc回收机制程序在内存上被分为堆，栈，全局数据，代码段，数据区五部分在go中栈上内存由编译器管理回收，堆上的内存由编辑器和垃圾收集器负责管理回收 golang1.3使用标记清除法使用stw暂停程序业务，然后查询可达内存和不可达内存，标记内存，清楚不可达内存，停止stw（后改为标记完就停止stw服务） golang1.5使用三色标记法，将程序对象分为白色，黑色和灰色三类，白色表示暂无对">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-05-07T02:25:18.000Z">
-<meta property="article:modified_time" content="2024-05-07T02:39:14.684Z">
+<meta property="article:published_time" content="2024-05-07T03:31:04.000Z">
+<meta property="article:modified_time" content="2024-05-07T03:51:41.166Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
 
@@ -90,7 +90,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(60)</small>
+                <small>(61)</small>
             
         </div>
     </li>
@@ -555,7 +555,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         golang
-                        <small>(5)</small>
+                        <small>(6)</small>
                         
                     </div>
                     
@@ -792,8 +792,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="60">
-<input type="hidden" id="yelog_site_word_count" value="38.9k">
+<input type="hidden" id="yelog_site_posts_number" value="61">
+<input type="hidden" id="yelog_site_word_count" value="39.6k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -886,6 +886,15 @@
     </div>
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="All golang "
+           href="/2024/05/07/go-gc/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="go_gc">go_gc</span>
+            <span class="post-date" title="2024-05-07 11:31:04">2024/05/07</span>
+        </a>
         
         
         <a  class="All redis 数据一致性保证 "
