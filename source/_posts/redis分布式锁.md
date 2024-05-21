@@ -123,13 +123,13 @@ end;
 
 ## redisson框架
 
-![6401](..\images\640(1).png)
+![6401](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/640(1).png)
 
 只要线程一加锁成功，就会启动一个`watch dog`看门狗，它是一个后台线程，会每隔10秒检查一下，如果线程1还持有锁，那么就会不断的延长锁key的生存时间。因此，Redisson就是使用Redisson解决了**锁过期释放，业务没执行完**问题。
 
 ## 多机实现分布式锁Redlock+Redisson
 
-![640 (1)](..\images\640 (1).png)
+![640 (1)](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/640%20(1).png)
 
 如果线程一在Redis的master节点上拿到了锁，但是加锁的key还没同步到slave节点。恰好这时，master节点发生故障，一个slave节点就会升级为master节点。线程二就可以获取同个key的锁啦，但线程一也已经拿到锁了，锁的安全性就没了。
 
@@ -141,7 +141,7 @@ end;
 
 我们假设当前有5个Redis master节点，在5台服务器上面运行这些Redis实例。
 
-![640 (2)](..\images\640 (2).png)
+![640 (2)](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/640%20(2).png)
 
 RedLock的实现步骤:如下
 
