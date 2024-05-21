@@ -4,6 +4,46 @@
   
     
     <entry>
+      <title>websocket</title>
+      <link href="/2024/05/21/websocket/"/>
+      <url>/2024/05/21/websocket/</url>
+      
+        <content type="html"><![CDATA[<h1 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h1><p>一次握手就能使客户端和服务端建立长连接，并进行双向传输<br>与http相比websocket协议每次数据传输的头信息都比较小，节约带宽</p><p>在springboot项目中，一般采用@ServerEndPoint+@Component<br>@ServerEndpoint 该注解可以将类定义成一个WebSocket服务器端<br>@OnOpen 表示有浏览器链接过来的时候被调用<br>一般将建立的session信息存入会话对象中进行保存。<br>@OnClose 表示浏览器发出关闭请求的时候被调用<br>@OnMessage 表示浏览器发消息的时候被调用<br>@OnError 表示报错了</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机网络 </category>
+          
+          <category> websocket </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>拦截器和过滤器</title>
+      <link href="/2024/05/21/%E6%8B%A6%E6%88%AA%E5%99%A8%E5%92%8C%E8%BF%87%E6%BB%A4%E5%99%A8/"/>
+      <url>/2024/05/21/%E6%8B%A6%E6%88%AA%E5%99%A8%E5%92%8C%E8%BF%87%E6%BB%A4%E5%99%A8/</url>
+      
+        <content type="html"><![CDATA[<h1 id="拦截器"><a href="#拦截器" class="headerlink" title="拦截器"></a>拦截器</h1><p>springmvc中基于java反射的方法增强工具，拦截器的实现继承HandlerInterceptore接口，实现接口的preHandle，postHandle和afterCompletion。<br>preHandle：请求方法之前，在controller除了之前调用<br>postHandle：preHandle返回true之后，在controller方法执行之后，视图渲染之前被调用<br>afterCompletion：preHandle返回true之后，并且整个请求结束之后执行该方法</p><p>@Around可以在方法执行之前和之后完成一些具体的任务<br>可以自定义point</p><h1 id="过滤器"><a href="#过滤器" class="headerlink" title="过滤器"></a>过滤器</h1><p>过滤器Filter基于Servlet实现，主要针对字符编码，跨域问题过滤。Servlet的工作愿你是拦截配置好的客户端请求，对Request和Response进行处理。Filter过滤器随着web应用的启动而启动，只初始化一次。基于回调方式实现。</p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240521111057437.png" alt="image-20240521111057437"></p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240521111223259.png" alt="image-20240521111223259"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> java </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>线程安全详解</title>
       <link href="/2024/05/20/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E8%AF%A6%E8%A7%A3/"/>
       <url>/2024/05/20/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E8%AF%A6%E8%A7%A3/</url>
@@ -229,7 +269,7 @@
       <link href="/2024/03/28/%E4%B8%83%E7%A7%8D%E5%B8%B8%E8%A7%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/"/>
       <url>/2024/03/28/%E4%B8%83%E7%A7%8D%E5%B8%B8%E8%A7%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/</url>
       
-        <content type="html"><![CDATA[<h1 id="七种常见分布式事务"><a href="#七种常见分布式事务" class="headerlink" title="七种常见分布式事务"></a>七种常见分布式事务</h1><h2 id="2pc：两阶段提交，准备阶段和提交阶段"><a href="#2pc：两阶段提交，准备阶段和提交阶段" class="headerlink" title="2pc：两阶段提交，准备阶段和提交阶段"></a>2pc：两阶段提交，准备阶段和提交阶段</h2><p>准备阶段：由事务协调者询问通知每个事务参与者，是否准备好执行事务</p><p><img src="/..%5Cimages%5Cimage-20240328121635423.png" alt="image-20240328121635423">提交阶段：所有参与l参与者都同意，意味着完成事务，要么都commit要么都rollback</p><p><img src="/..%5Cimages%5Cimage-20240328121719108.png" alt="image-20240328121719108"></p><p><img src="/..%5Cimages%5Cimage-20240328121738963.png" alt="image-20240328121738963"></p><p>问题：可靠性和数据一致性问题</p><h2 id="3pc：针对2pc进行改进"><a href="#3pc：针对2pc进行改进" class="headerlink" title="3pc：针对2pc进行改进"></a>3pc：针对2pc进行改进</h2><p>协调者和参与者引入超时机制；第一阶段和第二阶段中间插入一个准备阶段，保证在最后提交阶段之前各参与节点的状态保持一致</p><p>分为CanCommit，PreCommit，DoCommit阶段</p><p><img src="/..%5Cimages%5Cimage-20240328122005515.png" alt="image-20240328122005515"></p><p>precommit：</p><ol><li>执行事务：假如所有参与者反馈yes，协调者预执行事务，</li></ol><ul><li>发送预提交请求：协调者向参与者发送precommit请求，进入准备阶段</li><li>事务预处理：参与者接收到precommit请求后，执行本地事务操作，并将undo和redo信息记录到事务日志中。（并不提交事务）</li><li>提交反馈：如果参与者成功的执行了事务操作，返回ack响应，同时等待最终命令</li></ul><p><img src="/..%5Cimages%5Cimage-20240328140033077.png" alt="image-20240328140033077"><br>2. 中断事务：假设其中任何一个参与者反馈了no，或者等待超时，那么就执行事务中断。</p><ul><li>发送中断请求：协调者向所有参与者发送abort请求</li><li>中断事务：参与者收到abort请求后，执行事务中断</li></ul><p><img src="/..%5Cimages%5Cimage-20240328140545363.png" alt="image-20240328140545363"></p><p>docommit:</p><ol><li>提交事务：</li></ol><ul><li>发送提交请求：接收到所有参与者的ack确认，从预提交变为提交，从所有参与者发送docommit</li><li>本地事务提交：参与者接收到docommit请求之后，执行正式事务，提交之后释放事务资源</li><li>响应反馈：事务提交完，向协调者发送ack响应</li><li>完成事务：协调者接收到所有参与者的ack响应之后，完成事务</li></ul><p><img src="/..%5Cimages%5Cimage-20240328141627493.png" alt="image-20240328141627493"></p><ol start="2"><li>中断事务：任何一个参与者反馈no，或者等待超时</li></ol><ul><li>发送中断请求：协调者向参与者发送abort请求</li><li>事务回滚：参与者接收abort之后，利用undo信息回滚，释放资源</li><li>反馈结果：完成回滚之后，向协调者反馈ack消息</li><li>中断事务：协调者接收到所有ack消息后，中断事务</li></ul><p><img src="/..%5Cimages%5Cimage-20240328141959187.png" alt="image-20240328141959187"><br>3pc依然无法解决数据不一致问题，当参与者收到precommit请求后等待docommit指令时，如果协调者请求中断事务，而协调者因为网络问题无法与参与者正常通信，会导致参与者继续提交事务，造成数据不一致。</p><h2 id="tcc"><a href="#tcc" class="headerlink" title="tcc"></a>tcc</h2><h2 id="saga"><a href="#saga" class="headerlink" title="saga"></a>saga</h2><h2 id="本地消息表"><a href="#本地消息表" class="headerlink" title="本地消息表"></a>本地消息表</h2><h2 id="MQ事务消息"><a href="#MQ事务消息" class="headerlink" title="MQ事务消息"></a>MQ事务消息</h2><p>基于mq的分布式事务本质上是对本地消息表的封装，整体流程与本地消息表一致，唯一不同的将本地消息存在了mq内部，而不是业务数据库中</p><p><img src="/..%5Cimages%5Cimage-20240328143239908.png" alt="image-20240328143239908"></p><h2 id="最大努力通知（定期校对）"><a href="#最大努力通知（定期校对）" class="headerlink" title="最大努力通知（定期校对）"></a>最大努力通知（定期校对）</h2><p>对mq事务的优化，在事务主动方增加了消息校对的接口，如果事务被动方没有接收到主动方发送的消息，此时可以调用事务主动方提供的消息校对的接口主动获取。</p>]]></content>
+        <content type="html"><![CDATA[<h1 id="七种常见分布式事务"><a href="#七种常见分布式事务" class="headerlink" title="七种常见分布式事务"></a>七种常见分布式事务</h1><h2 id="2pc：两阶段提交，准备阶段和提交阶段"><a href="#2pc：两阶段提交，准备阶段和提交阶段" class="headerlink" title="2pc：两阶段提交，准备阶段和提交阶段"></a>2pc：两阶段提交，准备阶段和提交阶段</h2><p>准备阶段：由事务协调者询问通知每个事务参与者，是否准备好执行事务</p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328121635423.png" alt="image-20240328121635423">提交阶段：所有参与l参与者都同意，意味着完成事务，要么都commit要么都rollback</p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328121719108.png" alt="image-20240328121719108"></p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328121738963.png" alt="image-20240328121738963"></p><p>问题：可靠性和数据一致性问题</p><h2 id="3pc：针对2pc进行改进"><a href="#3pc：针对2pc进行改进" class="headerlink" title="3pc：针对2pc进行改进"></a>3pc：针对2pc进行改进</h2><p>协调者和参与者引入超时机制；第一阶段和第二阶段中间插入一个准备阶段，保证在最后提交阶段之前各参与节点的状态保持一致</p><p>分为CanCommit，PreCommit，DoCommit阶段</p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328122005515.png" alt="image-20240328122005515"></p><p>precommit：</p><ol><li>执行事务：假如所有参与者反馈yes，协调者预执行事务，</li></ol><ul><li>发送预提交请求：协调者向参与者发送precommit请求，进入准备阶段</li><li>事务预处理：参与者接收到precommit请求后，执行本地事务操作，并将undo和redo信息记录到事务日志中。（并不提交事务）</li><li>提交反馈：如果参与者成功的执行了事务操作，返回ack响应，同时等待最终命令</li></ul><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328140033077.png" alt="image-20240328140033077"><br>2. 中断事务：假设其中任何一个参与者反馈了no，或者等待超时，那么就执行事务中断。</p><ul><li>发送中断请求：协调者向所有参与者发送abort请求</li><li>中断事务：参与者收到abort请求后，执行事务中断</li></ul><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328140545363.png" alt="image-20240328140545363"></p><p>docommit:</p><ol><li>提交事务：</li></ol><ul><li>发送提交请求：接收到所有参与者的ack确认，从预提交变为提交，从所有参与者发送docommit</li><li>本地事务提交：参与者接收到docommit请求之后，执行正式事务，提交之后释放事务资源</li><li>响应反馈：事务提交完，向协调者发送ack响应</li><li>完成事务：协调者接收到所有参与者的ack响应之后，完成事务</li></ul><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328141627493.png" alt="image-20240328141627493"></p><ol start="2"><li>中断事务：任何一个参与者反馈no，或者等待超时</li></ol><ul><li>发送中断请求：协调者向参与者发送abort请求</li><li>事务回滚：参与者接收abort之后，利用undo信息回滚，释放资源</li><li>反馈结果：完成回滚之后，向协调者反馈ack消息</li><li>中断事务：协调者接收到所有ack消息后，中断事务</li></ul><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328141959187.png" alt="image-20240328141959187"><br>3pc依然无法解决数据不一致问题，当参与者收到precommit请求后等待docommit指令时，如果协调者请求中断事务，而协调者因为网络问题无法与参与者正常通信，会导致参与者继续提交事务，造成数据不一致。</p><h2 id="tcc"><a href="#tcc" class="headerlink" title="tcc"></a>tcc</h2><h2 id="saga"><a href="#saga" class="headerlink" title="saga"></a>saga</h2><h2 id="本地消息表"><a href="#本地消息表" class="headerlink" title="本地消息表"></a>本地消息表</h2><h2 id="MQ事务消息"><a href="#MQ事务消息" class="headerlink" title="MQ事务消息"></a>MQ事务消息</h2><p>基于mq的分布式事务本质上是对本地消息表的封装，整体流程与本地消息表一致，唯一不同的将本地消息存在了mq内部，而不是业务数据库中</p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328143239908.png" alt="image-20240328143239908"></p><h2 id="最大努力通知（定期校对）"><a href="#最大努力通知（定期校对）" class="headerlink" title="最大努力通知（定期校对）"></a>最大努力通知（定期校对）</h2><p>对mq事务的优化，在事务主动方增加了消息校对的接口，如果事务被动方没有接收到主动方发送的消息，此时可以调用事务主动方提供的消息校对的接口主动获取。</p>]]></content>
       
       
       <categories>
