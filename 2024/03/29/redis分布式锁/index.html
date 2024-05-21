@@ -1519,7 +1519,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-03-29 15:42:04'>2024-03-29 15:00</time>
+            Created At : <time class="date" title='Updated At: 2024-05-21 15:00:39'>2024-03-29 15:00</time>
         
     </div>
     <div class="article-meta">
@@ -1655,14 +1655,14 @@ else
    return 0
 end;
 </code></pre>
-<h2 id="redisson框架"><a href="#redisson框架" class="headerlink" title="redisson框架"></a>redisson框架</h2><p><img src="/..%5Cimages%5C640(1).png" alt="6401"></p>
+<h2 id="redisson框架"><a href="#redisson框架" class="headerlink" title="redisson框架"></a>redisson框架</h2><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/640(1).png" alt="6401"></p>
 <p>只要线程一加锁成功，就会启动一个<code>watch dog</code>看门狗，它是一个后台线程，会每隔10秒检查一下，如果线程1还持有锁，那么就会不断的延长锁key的生存时间。因此，Redisson就是使用Redisson解决了<strong>锁过期释放，业务没执行完</strong>问题。</p>
-<h2 id="多机实现分布式锁Redlock-Redisson"><a href="#多机实现分布式锁Redlock-Redisson" class="headerlink" title="多机实现分布式锁Redlock+Redisson"></a>多机实现分布式锁Redlock+Redisson</h2><p>![640 (1)](..\images\640 (1).png)</p>
+<h2 id="多机实现分布式锁Redlock-Redisson"><a href="#多机实现分布式锁Redlock-Redisson" class="headerlink" title="多机实现分布式锁Redlock+Redisson"></a>多机实现分布式锁Redlock+Redisson</h2><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/640%20(1).png" alt="640 (1)"></p>
 <p>如果线程一在Redis的master节点上拿到了锁，但是加锁的key还没同步到slave节点。恰好这时，master节点发生故障，一个slave节点就会升级为master节点。线程二就可以获取同个key的锁啦，但线程一也已经拿到锁了，锁的安全性就没了。</p>
 <p>为了解决这个问题，Redis作者 antirez提出一种高级的分布式锁算法：Redlock。Redlock核心思想是这样的：</p>
 <p>搞多个Redis master部署，以保证它们不会同时宕掉。并且这些master节点是完全相互独立的，相互之间不存在数据同步。同时，需要确保在这多个master实例上，是与在Redis单实例，使用相同方法来获取和释放锁。</p>
 <p>我们假设当前有5个Redis master节点，在5台服务器上面运行这些Redis实例。</p>
-<p>![640 (2)](..\images\640 (2).png)</p>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/640%20(2).png" alt="640 (2)"></p>
 <p>RedLock的实现步骤:如下</p>
 <blockquote>
 <ul>
