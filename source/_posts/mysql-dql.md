@@ -84,7 +84,7 @@ select * from p where id = 1;
 ```
 ### mysql执行流程
 
-![查询语句执行流程](..\images\mysql查询流程.png)
+![查询语句执行流程](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/mysql%E6%9F%A5%E8%AF%A2%E6%B5%81%E7%A8%8B.png)
 - server层负责建立链接，分析和执行sql
 客户端和mysql服务器建立连接的过程也是tcp，可以执行短链接和长连接，长连接的好处是减少建立连接和断开连接的过程，一般推荐使用长连接，因为大部分情况下执行多条sql；但是长连接会提高内存的占用
 解决长连接内存占用的方法：
@@ -130,3 +130,4 @@ redo log记录了本次事务完成后的数据状态，记录的是更新后的
 ## WAL技术
 
 ![img](..\images\wal.png)
+
