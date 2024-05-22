@@ -129,5 +129,5 @@ redo log记录了本次事务完成后的数据状态，记录的是更新后的
 
 ## WAL技术
 
-![img](..\images\wal.png)
+![img](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/wal.png)
 

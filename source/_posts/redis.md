@@ -74,7 +74,7 @@ Redis 的链表是简单的字符串列表，排序插入顺序。您可以添�
 Lpush：表示的是向链表的左添加，也就是向链表的头添加；
 Rpush：表示的是向链表的右添加，也就是向链表的尾添加；
 
-![image-20240314150334098](..\images\image-20240314150334098.png)
+![image-20240314150334098](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240314150334098.png)
 在 3.2 版本之前，Redis 采用 ZipList 和 LinkedList 来实现 List，当元素数量小于 512 并且元素大小小于 64 字节时采用 ZipList 编码，超过则采用 LinkedList 编码。在 3.2 版本之后，Redis统一采用 QuickList 来实现 List。
 
 **压缩列表新增某个元素或修改某个元素时，如果空间不不够，压缩列表占用的内存空间就需要重新分配。而当新插入的元素较大时，可能会导致后续元素的 prevlen 占用空间都发生变化，从而引起「连锁更新」问题，导致每个元素的空间都要重新分配，造成访问压缩列表性能的下降**
@@ -88,7 +88,7 @@ Quicklist 解决办法，**通过控制每个链表节点中的压缩列表的�
 - 限制 ZipList 的长度和 entry 大小
 - 通过链表的结构来管理每一个 ZipList 节点
 
-![image-20240314152709124](..\images\image-20240314152709124.png)
+![image-20240314152709124](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240314152709124.png)
 
 常用于消息队列，消息排队，队列系统
 

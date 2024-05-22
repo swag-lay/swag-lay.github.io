@@ -16,7 +16,7 @@ tags:
 
 session判断是否是同一会话
 
-![image-20240410171934809](..\images\image-20240410171934809.png)
+![image-20240410171934809](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240410171934809.png)
 第一次请求开辟内存空间，设置sessionId，通过响应头的Set-Cookie：JSESSIONID=xxxxxx，向客户端发送设置cookie的响应，客户端设置cookie，该cookie的过期时间为浏览器会话结束
 接下来每一次请求都会携带cookie（包含sessionId）
 
@@ -51,7 +51,7 @@ Signature：签证信息包括
 
 ### jwt如何工作的
 
-![image-20240520155050919](F:\swag-lay.github.io\source\_posts\cookie-session-token\image-20240520155050919.png)
+![image-20240520155050919](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240520155050919.png)
 - 客户端向服务器请求授权
 - 授予授权后，服务器向应用程序返回访问令牌
 - 应用程序使用访问令牌访问

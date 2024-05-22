@@ -13,13 +13,13 @@ tags:
 然后接收所有header，
 然后决定哪些http模块处理请求
 
-![image-20240314131424122](..\images\image-20240314131424122.png)
+![image-20240314131424122](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240314131424122.png)
 建立连接-分配内存池-http设置请求超时时间
 
-![image-20240314131919911](..\images\image-20240314131919911.png)
+![image-20240314131919911](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240314131919911.png)
 当用户发送请到来之后，发送ack回复，事件模块拿到请求，回调ngx_http_wait_request_handler，请求变为用户态，分配内存池（这段内存是从连接内存池分配的）
 
-![image-20240314132417225](..\images\image-20240314132417225.png)
+![image-20240314132417225](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240314132417225.png)
 处理请求只需要放入nginx内存中就行，同时需要做大量的上下文分析，所以许哟啊分配请求内存池。
 在状态机解析请求行时，不断分批大内存。
 分批完大内存之后，开始识别header，确定哪一个server块去处理请求，然后移除超时定时器，接下来开始核心的11个阶段http请求处理阶段
@@ -45,4 +45,4 @@ tags:
 10. CONTENT：这个阶段涉及到的模块就非常多了，例如 index, autoindex, concat 等都是在这个阶段生效的。
 11. LOG：记录日志 access_log 模块。
 
-![image-20240314140800523](..\images\image-20240314140800523.png)
+![image-20240314140800523](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240314140800523.png)

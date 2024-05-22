@@ -13,11 +13,11 @@ tags:
 
 JDK1.7
 
-![image-20230523163329596](../images/image-20230523163329596.png)
+![image-20230523163329596](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20230523163329596.png)
 
 JDK1.8
 
-![image-20230523163752233](../images\image-20230523163752233.png)
+![image-20230523163752233](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20230523163752233.png)
 
 
 
@@ -25,7 +25,7 @@ JDK1.8
 
 JDK1.7
 
-![image-20230523163752233](../images\jdk1.7堆结构.png)
+![image-20230523163752233](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/jdk1.7%E5%A0%86%E7%BB%93%E6%9E%84.png)
 
 - 新生代
 - 老生代
@@ -33,7 +33,7 @@ JDK1.7
 
 JDK1.8
 
-![image-20230523164208008](..\images\image-20230523164208008.png)
+![image-20230523164208008](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20230523164208008.png)
 
 - 新生代
 - 老生代

@@ -42,9 +42,9 @@ s锁满足读读共享，读写互斥，x锁满足写写互斥，读写互斥
 如果LOCK_MODE为x,REC_NOT_GAP，说明是记录锁
 如果LOCK_MODE为x,GAP，说明是间隙锁
 
-![img](..\images\唯一索引加锁流程.jpeg)
+![img](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95%E5%8A%A0%E9%94%81%E6%B5%81%E7%A8%8B.jpeg)
 
-![img](..\images\非唯一索引加锁流程.jpeg)
+![img](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/%E9%9D%9E%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95%E5%8A%A0%E9%94%81%E6%B5%81%E7%A8%8B.jpeg)
 **当在update语句的where条件没有使用索引，就会全表扫描，于是就会给所有记录加上next-key锁，相当于把整张表锁住了**
 
 那update语句的where带上索引就能避免全表记录加锁了吗？

@@ -12,7 +12,7 @@ tags:
 
 ## 类的生命周期
 
-![img](..\images\68747470733a2f2f6f73732e6a61766167756964652e636e2f6769746875622f6a61766167756964652f6a6176612f6a766d2f6c6966656379636c652d6f662d612d636c6173732e706e67)
+![image-20240522165900485](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240522165900485.png)
 
 
 
@@ -63,7 +63,7 @@ public abstract class ClassLoader {
 
 ### 类加载器总结
 
-![img](..\images\68747470733a2f2f6f73732e6a61766167756964652e636e2f6769746875622f6a61766167756964652f6a6176612f6a766d2f636c6173732d6c6f616465722d706172656e74732d64656c65676174696f6e2d6d6f64656c2e706e67)
+![image-20240522165923428](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240522165923428.png)
 
 除了BootstrapClassLoader是JVM本身的一部分，其他所有的类加载器都是在JVM外部实现的，并且全部继承自ClassLoader抽象类。这与做的好处是用户可以自定义类加载器，以便让应用程序自己决定如何去获取所需的类。
 
@@ -75,7 +75,7 @@ public abstract class ClassLoader {
 
      确保Class文件的字节流中包含的信息符合所有约束条件，保证信息被当作代码运行后不会危害虚拟机自身的安全。
 
-     ![img](..\images\68747470733a2f2f6f73732e6a61766167756964652e636e2f6769746875622f6a61766167756964652f6a6176612f6a766d2f636c6173732d6c6f6164696e672d70726f636573732d766572696669636174696f6e2e706e67)
+     ![image-20240522165940785](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240522165940785.png)
 
   2. 准备
   

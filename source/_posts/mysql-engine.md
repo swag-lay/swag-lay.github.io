@@ -12,7 +12,7 @@ tags:
 
 ## mysql体系结构
 
-![image-20230829093941681](..\images\image-mysql体系结构.png)
+![image-20230829093941681](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png)
 
 连接层，服务层，引擎层，存储层
 
@@ -73,11 +73,11 @@ hash索引（默认）
 
 xxx.sdi：存储表结构信息
 
-![image-20230829100341545](..\images\image-引擎特点.png)
+![image-20230829100341545](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-%E5%BC%95%E6%93%8E%E7%89%B9%E7%82%B9.png)
 
 ## InnoDB
 
-![image-20230906102612387](..\images\innodb.png)
+![image-20230906102612387](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/innodb.png)
 
 表空间
 
@@ -103,11 +103,11 @@ InnoDB 引擎中，其数据文件本身就是索引文件。相比 MyISAM，索
 
 ### 架构
 
-![image-20230906103426248](..\images\innodb架构.png)
+![image-20230906103426248](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/innodb%E6%9E%B6%E6%9E%84.png)
 
 ### 后台线程
 
-![image-20230906133932389](F:\swag-lay.github.io\source\images\innodb后台线程.png)
+![image-20230906133932389](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/innodb%E5%90%8E%E5%8F%B0%E7%BA%BF%E7%A8%8B.png)
 
 master thread
 

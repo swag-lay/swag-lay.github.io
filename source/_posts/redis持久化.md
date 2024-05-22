@@ -14,7 +14,7 @@ AOF日志：每执行一条写操作，以追加的方式写入到一个文件�
 
 redis写入aof日志的过程：
 
-![img](..\images\4eeef4dd1bedd2ffe0b84d4eaa0dbdea.png)
+![img](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/4eeef4dd1bedd2ffe0b84d4eaa0dbdea.png)
 
 三种写回aof策略，也就是上图中的第三步系统调用的过程
 - always：写操作执行完，同步将aof日志写入磁盘

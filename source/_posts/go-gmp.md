@@ -8,6 +8,8 @@ tags:
 ---
 
 # GMP模型
+![image-20240522165618052](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240522165618052.png)
+
 goroutine的并发编程模型基于gmp模型
 G:表示goroutine，每个goroutine都有自己的栈空间，定时器，初始化的栈空间在2k左右，空间会随着需求增长
 M:抽象化代表内核线程，记录内核线程栈信息，当goroutine调度到线程时，使用该goroutine自己的栈信息

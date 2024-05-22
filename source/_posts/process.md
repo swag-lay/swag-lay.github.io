@@ -65,7 +65,7 @@ tags:
 
 不同位数linux系统中，地址空间不一样
 
-![1711190901751](../images/1711190901751.png)
+![1711190901751](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/1711190901751.png)
 
 比如32位linux系统中，一个进程的虚拟空间是4G，内核是1G，剩余3G，可以采用ulimit -a查看stack size，假设一个线程占用10M的虚拟空间，那就是3G/10M=300个线程
 
