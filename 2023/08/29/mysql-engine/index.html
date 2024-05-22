@@ -1519,7 +1519,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-02-26 17:51:04'>2023-08-29 09:37</time>
+            Created At : <time class="date" title='Updated At: 2024-05-22 17:01:10'>2023-08-29 09:37</time>
         
     </div>
     <div class="article-meta">
@@ -1559,7 +1559,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="mysql-存储引擎"><a href="#mysql-存储引擎" class="headerlink" title="mysql-存储引擎"></a>mysql-存储引擎</h1><h2 id="mysql体系结构"><a href="#mysql体系结构" class="headerlink" title="mysql体系结构"></a>mysql体系结构</h2><p><img src="/..%5Cimages%5Cimage-mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png" alt="image-20230829093941681"></p>
+        <h1 id="mysql-存储引擎"><a href="#mysql-存储引擎" class="headerlink" title="mysql-存储引擎"></a>mysql-存储引擎</h1><h2 id="mysql体系结构"><a href="#mysql体系结构" class="headerlink" title="mysql体系结构"></a>mysql体系结构</h2><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.png" alt="image-20230829093941681"></p>
 <p>连接层，服务层，引擎层，存储层</p>
 <h2 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h2><p>存储引擎是存储数据，建立索引，更新&#x2F;查询数据等技术的实现方式。存储引擎是基于表的，而不是基于库的，所以存储引擎可以被称为表类型。</p>
 <h3 id="InnoDB"><a href="#InnoDB" class="headerlink" title="InnoDB"></a>InnoDB</h3><p>兼顾高可靠性和高性能的通用存储引擎，在mysql5.5之后，InnoDB是默认的存储引擎。</p>
@@ -1585,8 +1585,8 @@
 <p>hash索引（默认）</p>
 <p>文件：</p>
 <p>xxx.sdi：存储表结构信息</p>
-<p><img src="/..%5Cimages%5Cimage-%E5%BC%95%E6%93%8E%E7%89%B9%E7%82%B9.png" alt="image-20230829100341545"></p>
-<h2 id="InnoDB-1"><a href="#InnoDB-1" class="headerlink" title="InnoDB"></a>InnoDB</h2><p><img src="/..%5Cimages%5Cinnodb.png" alt="image-20230906102612387"></p>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-%E5%BC%95%E6%93%8E%E7%89%B9%E7%82%B9.png" alt="image-20230829100341545"></p>
+<h2 id="InnoDB-1"><a href="#InnoDB-1" class="headerlink" title="InnoDB"></a>InnoDB</h2><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/innodb.png" alt="image-20230906102612387"></p>
 <p>表空间</p>
 <p>ibd文件，一个mysql实例可以对应多个表空间，用于存储记录，索引等数据</p>
 <p>段</p>
@@ -1598,8 +1598,8 @@
 <p>行</p>
 <p>innodb存储引擎数据是按行进行存放的。</p>
 <p>InnoDB 引擎中，其数据文件本身就是索引文件。相比 MyISAM，索引文件和数据文件是分离的，其表数据文件本身就是按 B+Tree 组织的一个索引结构，树的叶节点 data 域保存了完整的数据记录。这个索引的 key 是数据表的主键，因此 InnoDB 表数据文件本身就是主索引。<strong>这被称为“聚簇索引（聚集索引）”，而其余的索引都作为 辅助索引 ，</strong>辅助索引的 data 域存储相应记录主键的值而不是地址，这也是和 MyISAM 不同的地方。在根据主索引搜索时，直接找到 key 所在的节点即可取出数据；在根据辅助索引查找时，则需要先取出主键的值，再走一遍主索引。 因此，在设计表的时候，不建议使用过长的字段作为主键，也不建议使用非单调的字段作为主键，这样会造成主索引频繁分裂。</p>
-<h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p><img src="/..%5Cimages%5Cinnodb%E6%9E%B6%E6%9E%84.png" alt="image-20230906103426248"></p>
-<h3 id="后台线程"><a href="#后台线程" class="headerlink" title="后台线程"></a>后台线程</h3><p><img src="/2023/08/29/mysql-engine/swag-lay.github.io\source\images\innodb后台线程.png" alt="image-20230906133932389"></p>
+<h3 id="架构"><a href="#架构" class="headerlink" title="架构"></a>架构</h3><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/innodb%E6%9E%B6%E6%9E%84.png" alt="image-20230906103426248"></p>
+<h3 id="后台线程"><a href="#后台线程" class="headerlink" title="后台线程"></a>后台线程</h3><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/innodb%E5%90%8E%E5%8F%B0%E7%BA%BF%E7%A8%8B.png" alt="image-20230906133932389"></p>
 <p>master thread</p>
 <p>核心后台线程，负责调度其他线程，还负责将缓冲池中的数据异步刷新到磁盘中，保持数据的一致性，还包括脏页的刷新，合并插入缓存，undo页的回收</p>
 <p>io thread</p>

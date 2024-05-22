@@ -1519,7 +1519,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-04-17 10:23:22'>2023-08-25 18:32</time>
+            Created At : <time class="date" title='Updated At: 2024-05-22 17:00:33'>2023-08-25 18:32</time>
         
     </div>
     <div class="article-meta">
@@ -1611,7 +1611,7 @@ select distinct 字段列表 from 表名;#去除重复操作
 <h2 id="当执行一条select语句，期间发生什么？"><a href="#当执行一条select语句，期间发生什么？" class="headerlink" title="当执行一条select语句，期间发生什么？"></a>当执行一条select语句，期间发生什么？</h2><p>比如：</p>
 <pre><code class="mysql">select * from p where id = 1;
 </code></pre>
-<h3 id="mysql执行流程"><a href="#mysql执行流程" class="headerlink" title="mysql执行流程"></a>mysql执行流程</h3><p><img src="/..%5Cimages%5Cmysql%E6%9F%A5%E8%AF%A2%E6%B5%81%E7%A8%8B.png" alt="查询语句执行流程"></p>
+<h3 id="mysql执行流程"><a href="#mysql执行流程" class="headerlink" title="mysql执行流程"></a>mysql执行流程</h3><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/mysql%E6%9F%A5%E8%AF%A2%E6%B5%81%E7%A8%8B.png" alt="查询语句执行流程"></p>
 <ul>
 <li>server层负责建立链接，分析和执行sql<br>客户端和mysql服务器建立连接的过程也是tcp，可以执行短链接和长连接，长连接的好处是减少建立连接和断开连接的过程，一般推荐使用长连接，因为大部分情况下执行多条sql；但是长连接会提高内存的占用<br>解决长连接内存占用的方法：</li>
 </ul>
@@ -1645,7 +1645,7 @@ select distinct 字段列表 from 表名;#去除重复操作
 </li>
 </ul>
 <p>redo log和undo log的区别：<br>undo log记录了本次事务开始前的数据状态，记录的是更新前的值<br>redo log记录了本次事务完成后的数据状态，记录的是更新后的值</p>
-<h2 id="WAL技术"><a href="#WAL技术" class="headerlink" title="WAL技术"></a>WAL技术</h2><p><img src="/..%5Cimages%5Cwal.png" alt="img"></p>
+<h2 id="WAL技术"><a href="#WAL技术" class="headerlink" title="WAL技术"></a>WAL技术</h2><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/wal.png" alt="img"></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>

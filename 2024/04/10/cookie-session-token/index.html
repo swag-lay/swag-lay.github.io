@@ -1519,7 +1519,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-05-20 16:10:15'>2024-04-10 15:27</time>
+            Created At : <time class="date" title='Updated At: 2024-05-22 16:53:04'>2024-04-10 15:27</time>
         
     </div>
     <div class="article-meta">
@@ -1562,7 +1562,7 @@
         <h1 id="Cookie和Session"><a href="#Cookie和Session" class="headerlink" title="Cookie和Session"></a>Cookie和Session</h1><p>因为http是无状态的协议，所以服务器不知道客户端的历史请求记录，session和cookie的目的是为了弥补http的无状态特性</p>
 <h2 id="session"><a href="#session" class="headerlink" title="session"></a>session</h2><p>保存会话<br>客户端请求服务器，服务器会开辟一块内存空间，这个对象便是session对象，存储结构是ConcurrentHashMap，弥补了http的无状态特性，服务器可以利用session存储客户端在同一个会话期间的一些操作记录</p>
 <p>session判断是否是同一会话</p>
-<p><img src="/..%5Cimages%5Cimage-20240410171934809.png" alt="image-20240410171934809"><br>第一次请求开辟内存空间，设置sessionId，通过响应头的Set-Cookie：JSESSIONID&#x3D;xxxxxx，向客户端发送设置cookie的响应，客户端设置cookie，该cookie的过期时间为浏览器会话结束<br>接下来每一次请求都会携带cookie（包含sessionId）</p>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240410171934809.png" alt="image-20240410171934809"><br>第一次请求开辟内存空间，设置sessionId，通过响应头的Set-Cookie：JSESSIONID&#x3D;xxxxxx，向客户端发送设置cookie的响应，客户端设置cookie，该cookie的过期时间为浏览器会话结束<br>接下来每一次请求都会携带cookie（包含sessionId）</p>
 <p>缺点：当一台服务器A存储Session，做了负载均衡之后，加入一段时间内A服务器的访问量激增，转发到B访问，此时B里面并没有Session</p>
 <h2 id="cookie"><a href="#cookie" class="headerlink" title="cookie"></a>cookie</h2><p>http协议的cookie包括Web Cookie和浏览器Cookie，他是服务器发送到web浏览器的一小块数据。服务器发送到浏览器的Cookie，浏览器会存储，并与下一个请求一起发送到服务器。通常用于判断两个请求是否来自同一个浏览器，例如用户保持登录状态<br>三个目的：</p>
 <ul>
@@ -1587,7 +1587,7 @@
 <li>payload（base64之后）</li>
 <li>secret</li>
 </ul>
-<h3 id="jwt如何工作的"><a href="#jwt如何工作的" class="headerlink" title="jwt如何工作的"></a>jwt如何工作的</h3><p><img src="/2024/04/10/cookie-session-token/swag-lay.github.io\source_posts\cookie-session-token\image-20240520155050919.png" alt="image-20240520155050919"></p>
+<h3 id="jwt如何工作的"><a href="#jwt如何工作的" class="headerlink" title="jwt如何工作的"></a>jwt如何工作的</h3><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240520155050919.png" alt="image-20240520155050919"></p>
 <ul>
 <li>客户端向服务器请求授权</li>
 <li>授予授权后，服务器向应用程序返回访问令牌</li>

@@ -1526,7 +1526,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-05-25 16:01:48'>2023-05-24 15:56</time>
+            Created At : <time class="date" title='Updated At: 2024-05-22 16:59:44'>2023-05-24 15:56</time>
         
     </div>
     <div class="article-meta">
@@ -1566,7 +1566,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h1><h2 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h2><p><img src="/..%5Cimages%5C68747470733a2f2f6f73732e6a61766167756964652e636e2f6769746875622f6a61766167756964652f6a6176612f6a766d2f6c6966656379636c652d6f662d612d636c6173732e706e67" alt="img"></p>
+        <h1 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h1><h2 id="类的生命周期"><a href="#类的生命周期" class="headerlink" title="类的生命周期"></a>类的生命周期</h2><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240522165900485.png" alt="image-20240522165900485"></p>
 <h2 id="类加载过程"><a href="#类加载过程" class="headerlink" title="类加载过程"></a>类加载过程</h2><p>上图中的加载-&gt;连接-&gt;初始化，连接过程又分为三步：验证-&gt;准备-&gt;解析</p>
 <ul>
 <li><p>加载</p>
@@ -1604,14 +1604,14 @@
   ...
 &#125;
 </code></pre>
-<h3 id="类加载器总结"><a href="#类加载器总结" class="headerlink" title="类加载器总结"></a>类加载器总结</h3><p><img src="/..%5Cimages%5C68747470733a2f2f6f73732e6a61766167756964652e636e2f6769746875622f6a61766167756964652f6a6176612f6a766d2f636c6173732d6c6f616465722d706172656e74732d64656c65676174696f6e2d6d6f64656c2e706e67" alt="img"></p>
+<h3 id="类加载器总结"><a href="#类加载器总结" class="headerlink" title="类加载器总结"></a>类加载器总结</h3><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240522165923428.png" alt="image-20240522165923428"></p>
 <p>除了BootstrapClassLoader是JVM本身的一部分，其他所有的类加载器都是在JVM外部实现的，并且全部继承自ClassLoader抽象类。这与做的好处是用户可以自定义类加载器，以便让应用程序自己决定如何去获取所需的类。</p>
 <ul>
 <li><p>连接</p>
 <ol>
 <li><p>验证</p>
 <p>确保Class文件的字节流中包含的信息符合所有约束条件，保证信息被当作代码运行后不会危害虚拟机自身的安全。</p>
-<p><img src="/..%5Cimages%5C68747470733a2f2f6f73732e6a61766167756964652e636e2f6769746875622f6a61766167756964652f6a6176612f6a766d2f636c6173732d6c6f6164696e672d70726f636573732d766572696669636174696f6e2e706e67" alt="img"></p>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240522165940785.png" alt="image-20240522165940785"></p>
 </li>
 <li><p>准备</p>
 <p>正式为类变量分配内存并设置类变量初始值的阶段</p>
@@ -1622,7 +1622,7 @@
 </ol>
 </li>
 <li><p>初始化</p>
-<p>是执行初始化方法<clinit>()方法的过程，是类加载的最后一步，这一步JVM才开始真正执行类中定义的Java程序代码（字节码）</clinit></p>
+<p>是执行初始化方法<clinit>()方法的过程，是类加载的最后一步，这一步JVM才开始真正执行类中定义的Java程序代码（字节码）</p>
 <h2 id="类卸载"><a href="#类卸载" class="headerlink" title="类卸载"></a>类卸载</h2><p>卸载类即该类的Class对象被GC</p>
 <p>三个条件：</p>
 <ol>

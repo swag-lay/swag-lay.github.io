@@ -1519,7 +1519,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-03-14 14:10:41'>2024-03-14 13:09</time>
+            Created At : <time class="date" title='Updated At: 2024-05-22 17:02:28'>2024-03-14 13:09</time>
         
     </div>
     <div class="article-meta">
@@ -1560,9 +1560,9 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="nginx是如何处理http头部的过程"><a href="#nginx是如何处理http头部的过程" class="headerlink" title="nginx是如何处理http头部的过程"></a>nginx是如何处理http头部的过程</h1><p>请求之前，将nginx和客户端建立连接，<br>然后接收用户发送的http请求，<br>然后接收所有header，<br>然后决定哪些http模块处理请求</p>
-<p><img src="/..%5Cimages%5Cimage-20240314131424122.png" alt="image-20240314131424122"><br>建立连接-分配内存池-http设置请求超时时间</p>
-<p><img src="/..%5Cimages%5Cimage-20240314131919911.png" alt="image-20240314131919911"><br>当用户发送请到来之后，发送ack回复，事件模块拿到请求，回调ngx_http_wait_request_handler，请求变为用户态，分配内存池（这段内存是从连接内存池分配的）</p>
-<p><img src="/..%5Cimages%5Cimage-20240314132417225.png" alt="image-20240314132417225"><br>处理请求只需要放入nginx内存中就行，同时需要做大量的上下文分析，所以许哟啊分配请求内存池。<br>在状态机解析请求行时，不断分批大内存。<br>分批完大内存之后，开始识别header，确定哪一个server块去处理请求，然后移除超时定时器，接下来开始核心的11个阶段http请求处理阶段</p>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240314131424122.png" alt="image-20240314131424122"><br>建立连接-分配内存池-http设置请求超时时间</p>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240314131919911.png" alt="image-20240314131919911"><br>当用户发送请到来之后，发送ack回复，事件模块拿到请求，回调ngx_http_wait_request_handler，请求变为用户态，分配内存池（这段内存是从连接内存池分配的）</p>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240314132417225.png" alt="image-20240314132417225"><br>处理请求只需要放入nginx内存中就行，同时需要做大量的上下文分析，所以许哟啊分配请求内存池。<br>在状态机解析请求行时，不断分批大内存。<br>分批完大内存之后，开始识别header，确定哪一个server块去处理请求，然后移除超时定时器，接下来开始核心的11个阶段http请求处理阶段</p>
 <ol>
 <li>Read Request Headers：解析请求头。</li>
 <li>Identify Configuration Block：识别由哪一个 location 进行处理，匹配 URL。</li>
@@ -1583,7 +1583,7 @@
 <li>CONTENT：这个阶段涉及到的模块就非常多了，例如 index, autoindex, concat 等都是在这个阶段生效的。</li>
 <li>LOG：记录日志 access_log 模块。</li>
 </ol>
-<p><img src="/..%5Cimages%5Cimage-20240314140800523.png" alt="image-20240314140800523"></p>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240314140800523.png" alt="image-20240314140800523"></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>

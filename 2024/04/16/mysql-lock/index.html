@@ -1519,7 +1519,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-04-16 18:07:36'>2024-04-16 15:43</time>
+            Created At : <time class="date" title='Updated At: 2024-05-22 17:01:36'>2024-04-16 15:43</time>
         
     </div>
     <div class="article-meta">
@@ -1584,8 +1584,8 @@ select ... for update;
 </code></pre>
 <p>update和delete也会加行级锁，且锁的类型都是独占锁（x锁）<br>s锁满足读读共享，读写互斥，x锁满足写写互斥，读写互斥</p>
 <h2 id="mysql怎么加行级锁"><a href="#mysql怎么加行级锁" class="headerlink" title="mysql怎么加行级锁"></a>mysql怎么加行级锁</h2><p><strong>加锁的对象是索引，加锁的基本单位是next-key lock，next-key lock是前开后闭区间，而间隙锁是前开后开区间</strong><br><strong>当使用记录锁或者间隙锁能够避免幻读的场景下，next-key lock就会退化为记录锁或间隙锁</strong><br>用select * from performance_schema.data_locks\G;可以查看加锁的过程<br>如果LOCK_MODE为x，说明是next-key锁<br>如果LOCK_MODE为x,REC_NOT_GAP，说明是记录锁<br>如果LOCK_MODE为x,GAP，说明是间隙锁</p>
-<p><img src="/..%5Cimages%5C%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95%E5%8A%A0%E9%94%81%E6%B5%81%E7%A8%8B.jpeg" alt="img"></p>
-<p><img src="/..%5Cimages%5C%E9%9D%9E%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95%E5%8A%A0%E9%94%81%E6%B5%81%E7%A8%8B.jpeg" alt="img"><br><strong>当在update语句的where条件没有使用索引，就会全表扫描，于是就会给所有记录加上next-key锁，相当于把整张表锁住了</strong></p>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95%E5%8A%A0%E9%94%81%E6%B5%81%E7%A8%8B.jpeg" alt="img"></p>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/%E9%9D%9E%E5%94%AF%E4%B8%80%E7%B4%A2%E5%BC%95%E5%8A%A0%E9%94%81%E6%B5%81%E7%A8%8B.jpeg" alt="img"><br><strong>当在update语句的where条件没有使用索引，就会全表扫描，于是就会给所有记录加上next-key锁，相当于把整张表锁住了</strong></p>
 <p>那update语句的where带上索引就能避免全表记录加锁了吗？<br>并不是，<strong>关键还得看这条语句在执行过程中，优化器最终选择的是索引扫描还是全表扫描，如果走了全表扫描，就会对全表的记录加锁了</strong></p>
 <p>两个事务即使生成的间隙锁的范围是一样的，也不会发生冲突，因为间隙锁目的是为了防止其他事务插入数据，因此间隙锁与间隙锁之间是相互兼容的。<br>在执行插入语句时，如果插入的记录在其他事务持有间隙锁范围内，插入语句就会被阻塞，因为插入语句在碰到间隙锁时，会生成一个插入意向锁，然后插入意向锁和间隙锁之间是互斥的关系。<br>如果两个事务分别向对方持有的间隙锁范围内插入一条记录，而插入操作为了获取到插入意向锁，都在等待对方事务的间隙锁释放，于是就造成了循环等待，满足了死锁的四个条件：互斥、占有且等待、不可强占用、循环等待，因此发生了死锁。</p>
 

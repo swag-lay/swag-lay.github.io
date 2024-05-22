@@ -1517,7 +1517,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-12-26 15:56:00'>2023-12-26 13:28</time>
+            Created At : <time class="date" title='Updated At: 2024-05-22 17:05:40'>2023-12-26 13:28</time>
         
     </div>
     <div class="article-meta">
@@ -1557,7 +1557,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Tomcat介绍"><a href="#Tomcat介绍" class="headerlink" title="Tomcat介绍"></a>Tomcat介绍</h1><h2 id="web容器"><a href="#web容器" class="headerlink" title="web容器"></a>web容器</h2><p>早期web应用主要用于浏览静态页面，http服务器（apache，nginx）向浏览器返回静态html，浏览器解析html，将结构呈现给用户<br>servlet技术简单理解为运行在服务端的java小程序，但是servlet没有main方法，不能独立运行，因此必须把它部署到servlet容器中，由容器来实例化并调用 servlet<br>tomcat就是一个servlet容器，为了方便使用，tomcat同时具有http服务器的功能<br>因此tomcat就是一个http服务器+servlet容器，我们叫它web容器<br><strong>http服务器</strong>：处理http请求并响应结果<br><img src="/..%5Cimages%5Cimage-20231226133449527.png" alt="image-20231226133449527"><br><strong>servlet容器</strong>：http服务器将请求交给servlet容器处理，servlet容器会将请求转发到具体的servlet（servlet容器用来加载和管理业务类）<br>servlet容器会根据web.xml文件中的映射关系，调用相应的servlet，servlet将处理的结果返回给servlet容器，并通过http服务器将响应传输给客户端。<br><img src="/..%5Cimages%5Cimage-20231226133749901.png" alt="image-20231226133749901"></p>
+        <h1 id="Tomcat介绍"><a href="#Tomcat介绍" class="headerlink" title="Tomcat介绍"></a>Tomcat介绍</h1><h2 id="web容器"><a href="#web容器" class="headerlink" title="web容器"></a>web容器</h2><p>早期web应用主要用于浏览静态页面，http服务器（apache，nginx）向浏览器返回静态html，浏览器解析html，将结构呈现给用户<br>servlet技术简单理解为运行在服务端的java小程序，但是servlet没有main方法，不能独立运行，因此必须把它部署到servlet容器中，由容器来实例化并调用 servlet<br>tomcat就是一个servlet容器，为了方便使用，tomcat同时具有http服务器的功能<br>因此tomcat就是一个http服务器+servlet容器，我们叫它web容器<br><strong>http服务器</strong>：处理http请求并响应结果<br><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20231226133449527.png" alt="image-20231226133449527"><br><strong>servlet容器</strong>：http服务器将请求交给servlet容器处理，servlet容器会将请求转发到具体的servlet（servlet容器用来加载和管理业务类）<br>servlet容器会根据web.xml文件中的映射关系，调用相应的servlet，servlet将处理的结果返回给servlet容器，并通过http服务器将响应传输给客户端。<br><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20231226133749901.png" alt="image-20231226133749901"></p>
 <h1 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h1><h2 id="静态资源服务器"><a href="#静态资源服务器" class="headerlink" title="静态资源服务器"></a>静态资源服务器</h2><p>将服务器上的静态文件缓存下来，通过http协议展现给客户端。</p>
 <h2 id="反向代理"><a href="#反向代理" class="headerlink" title="反向代理"></a>反向代理</h2><p>客服端将请求发送到反向代理服务器，由反向代理服务器去选择目标服务器，获取数据后再返回给客户端。对外暴露的是反向代理服务器地址，隐藏了真实服务器ip地址。反向代理”代理“的是目标服务器，这一个过程对于客户端而言是透明的。<br>代理服务器</p>
 <h2 id="正向代理"><a href="#正向代理" class="headerlink" title="正向代理"></a>正向代理</h2><p>代理客户端 如vpn</p>
