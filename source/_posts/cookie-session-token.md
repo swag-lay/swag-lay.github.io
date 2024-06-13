@@ -49,6 +49,8 @@ Signature：签证信息包括
 - payload（base64之后）
 - secret
 
+![jwt algorithm](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/xBqvamzTiw.svg)
+
 ### jwt如何工作的
 
 ![image-20240520155050919](https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240520155050919.png)
