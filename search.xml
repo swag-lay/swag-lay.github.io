@@ -4,6 +4,48 @@
   
     
     <entry>
+      <title>Prometheus</title>
+      <link href="/2024/06/17/Prometheus/"/>
+      <url>/2024/06/17/Prometheus/</url>
+      
+        <content type="html"><![CDATA[<h1 id="集群server端"><a href="#集群server端" class="headerlink" title="集群server端"></a>集群server端</h1><h2 id="Prometheus监控系统"><a href="#Prometheus监控系统" class="headerlink" title="Prometheus监控系统"></a>Prometheus监控系统</h2><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/34b2029df57e433ca5a8777b42f6acdd.png" alt="img"><br>通过http协议从远程的机器上收集数据并存储在本地的时序数据库上</p><ol><li>怎么采集数据的</li><li>怎么存储数据的</li><li>怎么暴露 接口的</li><li>存储和采集数据有哪些可配置的参数</li></ol><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h3><p>下载<a href="https://prometheus.io/download/">https://prometheus.io/download/</a><br>解压到&#x2F;opt&#x2F;prometheus</p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240617102748155.png" alt="image-20240617102748155"></p><p>启动指定命令<br>指定配置文件<br>–config.file&#x3D;”prometheus.yml”<br>默认指定监听地址端口，可修改端口<br>–web.listen-address&#x3D;”0.0.0.0:9090”<br>最大连接数<br>–web.max-connections&#x3D;512<br>tsdb数据存储的目录，默认当前data&#x2F;<br>–storage.tsdb.path&#x3D;”data&#x2F;“<br>premetheus 存储数据的时间，默认保存15天<br>–storage.tsdb.retention&#x3D;15d<br>通过命令热加载无需重启 curl -XPOST 192.168.2.45:9090&#x2F;-&#x2F;reload<br>–web.enable-lifecycle<br>可以启用 TLS 或 身份验证 的配置文件的路径<br>–web.config.file&#x3D;””</p><p>将prometheus注册服务</p><pre><code class="javascipt">[Unit]Description=prometheus service [Service]User=rootExecStart=/opt/prometheus/prometheus --config.file=/opt/prometheus/prometheus.yml --storage.tsdb.path=/opt/prometheus/data TimeoutStopSec=10Restart=on-failureRestartSec=5 [Install]WantedBy=multi-user.target</code></pre><pre><code class="bash">systemctl daemon-reloadsystemctl enable prometheussystemctl start prometheussystemctl status prometheus</code></pre><h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><p>安装node_exporter</p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240617112344679.png" alt="image-20240617112344679"></p><p>启动</p><p>node_exporter.service</p><p>再在服务端prometheus配置文件中加入任务信息</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 云原生 </category>
+          
+          <category> k8s集群管理 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Prometheus监控k8s</title>
+      <link href="/2024/06/17/k8s%E7%9B%91%E6%8E%A7/"/>
+      <url>/2024/06/17/k8s%E7%9B%91%E6%8E%A7/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Prometheus监控k8s"><a href="#Prometheus监控k8s" class="headerlink" title="Prometheus监控k8s"></a>Prometheus监控k8s</h1><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/0d93944f9b945bc0b0bb41cb9d1b0f87.png" alt="img"><br>左边是采集谁监控谁，一般是一些短周期的任务，比如cronjob任务，也可以是一些持久性的任务，一般主要是一些持久性的任务，比如web服务。</p><p>中间是Prometheus本身，内部是一个tsdb的数据库，但所有的被监控端暴露完指标之后，Prometheus会主动抓取这些指标，存储到tsdb数据库中，然后提供给web ui，或者api clients通过PromQL调用数据，PromQL就是查询这些数据的。</p><p>中间上方是服务发现，我们需要自动去发现新加入的节点时，或者以批量的节点加入监控中，在k8s中内置了k8s服务发现的机制，也就是他会连接k8s的api，去发现部署的应用，pod，然后暴露出去，进行监控。</p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/5faee1956c6b1331218588ff0e8a0690.png" alt="img"></p><p>当需要监控node的资源，可以设置node_exporter，去采集机器的资源信息</p><p>当想要监控容器，k8s内置cAdvisor采集器，不需要单独部署，只要知道怎么去访问这个cAdvisor采集器就可以了</p><p>监控k8s资源对象，会部署一个kube-state-metrics这个服务，定时的从API中获取这些指标，存取到Prometheus中。</p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/1965c3cd5dd36e34e204ff3a557f760c.png" alt="img"></p><h2 id="采集数据"><a href="#采集数据" class="headerlink" title="采集数据"></a>采集数据</h2><ol><li>主动拉取：<br> 主要通过scrape job进行，主动从目标实例中拉取实例的过程。主要通过http或者其他方式从目标实例中拉取数据，存储到本地的时间序列数据库中。<br> 拉取过程中需要指定目标实例的地址，端口，请求路径等信息，以及标签选择器，超时时间等参数。</li></ol><p>  分两模块：</p><p>  discovery模块</p><p>  协程（discovery）-发现targets（chan []*targetgroup.Group）-协程（updater）-更新targets，触发信号（triggerSend）-协程（sender）拉取targets</p><p>  该模块利用各种服务发现协议发现目标采集点，通过channel通道将最新发现的目标采集点信息实时同步给scrape模型</p><p>  scrape模块</p><p>  负责使用http协议从目标采集点上抓取监控指标数据</p><p>  syncCh通道-协程（updateTsets）-更新写入到scrapeManager结构体中targetSets字段对应的map中-触发信号triggerSend-协程（reloader）加载targets-从scrapeManager中targetSets中拉取最新采集点进行加载</p><ol start="2"><li>push gateway<br> 是一个临时组件，用于处理无法直接从实例拉取数据的场景，例如容器环境和短暂运行的任务。</li></ol><h2 id="怎么存储数据的"><a href="#怎么存储数据的" class="headerlink" title="怎么存储数据的"></a>怎么存储数据的</h2><h2 id="怎么暴露-接口的"><a href="#怎么暴露-接口的" class="headerlink" title="怎么暴露 接口的"></a>怎么暴露 接口的</h2><h2 id="存储和采集数据有哪些可配置的参数"><a href="#存储和采集数据有哪些可配置的参数" class="headerlink" title="存储和采集数据有哪些可配置的参数"></a>存储和采集数据有哪些可配置的参数</h2>]]></content>
+      
+      
+      <categories>
+          
+          <category> 云原生 </category>
+          
+          <category> Prometheus </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>内存管理-内外部碎片</title>
       <link href="/2024/06/12/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/"/>
       <url>/2024/06/12/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
