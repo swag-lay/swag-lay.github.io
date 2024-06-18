@@ -864,7 +864,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="67">
-<input type="hidden" id="yelog_site_word_count" value="42.8k">
+<input type="hidden" id="yelog_site_word_count" value="43.4k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1605,12 +1605,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-06-17 15:35:15'>2024-06-17 13:17</time>
+            Created At : <time class="date" title='Updated At: 2024-06-18 14:49:59'>2024-06-17 13:17</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:639</span>
+        <span>Count:1.2k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1666,7 +1666,42 @@
 <ol start="2">
 <li>push gateway<br> 是一个临时组件，用于处理无法直接从实例拉取数据的场景，例如容器环境和短暂运行的任务。</li>
 </ol>
-<h2 id="怎么存储数据的"><a href="#怎么存储数据的" class="headerlink" title="怎么存储数据的"></a>怎么存储数据的</h2><h2 id="怎么暴露-接口的"><a href="#怎么暴露-接口的" class="headerlink" title="怎么暴露 接口的"></a>怎么暴露 接口的</h2><h2 id="存储和采集数据有哪些可配置的参数"><a href="#存储和采集数据有哪些可配置的参数" class="headerlink" title="存储和采集数据有哪些可配置的参数"></a>存储和采集数据有哪些可配置的参数</h2>
+<h2 id="怎么存储数据的"><a href="#怎么存储数据的" class="headerlink" title="怎么存储数据的"></a>怎么存储数据的</h2><p>存储时间序列数据的是他自带的时间序列数据库，称为prometheus存储引擎</p>
+<p>特点：</p>
+<ol>
+<li>单机存储</li>
+<li>持久化存储，机器重启之后仍让可用</li>
+<li>可压缩：压缩时间序列数据，节约磁盘空间</li>
+<li>支持快照</li>
+</ol>
+<p>存储引擎底层采用一种称为WAL（write-ahead-logging）的机制确保数据的可靠性和一致性。该机制基于日志文件，当收集到新的指标数据时，将数据写入wal文件中，然后异步的将数据写入本地磁盘的时序数据库中。<br>存储底层用的存储格式为TSDB，基于时间的块存储方式，即将每个时间序列按照时间戳划分成一系列固定大小的块，并对每个块进行压缩存储。这种方式可以大幅减少存储空间，提高查询效率。</p>
+<p>首先同样采用了内存缓存，基于哈希表的数据结构</p>
+<p>存储数据的目录结构</p>
+<pre><code class="javacript">data/
+  |- alerts/
+  |- chunks/
+  |- head/
+  |- index/
+  |- rules/
+  |- snapshots/
+  |- wal/
+  
+alerts/: 存储警报规则的状态信息
+chunks/: 存储时序数据的块文件，每个块文件存储一段时间内的时序数据。块文件名由一组标签（label）组成，用于标识这段时间内的时序数据，例如：01D3EVB6S8SJP91GZM0RZP4YJF。
+head/: 存储最近的时序数据，用于快速查询。与块文件不同，head目录存储的是最近的时序数据，而不是按时间切分的块文件。
+index/: 存储指向块文件的索引信息，以便能够快速查找特定标签（label）的时序数据。
+rules/: 存储告警规则的定义信息
+snapshots/: 存储快照数据，用于在Prometheus重启时快速恢复数据。
+wal/: 存储写入预写日志（write-ahead log）的数据。
+</code></pre>
+<h2 id="怎么暴露-接口的"><a href="#怎么暴露-接口的" class="headerlink" title="怎么暴露 接口的"></a>怎么暴露 接口的</h2><p>默认对每一个被监控的目标（target）使用&#x2F;metrics路径获取指标。我们在配置文件中设置了目标地址，然后Prometheus就会从这个endpoint中收集指标数据</p>
+<h2 id="存储和采集数据有哪些可配置的参数"><a href="#存储和采集数据有哪些可配置的参数" class="headerlink" title="存储和采集数据有哪些可配置的参数"></a>存储和采集数据有哪些可配置的参数</h2><p>存储数据：</p>
+<pre><code class="javascript">--storage.tsdb.path: 存储数据的目录，默认为data/，如果要挂外部存储，可以指定该目录
+--storage.tsdb.retention.time: 数据过期清理时间，默认保存15天
+--storage.tsdb.retention.size: 实验性质，声明数据块的最大值，不包括wal文件，如512MB
+--storage.tsdb.retention: 已被废弃，改为使用storage.tsdb.retention.time
+</code></pre>
+
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
     </div>
