@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>七种常见分布式事务 | mhen</title>
+  <title>zookeeper实现分布式锁 | mhen</title>
   <meta name="keywords" content="">
-  <meta name="description" content="七种常见分布式事务 | mhen">
+  <meta name="description" content="zookeeper实现分布式锁 | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="zookeeper分布式锁实现两种方案 临时节点设置单个临时节点，多个机器&#x2F;线程去竞争创建同一个临时节点，只有一个机器&#x2F;线程能创建成功，则获取到锁，其他机器&#x2F;线程监听临时节点的变化当临时节点会话中断或者节点删除的时候，释放锁 临时顺序节点多个机器&#x2F;线程各自创建不同的的临时节点，按照顺序，让序号小的获取锁。其他机器&#x2F;线程监听比他序号小的节点。释放锁同">
 <meta property="og:type" content="article">
@@ -1604,9 +1604,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-七种常见分布式事务" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-zookeeper" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">七种常见分布式事务</h1>
+        <h1 class="article-title">zookeeper实现分布式锁</h1>
     
     <div class="article-meta">
         
@@ -1616,7 +1616,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="分布式微服务">分布式微服务</a>
+            <a  data-rel="分布式微服务">分布式微服务</a> > 
+            
+            <a  data-rel="分布式微服务&lt;---&gt;zookeeper实现分布式锁">zookeeper实现分布式锁</a>
             
         </span>
         
@@ -1624,12 +1626,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-05-21 14:31:51'>2024-03-28 11:49</time>
+            Created At : <time class="date" title='Updated At: 2024-06-19 18:25:42'>2024-06-19 18:18</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:804</span>
+        <span>Count:157</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1648,7 +1650,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E7%A7%8D%E5%B8%B8%E8%A7%81%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1"><span class="toc-text">七种常见分布式事务</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2pc%EF%BC%9A%E4%B8%A4%E9%98%B6%E6%AE%B5%E6%8F%90%E4%BA%A4%EF%BC%8C%E5%87%86%E5%A4%87%E9%98%B6%E6%AE%B5%E5%92%8C%E6%8F%90%E4%BA%A4%E9%98%B6%E6%AE%B5"><span class="toc-text">2pc：两阶段提交，准备阶段和提交阶段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3pc%EF%BC%9A%E9%92%88%E5%AF%B92pc%E8%BF%9B%E8%A1%8C%E6%94%B9%E8%BF%9B"><span class="toc-text">3pc：针对2pc进行改进</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tcc"><span class="toc-text">tcc</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#saga"><span class="toc-text">saga</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E6%B6%88%E6%81%AF%E8%A1%A8"><span class="toc-text">本地消息表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MQ%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF"><span class="toc-text">MQ事务消息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E5%A4%A7%E5%8A%AA%E5%8A%9B%E9%80%9A%E7%9F%A5%EF%BC%88%E5%AE%9A%E6%9C%9F%E6%A0%A1%E5%AF%B9%EF%BC%89"><span class="toc-text">最大努力通知（定期校对）</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#zookeeper%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">zookeeper分布式锁实现</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%B4%E6%97%B6%E8%8A%82%E7%82%B9"><span class="toc-text">临时节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%B4%E6%97%B6%E9%A1%BA%E5%BA%8F%E8%8A%82%E7%82%B9"><span class="toc-text">临时顺序节点</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1664,53 +1666,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="七种常见分布式事务"><a href="#七种常见分布式事务" class="headerlink" title="七种常见分布式事务"></a>七种常见分布式事务</h1><h2 id="2pc：两阶段提交，准备阶段和提交阶段"><a href="#2pc：两阶段提交，准备阶段和提交阶段" class="headerlink" title="2pc：两阶段提交，准备阶段和提交阶段"></a>2pc：两阶段提交，准备阶段和提交阶段</h2><p>准备阶段：由事务协调者询问通知每个事务参与者，是否准备好执行事务</p>
-<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328121635423.png" alt="image-20240328121635423">提交阶段：所有参与l参与者都同意，意味着完成事务，要么都commit要么都rollback</p>
-<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328121719108.png" alt="image-20240328121719108"></p>
-<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328121738963.png" alt="image-20240328121738963"></p>
-<p>问题：可靠性和数据一致性问题</p>
-<h2 id="3pc：针对2pc进行改进"><a href="#3pc：针对2pc进行改进" class="headerlink" title="3pc：针对2pc进行改进"></a>3pc：针对2pc进行改进</h2><p>协调者和参与者引入超时机制；第一阶段和第二阶段中间插入一个准备阶段，保证在最后提交阶段之前各参与节点的状态保持一致</p>
-<p>分为CanCommit，PreCommit，DoCommit阶段</p>
-<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328122005515.png" alt="image-20240328122005515"></p>
-<p>precommit：</p>
-<ol>
-<li>执行事务：假如所有参与者反馈yes，协调者预执行事务，</li>
-</ol>
-<ul>
-<li>发送预提交请求：协调者向参与者发送precommit请求，进入准备阶段</li>
-<li>事务预处理：参与者接收到precommit请求后，执行本地事务操作，并将undo和redo信息记录到事务日志中。（并不提交事务）</li>
-<li>提交反馈：如果参与者成功的执行了事务操作，返回ack响应，同时等待最终命令</li>
-</ul>
-<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328140033077.png" alt="image-20240328140033077"><br>2. 中断事务：假设其中任何一个参与者反馈了no，或者等待超时，那么就执行事务中断。</p>
-<ul>
-<li>发送中断请求：协调者向所有参与者发送abort请求</li>
-<li>中断事务：参与者收到abort请求后，执行事务中断</li>
-</ul>
-<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328140545363.png" alt="image-20240328140545363"></p>
-<p>docommit:</p>
-<ol>
-<li>提交事务：</li>
-</ol>
-<ul>
-<li>发送提交请求：接收到所有参与者的ack确认，从预提交变为提交，从所有参与者发送docommit</li>
-<li>本地事务提交：参与者接收到docommit请求之后，执行正式事务，提交之后释放事务资源</li>
-<li>响应反馈：事务提交完，向协调者发送ack响应</li>
-<li>完成事务：协调者接收到所有参与者的ack响应之后，完成事务</li>
-</ul>
-<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328141627493.png" alt="image-20240328141627493"></p>
-<ol start="2">
-<li>中断事务：任何一个参与者反馈no，或者等待超时</li>
-</ol>
-<ul>
-<li>发送中断请求：协调者向参与者发送abort请求</li>
-<li>事务回滚：参与者接收abort之后，利用undo信息回滚，释放资源</li>
-<li>反馈结果：完成回滚之后，向协调者反馈ack消息</li>
-<li>中断事务：协调者接收到所有ack消息后，中断事务</li>
-</ul>
-<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328141959187.png" alt="image-20240328141959187"><br>3pc依然无法解决数据不一致问题，当参与者收到precommit请求后等待docommit指令时，如果协调者请求中断事务，而协调者因为网络问题无法与参与者正常通信，会导致参与者继续提交事务，造成数据不一致。</p>
-<h2 id="tcc"><a href="#tcc" class="headerlink" title="tcc"></a>tcc</h2><h2 id="saga"><a href="#saga" class="headerlink" title="saga"></a>saga</h2><h2 id="本地消息表"><a href="#本地消息表" class="headerlink" title="本地消息表"></a>本地消息表</h2><h2 id="MQ事务消息"><a href="#MQ事务消息" class="headerlink" title="MQ事务消息"></a>MQ事务消息</h2><p>基于mq的分布式事务本质上是对本地消息表的封装，整体流程与本地消息表一致，唯一不同的将本地消息存在了mq内部，而不是业务数据库中</p>
-<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/image-20240328143239908.png" alt="image-20240328143239908"></p>
-<h2 id="最大努力通知（定期校对）"><a href="#最大努力通知（定期校对）" class="headerlink" title="最大努力通知（定期校对）"></a>最大努力通知（定期校对）</h2><p>对mq事务的优化，在事务主动方增加了消息校对的接口，如果事务被动方没有接收到主动方发送的消息，此时可以调用事务主动方提供的消息校对的接口主动获取。</p>
+        <h1 id="zookeeper分布式锁实现"><a href="#zookeeper分布式锁实现" class="headerlink" title="zookeeper分布式锁实现"></a>zookeeper分布式锁实现</h1><p>两种方案</p>
+<h2 id="临时节点"><a href="#临时节点" class="headerlink" title="临时节点"></a>临时节点</h2><p>设置单个临时节点，多个机器&#x2F;线程去竞争创建同一个临时节点，只有一个机器&#x2F;线程能创建成功，则获取到锁，其他机器&#x2F;线程监听临时节点的变化<br>当临时节点会话中断或者节点删除的时候，释放锁</p>
+<h2 id="临时顺序节点"><a href="#临时顺序节点" class="headerlink" title="临时顺序节点"></a>临时顺序节点</h2><p>多个机器&#x2F;线程各自创建不同的的临时节点，按照顺序，让序号小的获取锁。其他机器&#x2F;线程监听比他序号小的节点。<br>释放锁同理</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>

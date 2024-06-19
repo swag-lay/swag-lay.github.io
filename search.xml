@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>zookeeper实现分布式锁</title>
+      <link href="/2024/06/19/zookeeper/"/>
+      <url>/2024/06/19/zookeeper/</url>
+      
+        <content type="html"><![CDATA[<h1 id="zookeeper分布式锁实现"><a href="#zookeeper分布式锁实现" class="headerlink" title="zookeeper分布式锁实现"></a>zookeeper分布式锁实现</h1><p>两种方案</p><h2 id="临时节点"><a href="#临时节点" class="headerlink" title="临时节点"></a>临时节点</h2><p>设置单个临时节点，多个机器&#x2F;线程去竞争创建同一个临时节点，只有一个机器&#x2F;线程能创建成功，则获取到锁，其他机器&#x2F;线程监听临时节点的变化<br>当临时节点会话中断或者节点删除的时候，释放锁</p><h2 id="临时顺序节点"><a href="#临时顺序节点" class="headerlink" title="临时顺序节点"></a>临时顺序节点</h2><p>多个机器&#x2F;线程各自创建不同的的临时节点，按照顺序，让序号小的获取锁。其他机器&#x2F;线程监听比他序号小的节点。<br>释放锁同理</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 分布式微服务 </category>
+          
+          <category> zookeeper实现分布式锁 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Prometheus</title>
       <link href="/2024/06/17/Prometheus/"/>
       <url>/2024/06/17/Prometheus/</url>
