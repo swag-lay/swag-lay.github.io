@@ -864,7 +864,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="67">
-<input type="hidden" id="yelog_site_word_count" value="43.4k">
+<input type="hidden" id="yelog_site_word_count" value="43.9k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1605,12 +1605,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-05-21 15:00:39'>2024-03-29 15:00</time>
+            Created At : <time class="date" title='Updated At: 2024-06-19 12:24:18'>2024-03-29 15:00</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:1.6k</span>
+        <span>Count:2.1k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1629,7 +1629,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#redis%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-text">redis实现分布式锁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E4%B8%80%EF%BC%9Asetnx-expire"><span class="toc-text">方案一：setnx+expire</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E4%BA%8C%EF%BC%9Asetnx-value%E5%80%BC%E6%98%AF%EF%BC%88%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4-%E8%BF%87%E6%9C%9F%E6%97%B6%E9%97%B4%EF%BC%89"><span class="toc-text">方案二：setnx+value值是（系统时间+过期时间）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8lua%E8%84%9A%E6%9C%AC%EF%BC%88setnx-expire%EF%BC%89"><span class="toc-text">使用lua脚本（setnx+expire）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#set%E7%9A%84%E6%89%A9%E5%B1%95%E5%91%BD%E4%BB%A4%EF%BC%88set-ex-px-nx%EF%BC%89"><span class="toc-text">set的扩展命令（set ex px nx）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#set-ex-px-nx-%E6%A0%A1%E9%AA%8C%E5%94%AF%E4%B8%80%E9%9A%8F%E6%9C%BA%E5%80%BC%EF%BC%8C%E5%86%8D%E5%88%A0%E9%99%A4"><span class="toc-text">set ex px nx + 校验唯一随机值，再删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redisson%E6%A1%86%E6%9E%B6"><span class="toc-text">redisson框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E6%9C%BA%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81Redlock-Redisson"><span class="toc-text">多机实现分布式锁Redlock+Redisson</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#redis%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="toc-text">redis实现分布式锁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E6%84%8F%E4%B9%89"><span class="toc-text">redis分布式锁的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">redis分布式锁的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E4%B8%80%EF%BC%9Asetnx-expire"><span class="toc-text">方案一：setnx+expire</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B9%E6%A1%88%E4%BA%8C%EF%BC%9Asetnx-value%E5%80%BC%E6%98%AF%EF%BC%88%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4-%E8%BF%87%E6%9C%9F%E6%97%B6%E9%97%B4%EF%BC%89"><span class="toc-text">方案二：setnx+value值是（系统时间+过期时间）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8lua%E8%84%9A%E6%9C%AC%EF%BC%88setnx-expire%EF%BC%89"><span class="toc-text">使用lua脚本（setnx+expire）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#set%E7%9A%84%E6%89%A9%E5%B1%95%E5%91%BD%E4%BB%A4%EF%BC%88set-ex-px-nx%EF%BC%89"><span class="toc-text">set的扩展命令（set ex px nx）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#set-ex-px-nx-%E6%A0%A1%E9%AA%8C%E5%94%AF%E4%B8%80%E9%9A%8F%E6%9C%BA%E5%80%BC%EF%BC%8C%E5%86%8D%E5%88%A0%E9%99%A4"><span class="toc-text">set ex px nx + 校验唯一随机值，再删除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redisson%E6%A1%86%E6%9E%B6"><span class="toc-text">redisson框架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E6%9C%BA%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81Redlock-Redisson"><span class="toc-text">多机实现分布式锁Redlock+Redisson</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1645,7 +1645,15 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="redis实现分布式锁"><a href="#redis实现分布式锁" class="headerlink" title="redis实现分布式锁"></a>redis实现分布式锁</h1><h2 id="方案一：setnx-expire"><a href="#方案一：setnx-expire" class="headerlink" title="方案一：setnx+expire"></a>方案一：setnx+expire</h2><p>setnx key value，如果key不存在，则setnx成功返回1，如果这个key以及存在，则返回0<br>比如电商的秒杀活动，key可以设置为key_resource_id，value设置为任意值。</p>
+        <h1 id="redis实现分布式锁"><a href="#redis实现分布式锁" class="headerlink" title="redis实现分布式锁"></a>redis实现分布式锁</h1><h2 id="redis分布式锁的意义"><a href="#redis分布式锁的意义" class="headerlink" title="redis分布式锁的意义"></a>redis分布式锁的意义</h2><p>为了解决多机资源竞争问题，保证在同一时刻只能有一个机器或者线程使用某一资源。常用于定时任务，超卖等问题。利用了redis的原子性操作，结合分布式，实现对锁的获取，释放和操作。<br>通常包括原子性，超时处理，可重入，竞态问题</p>
+<ul>
+<li>原子性利用setnx，setex，保证多个机器获取锁只有单个机器能够获取成功 ，保证资源的互斥。</li>
+<li>超时通过设置过期时间，避免长时间占用，同时我们往往利用看门狗机制设置间隔对锁的过期时间进行延长，保证业务完成，防止出现锁过期而业务没有完成的现象。</li>
+<li>可重入是保证同一机器多次获取锁，此处是为了防止死锁的发生，不会让自己阻塞自己。我们往往通过设置value+1代表获取锁的次数，锁尝试释放value-1，直到value&#x3D;0，才能释放锁。这里设置value&#x3D;0才释放是为了保障释放锁的完整性，如果value每次-1就直接释放，当每次value-1的时候该线程其他代码可能仍然需要这个锁，如果其他线程直接获取该锁，导致数据出现竞态问题。</li>
+<li>竞态问题往往通过重试机制，或者公平锁的实现，保障客户端都有机会获取锁。</li>
+</ul>
+<h2 id="redis分布式锁的问题"><a href="#redis分布式锁的问题" class="headerlink" title="redis分布式锁的问题"></a>redis分布式锁的问题</h2><p>当在哨兵模式下，当一个线程已经对master节点获取锁了，master在对从节点进行异步复制的过程中，发生了宕机，从节点切换为master，此时另一个线程又对master获取锁，导致出现多个线程对同一个分布式锁完成了加锁，出现脏数据的产生。<br>RedLock可以解决，设置需要在多数机器上同时加锁，但一般不用，成本太高。<br>常用zookeeper实现的分布式锁解决这个问题。</p>
+<h2 id="方案一：setnx-expire"><a href="#方案一：setnx-expire" class="headerlink" title="方案一：setnx+expire"></a>方案一：setnx+expire</h2><p>setnx key value，如果key不存在，则setnx成功返回1，如果这个key以及存在，则返回0<br>比如电商的秒杀活动，key可以设置为key_resource_id，value设置为任意值。</p>
 <pre><code class="c#">if（jedis.setnx(key_resource_id,lock_value) == 1）&#123; //加锁
     expire（key_resource_id，100）; //设置过期时间
     try &#123;
