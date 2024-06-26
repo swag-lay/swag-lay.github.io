@@ -1246,6 +1246,48 @@
     
     
     <entry>
+      <title>java-hashmap</title>
+      <link href="/2023/06/26/java-hashmap/"/>
+      <url>/2023/06/26/java-hashmap/</url>
+      
+        <content type="html"><![CDATA[<h1 id="HashMap基本概念"><a href="#HashMap基本概念" class="headerlink" title="HashMap基本概念"></a>HashMap基本概念</h1><ol><li>非线程安全</li><li>支持存储null的key和value，为null的key只有一个，为null的value可以多个</li><li>默认容量为16，每次扩容为之前的两倍、</li><li>java1.8之前都是数组+链表，在java1.8之后，当解决哈希冲突的时候，当链表长度大于阈值（默认8），链表变为红黑树（需要保证数组长度大于64，否则先扩容）</li></ol><h2 id="HashMap的线程问题"><a href="#HashMap的线程问题" class="headerlink" title="HashMap的线程问题"></a>HashMap的线程问题</h2><p>首先我们需要知道HashMap放置value的逻辑，通过key的hashcode经过扰动函数处理的到hash值，然后通过（n-1）&amp;hash判断当前元素存放的位置（n为数组的长度），如果当前位置存在元素，判断加入元素的hash值和该元素以及key是否相同，如果相同直接覆盖，不同通过拉链法解决冲突。</p><pre><code class="java">//java 1.8    static final int hash(Object key) &#123;      int h;      // key.hashCode()：返回散列值也就是hashcode      // ^：按位异或      // &gt;&gt;&gt;:无符号右移，忽略符号位，空位都以0补齐      return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);  &#125;</code></pre><p>在java1.7之前，多线程下，当一个节点有多个元素需要进行扩容，多个线程对链表进行操作，因为采用的头插法，所以可能导致链表中的节点指向错误，比如链表变为环状，此时查询操作就会陷入死循环。<br>而java1.8采用尾插法解决环状问题，当时多线程下还是可能存在数据覆盖的问题，因为多线程下往往使用ConcurrentHashMap</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> java </category>
+          
+          <category> HashMap </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>java-arraylist</title>
+      <link href="/2023/06/26/java-arraylist/"/>
+      <url>/2023/06/26/java-arraylist/</url>
+      
+        <content type="html"><![CDATA[<h1 id="ArrayList相关概念"><a href="#ArrayList相关概念" class="headerlink" title="ArrayList相关概念"></a>ArrayList相关概念</h1><pre><code class="java">public class ArrayList&lt;E&gt; extends AbstractList&lt;E&gt;        implements List&lt;E&gt;, RandomAccess, Cloneable, java.io.Serializable&#123;  &#125;</code></pre><ol><li>内部基于动态数组，相比于Array静态数组更加灵活</li><li>根据实际存储元素进行动态扩容</li><li>可以使用泛型确保类型安全</li><li>只能存储对象，对于基础数据结构，需要使用包装类</li><li>允许添加任何值，包括null，但不建议</li><li>支持随机访问，实现了RandomAccess接口</li></ol><p>三种构造函数</p><pre><code class="java">/** * 默认初始容量大小 */private static final int DEFAULT_CAPACITY = 10;private static final Object[] DEFAULTCAPACITY_EMPTY_ELEMENTDATA = &#123;&#125;;/** * 默认构造函数，使用初始容量10构造一个空列表(无参数构造) */public ArrayList() &#123;    this.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;&#125;// 以无参构造方法创建时，初始化的数组是空数组。只有当真正向数组添加元素时，才真正分配容量，设置为默认容量10./** * 带初始容量参数的构造函数。（用户自己指定容量） */public ArrayList(int initialCapacity) &#123;    if (initialCapacity &gt; 0) &#123;//初始容量大于0        //创建initialCapacity大小的数组        this.elementData = new Object[initialCapacity];    &#125; else if (initialCapacity == 0) &#123;//初始容量等于0        //创建空数组        this.elementData = EMPTY_ELEMENTDATA;    &#125; else &#123;//初始容量小于0，抛出异常        throw new IllegalArgumentException(&quot;Illegal Capacity: &quot; + initialCapacity);    &#125;&#125;/** *构造包含指定collection元素的列表，这些元素利用该集合的迭代器按顺序返回 *如果指定的集合为null，throws NullPointerException。 */public ArrayList(Collection&lt;? extends E&gt; c) &#123;    elementData = c.toArray();    if ((size = elementData.length) != 0) &#123;        // c.toArray might (incorrectly) not return Object[] (see 6260652)        if (elementData.getClass() != Object[].class)            elementData = Arrays.copyOf(elementData, size, Object[].class);    &#125; else &#123;        // replace with empty array.        this.elementData = EMPTY_ELEMENTDATA;    &#125;&#125;</code></pre><h2 id="扩容问题"><a href="#扩容问题" class="headerlink" title="扩容问题"></a>扩容问题</h2><p>当添加是当前容量没有大于数组长度时不会进行扩容，当扩容时会调用grow方法</p><pre><code class="java">/** * 要分配的最大数组大小 */private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;/** * ArrayList扩容的核心方法。 */private void grow(int minCapacity) &#123;    // oldCapacity为旧容量，newCapacity为新容量    int oldCapacity = elementData.length;    // 将oldCapacity 右移一位，其效果相当于oldCapacity /2，    // 我们知道位运算的速度远远快于整除运算，整句运算式的结果就是将新容量更新为旧容量的1.5倍，    int newCapacity = oldCapacity + (oldCapacity &gt;&gt; 1);    // 然后检查新容量是否大于最小需要容量，若还是小于最小需要容量，那么就把最小需要容量当作数组的新容量，    if (newCapacity - minCapacity &lt; 0)        newCapacity = minCapacity;    // 如果新容量大于 MAX_ARRAY_SIZE,进入(执行) `hugeCapacity()` 方法来比较 minCapacity 和 MAX_ARRAY_SIZE，    // 如果minCapacity大于最大容量，则新容量则为`Integer.MAX_VALUE`，否则，新容量大小则为 MAX_ARRAY_SIZE 即为 `Integer.MAX_VALUE - 8`。    if (newCapacity - MAX_ARRAY_SIZE &gt; 0)        newCapacity = hugeCapacity(minCapacity);    // minCapacity is usually close to size, so this is a win:    elementData = Arrays.copyOf(elementData, newCapacity);&#125;private static int hugeCapacity(int minCapacity) &#123;    if (minCapacity &lt; 0) // overflow        throw new OutOfMemoryError();    // 对minCapacity和MAX_ARRAY_SIZE进行比较    // 若minCapacity大，将Integer.MAX_VALUE作为新数组的大小    // 若MAX_ARRAY_SIZE大，将MAX_ARRAY_SIZE作为新数组的大小    // MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;    return (minCapacity &gt; MAX_ARRAY_SIZE) ?        Integer.MAX_VALUE :        MAX_ARRAY_SIZE;&#125;</code></pre><p>由newCapacity &#x3D; oldCapacity + (oldCapacity &gt;&gt; 1)可知每次扩容为之前的1.5倍</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> java </category>
+          
+          <category> ArrayList </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>constructTree</title>
       <link href="/2023/06/12/constructTree/"/>
       <url>/2023/06/12/constructTree/</url>
