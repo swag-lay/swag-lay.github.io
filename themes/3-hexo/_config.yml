@@ -11,7 +11,7 @@ blog_path: /
 link:
   theme: color # 链接样式，color: 彩色图标  white: 黑白图标
   items:
-    github: https://github.com/
+    github: https://github.com/swag-lay
 
 
 ##########多作者模式############
@@ -166,7 +166,7 @@ highlight:
   on: true # true开启代码高亮，开启需要关闭博客 _config.yml 中的 highlight
   lineNum: true # true显示行号
   copy: true # 复制功能
-  theme: atom-light
+  theme: github-gist #atom-light
   overflow-y: auto
   overflow-x: auto
 # 代码高亮主题,效果可以查看 https://highlightjs.org/static/demo/
