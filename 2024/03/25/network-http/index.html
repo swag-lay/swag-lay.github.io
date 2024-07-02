@@ -943,7 +943,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="72">
-<input type="hidden" id="yelog_site_word_count" value="47.3k">
+<input type="hidden" id="yelog_site_word_count" value="47.8k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1729,12 +1729,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-05-22 17:01:54'>2024-03-25 16:42</time>
+            Created At : <time class="date" title='Updated At: 2024-07-02 15:13:05'>2024-03-25 16:42</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:1.2k</span>
+        <span>Count:1.7k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1753,7 +1753,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#http-amp-https"><span class="toc-text">http &amp; https</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#http%E6%98%AF%E5%A6%82%E4%BD%95%E4%BF%9D%E5%AD%98%E7%94%A8%E6%88%B7%E7%9A%84%E7%8A%B6%E6%80%81"><span class="toc-text">http是如何保存用户的状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E8%BE%93%E5%85%A5url%E5%88%B0%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%A4%BA%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-text">从输入url到页面展示的过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http%E6%A0%87%E5%A4%B4"><span class="toc-text">http标头</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#https%E6%B5%81%E7%A8%8B"><span class="toc-text">https流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http%E5%92%8Chttps%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">http和https的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TLS"><span class="toc-text">TLS</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#http-amp-https"><span class="toc-text">http &amp; https</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#http%E6%98%AF%E5%A6%82%E4%BD%95%E4%BF%9D%E5%AD%98%E7%94%A8%E6%88%B7%E7%9A%84%E7%8A%B6%E6%80%81"><span class="toc-text">http是如何保存用户的状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E8%BE%93%E5%85%A5url%E5%88%B0%E9%A1%B5%E9%9D%A2%E5%B1%95%E7%A4%BA%E7%9A%84%E8%BF%87%E7%A8%8B"><span class="toc-text">从输入url到页面展示的过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http%E6%A0%87%E5%A4%B4"><span class="toc-text">http标头</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#https%E6%B5%81%E7%A8%8B"><span class="toc-text">https流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http1-0-1-1-2-0-3-0"><span class="toc-text">http1.0 1.1 2.0 3.0</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#http%E5%92%8Chttps%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">http和https的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TLS"><span class="toc-text">TLS</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1814,6 +1814,15 @@
 </ul>
 <h2 id="https流程"><a href="#https流程" class="headerlink" title="https流程"></a>https流程</h2><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240410144518114.png" alt="image-20240410144518114"></p>
 <p>http三次tcp握手<br>ClientHello：客户端通过服务器发送hello消息来发起握手过程<br>ServerHello<br>认证：客户端的证书颁发机构会认证SSL证书，然后发送Certificate报文，报文中包含公开密钥证书。最后服务器发送ServerHelloDone作为hello请求的响应。第一部分握手阶段结束<br>加密阶段：第一个阶段握手完成后，客户端会发送ClientKeyExchange作为响应，这个响应中包含一种称为The premaster secret的密钥字符串，这个字符串就是使用上面公开密钥证书进行加密的字符串。随后客户端发送ChangeCipherSpec，告诉服务端使用私钥解密这个premaster secret的字符串，然后客户端发送finished告诉服务端自己发送完成<br>实现安全的非对称加密：然后，服务器发送ChangeCipherSpec和Finished告诉客户端解密完成，至此实现RSA的非对称加密。</p>
+<h2 id="http1-0-1-1-2-0-3-0"><a href="#http1-0-1-1-2-0-3-0" class="headerlink" title="http1.0 1.1 2.0 3.0"></a>http1.0 1.1 2.0 3.0</h2><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240702120528390.png" alt="image-20240702120528390"></p>
+<ul>
+<li><p>http1.0<br>  无连接，可以使用keep-alive建立长连接，但需要手动<br>  无法复用连接，每次发送请求都需要进行tcp连接<br>  队头阻塞，下一个请求必须在前一个请求响应达到之后才能发送<br>  其他：认为每个服务器绑定唯一一个ip地址，因此在请求消息的url中没有主机名，http1.0没有host域。<br>  不支持断点续传功能，每次都需要传送全部的页面和数据。</p>
+</li>
+<li><p>http1.1<br>  简单：基本的报文格式是header+body，头部信息是key-value的形式<br>  灵活易扩展，请求方法url状态码没有固定死<br>  无状态<br>  明文传输<br>  不安全<br>  长连接<br>  管道传输：在一个tcp连接中，用户可以发送多个请求，但是服务器必须按照接收请求的顺序发送对这些管道化请求的响应。http1.1虽然解决了请求的队头阻塞（应用层），但是没有解决响应的队头阻塞。但是在传输层（tcp）仍存在队头阻塞，tcp中途有数据断开，丢包，导致http无法从缓冲区中得到数据，依然会队头阻塞，当丢包会触发tcp的超时重传。</p>
+</li>
+<li><p>http2.0<br>  头部压缩<br>  二进制格式：在1.0和1.1中报文都是以纯文本的格式简单易读，在2.0中采用了二进制格式。报头和数据体称为：帧-》头信息帧和数据帧<br>  多路复用：能够在一个tcp上进行任意数量的http请求，彻底解决了队头阻塞的问题。<br>  服务端推送：服务端不再是被动响应，也可以主动向客户端发送消息，推送额外的资源。</p>
+</li>
+</ul>
 <h2 id="http和https的区别"><a href="#http和https的区别" class="headerlink" title="http和https的区别"></a>http和https的区别</h2><p>https就是http+tsl&#x2F;ssl组合<br>端口号：http是80，https是443<br>url前缀：http:&#x2F;&#x2F;,https:&#x2F;&#x2F;<br>安全性和资源消耗：http运行在tcp上，所有传输内容为明文，客户端和用户端都无法验证对方的身份。https是运行在ssl&#x2F;tls上的，ssl&#x2F;tls又是运行在tcp上的。所有传输的内容都经过加密，加密采用对称加密，但对称加密的密钥用服务器的证书进行了非对称加密<br>搜索引擎优化：搜索引擎通常会更青睐使用https协议的网站，因为https能够提供更高的安全性和用户隐私保护。使用https协议的网站在搜索结果中可能会被优先显示，从而对seo产生影响。</p>
 <h2 id="TLS"><a href="#TLS" class="headerlink" title="TLS"></a>TLS</h2><p>由记录协议，握手协议，警告协议，变更密码规范协议，扩展协议等几个子协议组成<br>比如ECDHE-ECDSA-AES256-GCM-SHA384<br>基本格式<strong>密钥交换算法-签名算法-对称加密算法-摘要算法</strong>组成，有时候还有分组模式<br>TLS从根本上使用对称加密和非对称加密两种形式</p>
 
