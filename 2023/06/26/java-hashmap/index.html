@@ -93,7 +93,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(72)</small>
+                <small>(73)</small>
             
         </div>
     </li>
@@ -700,7 +700,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         java
-                        <small>(10)</small>
+                        <small>(11)</small>
                         
                     </div>
                     
@@ -767,6 +767,18 @@
                                 </li>
                             
                                 <li>
+                                    <div data-rel="java<--->lock">
+                                        
+                                        lock
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
                                     <div data-rel="java<--->threadlocal">
                                         
                                         threadlocal
@@ -807,6 +819,10 @@
                     </div>
                     
                 </li>
+            
+        
+    
+        
             
         
     
@@ -942,8 +958,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="72">
-<input type="hidden" id="yelog_site_word_count" value="48.5k">
+<input type="hidden" id="yelog_site_posts_number" value="73">
+<input type="hidden" id="yelog_site_word_count" value="48.9k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1591,6 +1607,15 @@
         </a>
         
         
+        <a  class="All java lock "
+           href="/2023/07/08/java-cas/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="java-cas">java-cas</span>
+            <span class="post-date" title="2023-07-08 10:14:08">2023/07/08</span>
+        </a>
+        
+        
         <a  class="All java HashMap "
            href="/2023/06/26/java-hashmap/"
            data-tag=""
@@ -1729,12 +1754,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-06-26 11:34:16'>2023-06-26 11:05</time>
+            Created At : <time class="date" title='Updated At: 2024-07-08 10:11:31'>2023-06-26 11:05</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:400</span>
+        <span>Count:510</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1753,7 +1778,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HashMap%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">HashMap基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HashMap%E7%9A%84%E7%BA%BF%E7%A8%8B%E9%97%AE%E9%A2%98"><span class="toc-text">HashMap的线程问题</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HashMap%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">HashMap基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HashMap%E7%9A%84%E7%BA%BF%E7%A8%8B%E9%97%AE%E9%A2%98"><span class="toc-text">HashMap的线程问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ConcurrentHashMap"><span class="toc-text">ConcurrentHashMap</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1785,7 +1810,8 @@
       return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);
   &#125;
 </code></pre>
-<p>在java1.7之前，多线程下，当一个节点有多个元素需要进行扩容，多个线程对链表进行操作，因为采用的头插法，所以可能导致链表中的节点指向错误，比如链表变为环状，此时查询操作就会陷入死循环。<br>而java1.8采用尾插法解决环状问题，当时多线程下还是可能存在数据覆盖的问题，因为多线程下往往使用ConcurrentHashMap</p>
+<p>在java1.7之前，多线程下，当一个节点有多个元素需要进行扩容，多个线程对链表进行操作，因为采用的头插法，所以可能导致链表中的节点指向错误，比如链表变为环状，此时查询操作就会陷入死循环。<br>而java1.8采用尾插法解决环状问题，当时多线程下还是可能存在数据覆盖的问题，数据覆盖就是两个线程hash位置一样，某一个线程插入的值被另一个线程覆盖掉了，因此多线程下往往使用ConcurrentHashMap。</p>
+<h2 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h2><p>jdk1.7的时候对整个桶数组进行分割分段（分割锁），每一把锁锁住segment容器中的一部分数组，这样提高并发访问率。<br>jdk1.8的时候不用segment直接用数组+链表+红黑树（和jdk1.8中的hashmap一样），采用sysnchronized+cas来操作。</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
