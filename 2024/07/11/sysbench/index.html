@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>go_gc | mhen</title>
+  <title>sysbench | mhen</title>
   <meta name="keywords" content="">
-  <meta name="description" content="go_gc | mhen">
+  <meta name="description" content="sysbench | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="sysbench安装 curl -s https:&#x2F;&#x2F;packagecloud.io&#x2F;install&#x2F;repositories&#x2F;akopytov&#x2F;sysbench&#x2F;script.deb.sh | sudo bash sudo apt -y install sysbench  mysql测试执行以下sysbench命令可以创建，sysbench的内置表。 sysbench --db-driver&#x3D;m">
 <meta property="og:type" content="article">
@@ -1777,9 +1777,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-go-gc" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-sysbench" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">go_gc</h1>
+        <h1 class="article-title">sysbench</h1>
     
     <div class="article-meta">
         
@@ -1789,7 +1789,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="golang">golang</a>
+            <a  data-rel="测试工具">测试工具</a> > 
+            
+            <a  data-rel="测试工具&lt;---&gt;sysbench">sysbench</a>
             
         </span>
         
@@ -1797,12 +1799,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-05-07 11:51:41'>2024-05-07 11:31</time>
+            Created At : <time class="date" title='Updated At: 2024-07-11 15:10:30'>2024-07-11 13:41</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:635</span>
+        <span>Count:589</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1821,7 +1823,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#golang-gc%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6"><span class="toc-text">golang gc回收机制</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#sysbench"><span class="toc-text">sysbench</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql%E6%B5%8B%E8%AF%95"><span class="toc-text">mysql测试</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1837,13 +1839,228 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="golang-gc回收机制"><a href="#golang-gc回收机制" class="headerlink" title="golang gc回收机制"></a>golang gc回收机制</h1><p>程序在内存上被分为堆，栈，全局数据，代码段，数据区五部分<br>在go中栈上内存由编译器管理回收，堆上的内存由编辑器和垃圾收集器负责管理回收</p>
-<p>golang1.3使用标记清除法<br>使用stw暂停程序业务，然后查询可达内存和不可达内存，标记内存，清楚不可达内存，停止stw（后改为标记完就停止stw服务）</p>
-<p>golang1.5使用三色标记法，将程序对象分为白色，黑色和灰色三类，白色表示暂无对象引用的潜在垃圾，其内存可能被回收；灰色表示活跃对象，白色到黑色的中间态，会扫描他所引用的外部对象；黑色表示活跃对象，包括不存在引用外部指针的对象以及从根对象可达的对象<br>三色标记法分五步进行<br>1.将所有对象标记为白色<br>2.从根节点集合出发，将第一次遍历到的节点标记为灰色放入集合列表中<br>3.遍历灰色集合，将灰色节点遍历到的白色节点标记为灰色，并把灰色节点标记为黑色<br>4.循环这个过程<br>5.直到灰色节点集合为空，回收所有的白色节点</p>
-<p>问题：可能中途存在白色对象被黑色对象引用，或者灰色对象和白色对象之间的可达关系遭到破坏，直接进行gc导致回收了不能回收的对象</p>
-<p>因此可采用强三色不变式和弱三色不变式<br>强三色：不允许黑色引用白色<br>弱三色：允许黑色引用白色，但白色对象存在灰色对象对他的引用或者链路存在灰色对象</p>
-<p>插入屏障用来实现强三色：当白色对象被黑色对象引用，白色变为灰色<br>删除屏障用来实现弱三色：如果灰色对象引用的白色对象被删除，白色对象先标记为灰色</p>
-<p>golang1.8三色标记+混合写屏障<br>混合写屏障分下面四步<br>1.GC开始时将栈上可达对象全部标记为黑色（不需要二次扫描，无需STW）<br>2.GC期间，任何栈上创建的新对象均为黑色<br>3.被删除引用的对象标记为灰色<br>4.被添加引用的对象标记为灰色</p>
+        <h1 id="sysbench"><a href="#sysbench" class="headerlink" title="sysbench"></a>sysbench</h1><p>安装</p>
+<pre><code class="bash">curl -s https://packagecloud.io/install/repositories/akopytov/sysbench/script.deb.sh | sudo bash
+sudo apt -y install sysbench
+</code></pre>
+<h2 id="mysql测试"><a href="#mysql测试" class="headerlink" title="mysql测试"></a>mysql测试</h2><p>执行以下sysbench命令可以创建，sysbench的内置表。</p>
+<pre><code class="text">sysbench --db-driver=mysql \
+--mysql-host=127.0.0.1 \
+--mysql-port=33106 \
+--mysql-user=root \
+--mysql-password=Abc123456 \
+--mysql-db=test_db \
+--table_size=25000 \
+--tables=250 \
+--events=0 \
+--time=600 \
+oltp_read_write prepare
+</code></pre>
+<p>只写</p>
+<pre><code class="text">##准备数据
+sysbench --db-driver=mysql \
+--mysql-host=XXX \
+--mysql-port=XXX \
+--mysql-user=XXX \
+--mysql-password=XXX \
+--mysql-db=XXX \
+--table_size=XXX \
+--tables=XXX \
+oltp_write_only run
+
+
+##运行 workload
+sysbench --db-driver=mysql \
+--mysql-host=XXX \
+--mysql-port=XXX \
+--mysql-user=XXX \
+--mysql-password=XXX \
+--mysql-db=XXX \
+--table_size=XXX \
+--tables=XXX \
+--events=0 \
+--time=600 \
+--threads=192 \
+--percentile=95 \
+--report-interval=1 \
+oltp_write_only run
+
+##清理数据
+sysbench --db-driver=mysql \
+--mysql-host=XXX \
+--mysql-port=XXX \
+--mysql-user=XXX \
+--mysql-password=XXX \
+--mysql-db=XXX \
+--table_size=XXX \
+--tables=XXX \ 
+oltp_write_only cleanup
+</code></pre>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240711140848333.png"></p>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240711142412779.png" alt="image-20240711142412779"></p>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240711141817805.png" alt="image-20240711141817805"></p>
+<p>只读（point select）</p>
+<pre><code class="text">##准备数据
+sysbench --db-driver=mysql \
+--mysql-host=XXX \
+--mysql-port=XXX \
+--mysql-user=XXX \
+--mysql-password=XXX \
+--mysql-db=XXX \
+--table_size=XXX \
+--tables=XXX \
+oltp_read_only prepare
+
+##运行 workload
+sysbench --db-driver=mysql \
+--mysql-host=XXX \
+--mysql-port=XXX \
+--mysql-user=XXX \
+--mysql-password=XXX \
+--mysql-db=XXX \
+--table_size=XXX \
+--tables=XXX \
+--events=0 \
+--time=600 \
+--threads=512 \
+--percentile=95 \
+--range_selects=0 \
+--skip-trx=1 \
+--report-interval=1 \
+oltp_read_only run
+
+##清理数据
+sysbench --db-driver=mysql \
+--mysql-host=XXX \
+--mysql-port=XXX \
+--mysql-user=XXX \
+--mysql-password=XXX \
+--mysql-db=XXX \
+--table_size=XXX \
+--tables=XXX \
+oltp_read_only cleanup
+</code></pre>
+<p>只读（range select）</p>
+<pre><code class="text">##准备数据
+sysbench --db-driver=mysql \
+--mysql-host=XXX \
+--mysql-port=XXX \
+--mysql-user=XXX \
+--mysql-password=XXX \
+--mysql-db=XXX \
+--table_size=XXX \
+--tables=XXX \
+oltp_read_only prepare
+
+##运行 workload
+sysbench --db-driver=mysql \
+--mysql-host=XXX \
+--mysql-port=XXX \
+--mysql-user=XXX \
+--mysql-password=XXX \
+--mysql-db=XXX \
+--table_size=XXX \
+--tables=XXX \
+--events=0 \
+--time=600 \
+--threads=512 \
+--percentile=95 \
+--skip-trx=1 \
+--report-interval=1 \
+oltp_read_only run
+
+##清理数据
+sysbench --db-driver=mysql \
+--mysql-host=XXX \
+--mysql-port=XXX \
+--mysql-user=XXX \
+--mysql-password=XXX \
+--mysql-db=XXX \
+--table_size=XXX \
+--tables=XXX \
+oltp_read_only cleanup
+</code></pre>
+<p>混合读写point select</p>
+<pre><code class="TEXT">
+##准备数据
+sysbench --db-driver=mysql \
+--mysql-host=XXX \
+--mysql-port=XXX \
+--mysql-user=XXX \
+--mysql-password=XXX \
+--mysql-db=XXX \
+--table_size=XXX \
+--tables=XXX \
+oltp_read_write run
+
+##运行 workload
+sysbench --db-driver=mysql \
+--mysql-host=XXX \
+--mysql-port=XXX \
+--mysql-user=XXX \
+--mysql-password=XXX \
+--mysql-db=XXX \
+--table_size=XXX \
+--tables=XXX \
+--events=0 \
+--time=600 \
+--range_selects=0 \
+--threads=XXX \
+--percentile=95 \
+--report-interval=1 \
+oltp_read_write run
+
+##清理数据
+sysbench --db-driver=mysql \
+--mysql-host=XXX \
+--mysql-port=XXX \
+--mysql-user=XXX \
+--mysql-password=XXX \
+--mysql-db=XXX \
+--table_size=XXX \
+--tables=XXX \
+oltp_read_write cleanup
+</code></pre>
+<p>混合读写range select</p>
+<pre><code class="text">
+##准备数据
+sysbench --db-driver=mysql \
+--mysql-host=XXX \
+--mysql-port=XXX \
+--mysql-user=XXX \
+--mysql-password=XXX \
+--mysql-db=XXX \
+--table_size=XXX \
+--tables=XXX \
+oltp_read_write run
+
+##运行 workload
+sysbench --db-driver=mysql \
+--mysql-host=XXX \
+--mysql-port=XXX \
+--mysql-user=XXX \
+--mysql-password=XXX \
+--mysql-db=XXX \
+--table_size=XXX \
+--tables=XXX \
+--events=0 \
+--time=600 \
+--threads=XXX \
+--percentile=95 \
+--report-interval=1 \
+oltp_read_write run
+
+##清理数据
+sysbench --db-driver=mysql \
+--mysql-host=XXX \
+--mysql-port=XXX \
+--mysql-user=XXX \
+--mysql-password=XXX \
+--mysql-db=XXX \
+--table_size=XXX \
+--tables=XXX \
+oltp_read_write cleanup
+</code></pre>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
