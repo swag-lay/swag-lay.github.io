@@ -16,7 +16,7 @@ sudo apt -y install sysbench
 
 ## mysql测试
 执行以下sysbench命令可以创建，sysbench的内置表。
-```text
+```bash
 sysbench --db-driver=mysql \
 --mysql-host=127.0.0.1 \
 --mysql-port=33106 \
@@ -31,7 +31,7 @@ oltp_read_write prepare
 ```
 
 只写
-```text
+```bash
 ##准备数据
 sysbench --db-driver=mysql \
 --mysql-host=XXX \
@@ -81,7 +81,7 @@ oltp_write_only cleanup
 
 只读（point select）
 
-```text
+```bash
 ##准备数据
 sysbench --db-driver=mysql \
 --mysql-host=XXX \
@@ -125,7 +125,7 @@ oltp_read_only cleanup
 ```
 
 只读（range select）
-```text
+```bash
 ##准备数据
 sysbench --db-driver=mysql \
 --mysql-host=XXX \
@@ -167,7 +167,7 @@ oltp_read_only cleanup
 ```
 
 混合读写point select
-```TEXT
+```bash
 
 ##准备数据
 sysbench --db-driver=mysql \
@@ -211,7 +211,7 @@ oltp_read_write cleanup
 ```
 
 混合读写range select
-```text
+```bash
 
 ##准备数据
 sysbench --db-driver=mysql \
