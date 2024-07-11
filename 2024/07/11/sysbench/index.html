@@ -1823,7 +1823,7 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-07-11 15:10:30'>2024-07-11 13:41</time>
+            Created At : <time class="date" title='Updated At: 2024-07-11 15:53:47'>2024-07-11 13:41</time>
         
     </div>
     <div class="article-meta">
@@ -1868,7 +1868,7 @@
 sudo apt -y install sysbench
 </code></pre>
 <h2 id="mysql测试"><a href="#mysql测试" class="headerlink" title="mysql测试"></a>mysql测试</h2><p>执行以下sysbench命令可以创建，sysbench的内置表。</p>
-<pre><code class="text">sysbench --db-driver=mysql \
+<pre><code class="bash">sysbench --db-driver=mysql \
 --mysql-host=127.0.0.1 \
 --mysql-port=33106 \
 --mysql-user=root \
@@ -1881,7 +1881,7 @@ sudo apt -y install sysbench
 oltp_read_write prepare
 </code></pre>
 <p>只写</p>
-<pre><code class="text">##准备数据
+<pre><code class="bash">##准备数据
 sysbench --db-driver=mysql \
 --mysql-host=XXX \
 --mysql-port=XXX \
@@ -1924,7 +1924,7 @@ oltp_write_only cleanup
 <p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240711142412779.png" alt="image-20240711142412779"></p>
 <p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240711141817805.png" alt="image-20240711141817805"></p>
 <p>只读（point select）</p>
-<pre><code class="text">##准备数据
+<pre><code class="bash">##准备数据
 sysbench --db-driver=mysql \
 --mysql-host=XXX \
 --mysql-port=XXX \
@@ -1965,7 +1965,7 @@ sysbench --db-driver=mysql \
 oltp_read_only cleanup
 </code></pre>
 <p>只读（range select）</p>
-<pre><code class="text">##准备数据
+<pre><code class="bash">##准备数据
 sysbench --db-driver=mysql \
 --mysql-host=XXX \
 --mysql-port=XXX \
@@ -2005,7 +2005,7 @@ sysbench --db-driver=mysql \
 oltp_read_only cleanup
 </code></pre>
 <p>混合读写point select</p>
-<pre><code class="TEXT">
+<pre><code class="bash">
 ##准备数据
 sysbench --db-driver=mysql \
 --mysql-host=XXX \
@@ -2046,7 +2046,7 @@ sysbench --db-driver=mysql \
 oltp_read_write cleanup
 </code></pre>
 <p>混合读写range select</p>
-<pre><code class="text">
+<pre><code class="bash">
 ##准备数据
 sysbench --db-driver=mysql \
 --mysql-host=XXX \
