@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>mysql-dml | mhen</title>
+  <title>network-spdy | mhen</title>
   <meta name="keywords" content="">
-  <meta name="description" content="mysql-dml | mhen">
+  <meta name="description" content="network-spdy | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="SPDYgoogle开发的基于tcp的应用层协议，在于通过压缩，多路复用和优先级来缩短网页的加载时间和提高安全性。 在性能上对http进行优化，核心在于尽量减少连接个数，对于http头部并没有太大的修改。具体，spdy使用http的方法和页眉，但是删除了一些头并重写了http中管理连接和数据转移格式的部分，所以基本上是兼容http的。 目前google只是在ssl之上增加会话层来实现spdy，ht">
 <meta property="og:type" content="article">
@@ -1801,9 +1801,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-mysql-dml" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-network-spdy" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">mysql-dml</h1>
+        <h1 class="article-title">network-spdy</h1>
     
     <div class="article-meta">
         
@@ -1813,9 +1813,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="数据库">数据库</a> > 
+            <a  data-rel="计算机网络">计算机网络</a> > 
             
-            <a  data-rel="数据库&lt;---&gt;mysql">mysql</a>
+            <a  data-rel="计算机网络&lt;---&gt;spdy">spdy</a>
             
         </span>
         
@@ -1823,12 +1823,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2023-09-01 09:31:39'>2023-08-25 18:14</time>
+            Created At : <time class="date" title='Updated At: 2024-07-11 15:42:42'>2024-07-11 15:17</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:165</span>
+        <span>Count:336</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1847,7 +1847,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-dml"><span class="toc-text">mysql数据库基本操作-dml</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E6%95%B0%E6%8D%AE"><span class="toc-text">添加数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E6%95%B0%E6%8D%AE"><span class="toc-text">修改数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%95%B0%E6%8D%AE"><span class="toc-text">删除数据</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SPDY"><span class="toc-text">SPDY</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1863,27 +1863,17 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="mysql数据库基本操作-dml"><a href="#mysql数据库基本操作-dml" class="headerlink" title="mysql数据库基本操作-dml"></a>mysql数据库基本操作-dml</h1><p>dml：data manipulation language，用来对数据库中表的数据记录进行增删改操作</p>
-<h2 id="添加数据"><a href="#添加数据" class="headerlink" title="添加数据"></a>添加数据</h2><pre><code class="mysql">给指定字段添加数据
-insert into 表名 (字段名1,字段名2) values (值1,值2,...);
-
-给全部字段添加数据
-insert into 表名 values ();
-
-批量添加数据
-insert into 表名 () values (),();
-insert into 表名 values (),();
-</code></pre>
-<p>注意：</p>
-<ul>
-<li>字段顺序和值的顺序一一对应</li>
-<li>字符串和日期型数据应该包含在引号中</li>
-<li>数据大小在字段的规定范围中</li>
-</ul>
-<h2 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h2><pre><code class="mysql">update 表名 set 字段名1=值1 [where 条件];
-</code></pre>
-<h2 id="删除数据"><a href="#删除数据" class="headerlink" title="删除数据"></a>删除数据</h2><pre><code class="mysql">delete from 表名 [where 条件];
-</code></pre>
+        <h1 id="SPDY"><a href="#SPDY" class="headerlink" title="SPDY"></a>SPDY</h1><p>google开发的基于tcp的应用层协议，在于通过压缩，多路复用和优先级来缩短网页的加载时间和提高安全性。</p>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240711151904587.png" alt="image-20240711151904587"><br>在性能上对http进行优化，核心在于尽量减少连接个数，对于http头部并没有太大的修改。具体，spdy使用http的方法和页眉，但是删除了一些头并重写了http中管理连接和数据转移格式的部分，所以基本上是兼容http的。</p>
+<p>目前google只是在ssl之上增加会话层来实现spdy，http的请求格式保持不变，即现有的所有服务端应用均不用做任何修改。因此，目前spdy目的是为了加强http。默认规定建立在tls上个，即url secheme为https</p>
+<p>优点</p>
+<ol>
+<li>多路复用 请求优化<br>在一个spdy连接中可以无限个并发请求，允许多个并发http请求共用一个tcp会话。<br>多路复用可以设置优先级，不像传统http那样严格按照先入先出一个个处理。</li>
+<li>支持服务器推送技术<br>服务器可以主动向客户端发起通信 向客户端推送数据，这样整个网络一直保持一个快速状态。</li>
+<li>spdy压缩了http头<br>舍去不必要的头信息。</li>
+<li>强制使用ssl</li>
+</ol>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/spdy_session.png" alt="spdy_session"></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
