@@ -1309,6 +1309,27 @@
     
     
     <entry>
+      <title>docker</title>
+      <link href="/2023/07/16/docker/"/>
+      <url>/2023/07/16/docker/</url>
+      
+        <content type="html"><![CDATA[<p>docker是开源的应用容器引擎<br>开发者将他们的应用以依赖都打包到一个轻量级，可移植的容器中，然后实现虚拟化</p><h2 id="什么是docker"><a href="#什么是docker" class="headerlink" title="什么是docker"></a>什么是docker</h2><p>docker是一个c&#x2F;s架构，守护进程运行在主机上，然后通过socket连接从客户端访问docker守护进程。<br>守护进程从客户端接收命令，按照命令管理运行在主机上的容器<br><strong>一个docker容器，是一个运行时环境，可以简单理解为进程运行的集装箱</strong></p><h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><ul><li>web应用的自动化打包和发布</li><li>自动化测试和持续集成，发布</li><li>在服务器中部署和调整数据库或其他的后台应用</li></ul><h2 id="docker和vm的区别"><a href="#docker和vm的区别" class="headerlink" title="docker和vm的区别"></a>docker和vm的区别</h2><ol><li><p>docker有着更少的抽象层</p></li><li><p>docker利用宿主机的内核，vm需要的是guest os<br><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240716144051219.png" alt="image-20240716144051219"><br>两者的区别：</p></li></ol><ul><li>vm直接在宿主机，宿主机操作系统的基础上创建虚拟层，虚拟化的操作系统，虚拟化的仓库，然后再安装应用。</li><li>docker容器再宿主机，宿主机操作系统上先创建docker引擎，在引擎的基础上安装应用。</li></ul><ol start="3"><li>docker启动速度块，磁盘使用一般在mb，性能接近原生，单机支持上千个容器</li></ol><h2 id="docker的技术基础"><a href="#docker的技术基础" class="headerlink" title="docker的技术基础"></a>docker的技术基础</h2><h3 id="namespace"><a href="#namespace" class="headerlink" title="namespace"></a>namespace</h3><p>命名空间是容器隔离的基础，保持A容器看不到B容器<br>通常一个容器包含6个命名空间：User，Mnt，Network，UTS，IPC，Pid</p><pre><code class="bash">docker inspect -f &quot;&#123;&#123;.State.Pid&#125;&#125;&quot; 容器idls -l /proc/xxxx/ns</code></pre><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240716150743606.png" alt="image-20240716150743606"><br>cgroups（控制组）容器资源统计和隔离<br>主要用到的控制组包括：cpu，blkio，device，freezer，memory<br>因此docker的本质就是限制了的Namespaces，cgroup，具有逻辑上独立文件系统和网络的一个进程</p><p><strong>pid隔离</strong><br>因为存在命名空间 彼此隔离，所以docker中不同容器是否可以运行相同pid呢？<br>答案是可以<br>此处用到了pid namespace，其实是linux创建新进程时的一个可选参数，在linux系统中创建进程的系统调用是clone方法</p><pre><code class="cpp">int clone(int (*fn) (void *)，void *child stack,          int flags， void *arg， . . .         /* pid_ t *ptid, void *newtls, pid_ t *ctid */ ) ;</code></pre><p>通过调用这个方法，改进程会获取一个独立的进程空间，他看不到宿主机上的其他进程，这也就是在容器内执行ps命令的结果。</p><p>1.进程隔离<br>    <img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240716162010825.png" alt="image-20240716162010825"><br>在docker容器内部打印进程与宿主机的进程隔离</p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240716162250430.png" alt="image-20240716162250430"></p><p><strong>网络隔离</strong><br>在容器之间虽然可以通过命名空间创建隔离的网络环境，但是docker中的服务也需要和外界相连。<br>docker有四种网络模式：host，container，none，bridge<br>默认bridge模式，此模式下除了分配隔离的网络命名空间，还会给容器设置ip，所有容器的网桥和主机上的虚拟网桥docker0相连。</p><h3 id="unionfs联合文件系统"><a href="#unionfs联合文件系统" class="headerlink" title="unionfs联合文件系统"></a>unionfs联合文件系统</h3><p><strong>镜像</strong><br>image是docker部署的基本单位，一个image包含了我们的程序文件，以及这个程序依赖的资源的环境。</p><p>unionfs是一种为linux操作系统设计的用于把多个文件系统联合到同一个挂载点的文件系统服务。<br>AUFS是unionfs的升级版，将不同文件夹中的层联合到了同一个文件夹中，这些文件夹在AUFS中称作分支，整个联合的过程被称为联合挂载。<br>在linux中我们采用mount联合文件，比如我们将服务的源代码和一个存放代码修改记录的目录联合起来，前者设置只读权限，后者设置读写权限，那么一切对源代码目录的修改都只会影响那个存放修改的目录，不会污染原始的代码</p><p><strong>dockerde的镜像分层机制</strong></p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240716155805197.png" alt="image-20240716155805197"></p><p>docker image是一个层级结构，最底层的layer为BaseImage（一般是操心系统的iso镜像），然后顺序执行每一条指令，生成的layer按照入栈的顺序逐渐累加，最终形成一个Image<br>layer和image的关系与AUFS中的联合目录和挂载点的关系比较相似</p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240716155718721.png" alt="image-20240716155718721"></p><h3 id="CGroups物理资源分组"><a href="#CGroups物理资源分组" class="headerlink" title="CGroups物理资源分组"></a>CGroups物理资源分组</h3><p>命名空间不能为我们提供物理资源上的隔离，比如CPU或内存。<br>比如某个容器运行cpu密集型任务，影响其他容器的执行性能和效率。因此Control Groups（简称CGroups）就是能够隔离主机器上的物理资源</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 云原生 </category>
+          
+          <category> docker </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>java-cas</title>
       <link href="/2023/07/08/java-cas/"/>
       <url>/2023/07/08/java-cas/</url>

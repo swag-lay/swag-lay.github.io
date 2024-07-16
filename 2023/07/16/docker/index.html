@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>ssl/stl | mhen</title>
+  <title>docker | mhen</title>
   <meta name="keywords" content="">
-  <meta name="description" content="ssl/stl | mhen">
+  <meta name="description" content="docker | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="SPDYgoogle开发的基于tcp的应用层协议，在于通过压缩，多路复用和优先级来缩短网页的加载时间和提高安全性。 在性能上对http进行优化，核心在于尽量减少连接个数，对于http头部并没有太大的修改。具体，spdy使用http的方法和页眉，但是删除了一些头并重写了http中管理连接和数据转移格式的部分，所以基本上是兼容http的。 目前google只是在ssl之上增加会话层来实现spdy，ht">
 <meta property="og:type" content="article">
@@ -1826,9 +1826,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-ssl-stl" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-docker" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">ssl/stl</h1>
+        <h1 class="article-title">docker</h1>
     
     <div class="article-meta">
         
@@ -1838,9 +1838,9 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="计算机网络">计算机网络</a> > 
+            <a  data-rel="云原生">云原生</a> > 
             
-            <a  data-rel="计算机网络&lt;---&gt;https—ssl">https—ssl</a>
+            <a  data-rel="云原生&lt;---&gt;docker">docker</a>
             
         </span>
         
@@ -1848,12 +1848,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-07-03 11:01:15'>2024-06-20 15:59</time>
+            Created At : <time class="date" title='Updated At: 2024-07-16 16:58:19'>2023-07-16 11:57</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:795</span>
+        <span>Count:1.1k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1872,7 +1872,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#SSL-amp-STL"><span class="toc-text">SSL&amp;STL</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85ssl"><span class="toc-text">服务器安装ssl</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E6%95%B4%E4%B8%AASSL%E7%9A%84%E8%BF%9E%E6%8E%A5%E8%BF%87%E7%A8%8B%E4%B8%8D%E5%85%A8%E9%83%A8%E9%87%87%E7%94%A8%E9%9D%9E%E5%AF%B9%E7%A7%B0%E5%8A%A0%E5%AF%86"><span class="toc-text">为什么整个SSL的连接过程不全部采用非对称加密</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%87%E8%AE%BE%E8%BF%99%E4%B8%AA%E8%AF%81%E4%B9%A6%E4%B8%8D%E6%98%AF%E7%94%B1%E4%B8%80%E4%B8%AA%E5%8F%AF%E4%BF%A1%E7%9A%84%E4%BA%BA%E5%8F%91%E7%9A%84%EF%BC%8C%E4%BD%86%E6%98%AF%E8%BF%99%E4%B8%AA%E8%AF%81%E4%B9%A6%E6%9C%AC%E8%BA%AB%E6%98%AF%E5%90%88%E6%B3%95%E7%9A%84%EF%BC%8C%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%80%8E%E4%B9%88%E7%9F%A5%E9%81%93%E5%93%AA%E4%BA%9B%E8%AF%81%E4%B9%A6%E5%8F%AF%E4%BB%A5%E4%BF%A1%E4%BB%BB%EF%BC%8C%E5%93%AA%E4%BA%9B%E4%B8%8D%E8%83%BD%E4%BF%A1%E4%BB%BB%EF%BC%9F"><span class="toc-text">假设这个证书不是由一个可信的人发的，但是这个证书本身是合法的，客户端怎么知道哪些证书可以信任，哪些不能信任？</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFdocker"><span class="toc-text">什么是docker</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">应用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker%E5%92%8Cvm%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">docker和vm的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#docker%E7%9A%84%E6%8A%80%E6%9C%AF%E5%9F%BA%E7%A1%80"><span class="toc-text">docker的技术基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#namespace"><span class="toc-text">namespace</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#unionfs%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-text">unionfs联合文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CGroups%E7%89%A9%E7%90%86%E8%B5%84%E6%BA%90%E5%88%86%E7%BB%84"><span class="toc-text">CGroups物理资源分组</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1888,50 +1888,47 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="SSL-amp-STL"><a href="#SSL-amp-STL" class="headerlink" title="SSL&amp;STL"></a>SSL&amp;STL</h1><p>ssl握手使用三个密钥来建立私密连接：</p>
-<ul>
-<li>私有密钥</li>
-<li>公共密钥</li>
-<li>会话密钥<br>当数据用私钥加密的时候，只能用公钥才能解密。大通过私钥也是唯一能够解密公钥加密信息的东西。</li>
+        <p>docker是开源的应用容器引擎<br>开发者将他们的应用以依赖都打包到一个轻量级，可移植的容器中，然后实现虚拟化</p>
+<h2 id="什么是docker"><a href="#什么是docker" class="headerlink" title="什么是docker"></a>什么是docker</h2><p>docker是一个c&#x2F;s架构，守护进程运行在主机上，然后通过socket连接从客户端访问docker守护进程。<br>守护进程从客户端接收命令，按照命令管理运行在主机上的容器<br><strong>一个docker容器，是一个运行时环境，可以简单理解为进程运行的集装箱</strong></p>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><ul>
+<li>web应用的自动化打包和发布</li>
+<li>自动化测试和持续集成，发布</li>
+<li>在服务器中部署和调整数据库或其他的后台应用</li>
 </ul>
-<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/9d30270e7f052b054fb074b81decb44a.png" alt="img"></p>
-<ol>
-<li>客户端连接受ssl保护的服务端</li>
-<li>发送ssl证书副本和公钥给客户端</li>
-<li>检查证书</li>
-<li>客户端用公钥加密信息，创建对称会话密钥</li>
-<li>服务端用私钥解密会话密钥，发送加密确定以启动会话</li>
-<li>之后的所有数据都用会话密钥加密</li>
+<h2 id="docker和vm的区别"><a href="#docker和vm的区别" class="headerlink" title="docker和vm的区别"></a>docker和vm的区别</h2><ol>
+<li><p>docker有着更少的抽象层</p>
+</li>
+<li><p>docker利用宿主机的内核，vm需要的是guest os<br><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240716144051219.png" alt="image-20240716144051219"><br>两者的区别：</p>
+</li>
 </ol>
-<p>现在往往采用tls<br>gin对tls启动的实现</p>
-<pre><code class="go">func (engine *Engine) RunTLS(addr, certFile, keyFile string) (err error) &#123;
-    debugPrint(&quot;Listening and serving HTTPS on %s\n&quot;, addr)
-    defer func() &#123; debugPrintError(err) &#125;()
-
-    if engine.isUnsafeTrustedProxies() &#123;
-        debugPrint(&quot;[WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.\n&quot; +
-            &quot;Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.&quot;)
-    &#125;
-
-    err = http.ListenAndServeTLS(addr, certFile, keyFile, engine.Handler())
-    return
-&#125;
+<ul>
+<li>vm直接在宿主机，宿主机操作系统的基础上创建虚拟层，虚拟化的操作系统，虚拟化的仓库，然后再安装应用。</li>
+<li>docker容器再宿主机，宿主机操作系统上先创建docker引擎，在引擎的基础上安装应用。</li>
+</ul>
+<ol start="3">
+<li>docker启动速度块，磁盘使用一般在mb，性能接近原生，单机支持上千个容器</li>
+</ol>
+<h2 id="docker的技术基础"><a href="#docker的技术基础" class="headerlink" title="docker的技术基础"></a>docker的技术基础</h2><h3 id="namespace"><a href="#namespace" class="headerlink" title="namespace"></a>namespace</h3><p>命名空间是容器隔离的基础，保持A容器看不到B容器<br>通常一个容器包含6个命名空间：User，Mnt，Network，UTS，IPC，Pid</p>
+<pre><code class="bash">docker inspect -f &quot;&#123;&#123;.State.Pid&#125;&#125;&quot; 容器id
+ls -l /proc/xxxx/ns
 </code></pre>
-<p><strong>证书验证阶段（使用非对称加密）</strong><br>当服务器将报文发送给客户端，第一个报文中包含证书信息，第二个报文包含公钥信息。<br>客户端根据自己的证书列表来确认服务器是否可信。<br>用CA机构的公钥对数字签名解密，用证书的签名算法对签名进行hash<br>比较解密的数字签名和证书内容的hash值。</p>
-<h2 id="服务器安装ssl"><a href="#服务器安装ssl" class="headerlink" title="服务器安装ssl"></a>服务器安装ssl</h2><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/a2e2486cabbefc6f3b867ccb78b7d243.png" alt="img"></p>
-<ol>
-<li>创建密钥和发送证书签名请求<br>服务器需要生成私钥和公钥，然后发送签名请求</li>
-<li>将CSR（签名请求）发送到证书颁布机构<br>将加密的数据文件提交给CA获取证书，需要选择一个受网络浏览器（DigiCert&#x2F;SSL.com）公开信任的CA</li>
-<li>在服务器上安装SSL证书<br>通常需要安装一个中间证书，它通过将证书连接到CA的根证书来确认证书的真实性<br>中间的安装步骤根据具体说明</li>
-</ol>
-<h3 id="为什么整个SSL的连接过程不全部采用非对称加密"><a href="#为什么整个SSL的连接过程不全部采用非对称加密" class="headerlink" title="为什么整个SSL的连接过程不全部采用非对称加密"></a>为什么整个SSL的连接过程不全部采用非对称加密</h3><p>非对称加密算法复杂，加密时间长，效率低，但是安全性高，所以我们只在tsl连接阶段使用，后面的数据传输同一使用对称加密。</p>
-<h3 id="假设这个证书不是由一个可信的人发的，但是这个证书本身是合法的，客户端怎么知道哪些证书可以信任，哪些不能信任？"><a href="#假设这个证书不是由一个可信的人发的，但是这个证书本身是合法的，客户端怎么知道哪些证书可以信任，哪些不能信任？" class="headerlink" title="假设这个证书不是由一个可信的人发的，但是这个证书本身是合法的，客户端怎么知道哪些证书可以信任，哪些不能信任？"></a>假设这个证书不是由一个可信的人发的，但是这个证书本身是合法的，客户端怎么知道哪些证书可以信任，哪些不能信任？</h3><p>证书的信任不仅却决于技术上是否是合法的，不仅仅基于证书自身的有效性，而是基于谁发布了这个证书。</p>
-<ul>
-<li>受信任的CA列表：内置的根信任列表。</li>
-<li>合法但不受信任：这种情况下客户端是不会信任的，浏览器会提示警告。</li>
-<li>手动导入证书：在开发或者测试中开发者手动导入的信任。</li>
-<li>私有CA&#x2F;企业CA：仅在组织内部受信任，通过为了保障员工的设备信任这些证书，会部署到设备上。</li>
-</ul>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240716150743606.png" alt="image-20240716150743606"><br>cgroups（控制组）容器资源统计和隔离<br>主要用到的控制组包括：cpu，blkio，device，freezer，memory<br>因此docker的本质就是限制了的Namespaces，cgroup，具有逻辑上独立文件系统和网络的一个进程</p>
+<p><strong>pid隔离</strong><br>因为存在命名空间 彼此隔离，所以docker中不同容器是否可以运行相同pid呢？<br>答案是可以<br>此处用到了pid namespace，其实是linux创建新进程时的一个可选参数，在linux系统中创建进程的系统调用是clone方法</p>
+<pre><code class="cpp">int clone(int (*fn) (void *)，void *child stack,
+          int flags， void *arg， . . .
+         /* pid_ t *ptid, void *newtls, pid_ t *ctid */ ) ;
+</code></pre>
+<p>通过调用这个方法，改进程会获取一个独立的进程空间，他看不到宿主机上的其他进程，这也就是在容器内执行ps命令的结果。</p>
+<p>1.进程隔离<br>    <img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240716162010825.png" alt="image-20240716162010825"><br>在docker容器内部打印进程与宿主机的进程隔离</p>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240716162250430.png" alt="image-20240716162250430"></p>
+<p><strong>网络隔离</strong><br>在容器之间虽然可以通过命名空间创建隔离的网络环境，但是docker中的服务也需要和外界相连。<br>docker有四种网络模式：host，container，none，bridge<br>默认bridge模式，此模式下除了分配隔离的网络命名空间，还会给容器设置ip，所有容器的网桥和主机上的虚拟网桥docker0相连。</p>
+<h3 id="unionfs联合文件系统"><a href="#unionfs联合文件系统" class="headerlink" title="unionfs联合文件系统"></a>unionfs联合文件系统</h3><p><strong>镜像</strong><br>image是docker部署的基本单位，一个image包含了我们的程序文件，以及这个程序依赖的资源的环境。</p>
+<p>unionfs是一种为linux操作系统设计的用于把多个文件系统联合到同一个挂载点的文件系统服务。<br>AUFS是unionfs的升级版，将不同文件夹中的层联合到了同一个文件夹中，这些文件夹在AUFS中称作分支，整个联合的过程被称为联合挂载。<br>在linux中我们采用mount联合文件，比如我们将服务的源代码和一个存放代码修改记录的目录联合起来，前者设置只读权限，后者设置读写权限，那么一切对源代码目录的修改都只会影响那个存放修改的目录，不会污染原始的代码</p>
+<p><strong>dockerde的镜像分层机制</strong></p>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240716155805197.png" alt="image-20240716155805197"></p>
+<p>docker image是一个层级结构，最底层的layer为BaseImage（一般是操心系统的iso镜像），然后顺序执行每一条指令，生成的layer按照入栈的顺序逐渐累加，最终形成一个Image<br>layer和image的关系与AUFS中的联合目录和挂载点的关系比较相似</p>
+<p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240716155718721.png" alt="image-20240716155718721"></p>
+<h3 id="CGroups物理资源分组"><a href="#CGroups物理资源分组" class="headerlink" title="CGroups物理资源分组"></a>CGroups物理资源分组</h3><p>命名空间不能为我们提供物理资源上的隔离，比如CPU或内存。<br>比如某个容器运行cpu密集型任务，影响其他容器的执行性能和效率。因此Control Groups（简称CGroups）就是能够隔离主机器上的物理资源</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
