@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>redis-string</title>
+      <link href="/2024/07/17/redis-string/"/>
+      <url>/2024/07/17/redis-string/</url>
+      
+        <content type="html"><![CDATA[<h1 id="string的实现"><a href="#string的实现" class="headerlink" title="string的实现"></a>string的实现</h1><p>redis的string是动态字符串，是可以修改的字符串，内部结构实现上类似于java的arraylist，采用预分配冗余空间的方式来减少内存的频繁分配。</p><ul><li>一般字符串分配的空间capacity一般高于实际字符串长度len</li><li>字符串长度小于1M的时候，扩容都是加倍现有的空间</li><li>超过1M，扩容时一次只会多扩1M的空间</li><li>字符串最大长度为512M</li><li>字符串是由多个字节组成，每个字节由8个bit组成，也就是说一个字符串看成多个bit的组合</li></ul><h2 id="string的使用场景"><a href="#string的使用场景" class="headerlink" title="string的使用场景"></a>string的使用场景</h2><p>计数，缓存基础数据，限制请求次数，分布式下共享session，签到</p><p>分布式下共享session：<br>用redis将用户的session信息进行集中的管理，每个用户登录都从redis中集中获取<br>session除了redis存储外，<br>还可以采用session会话保持：用户每次请求都在同一台机器上，<br>session会话复制：每个应用服务器中的session信息复制同步到其他服务器节点中</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> redis </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>network-spdy</title>
       <link href="/2024/07/11/network-spdy/"/>
       <url>/2024/07/11/network-spdy/</url>
