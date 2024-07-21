@@ -4,6 +4,44 @@
   
     
     <entry>
+      <title>k8s-scheduler</title>
+      <link href="/2024/07/21/k8s-scheduler/"/>
+      <url>/2024/07/21/k8s-scheduler/</url>
+      
+        <content type="html"><![CDATA[<h2 id="Kube-scheduler"><a href="#Kube-scheduler" class="headerlink" title="Kube-scheduler"></a>Kube-scheduler</h2><p>起承上启下的作用，首先负责接收controller manager创建新的pod，为其安排node，其次安排工作结束之后，目标node上的kubelet服务进程接管后续工作。</p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240721165644256.png" alt="image-20240721165644256"></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 云原生 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>rpc</title>
+      <link href="/2024/07/21/rpc/"/>
+      <url>/2024/07/21/rpc/</url>
+      
+        <content type="html"><![CDATA[<h1 id="RPC"><a href="#RPC" class="headerlink" title="RPC"></a>RPC</h1><p>远程服务调用，一个应用部署在A服务器上，想要调用B服务器上提供的应用函数，由于不在一个内存空间，不能直接调用，需要通过网络来表达调用的语义和传达调用的数据。</p><ol><li>Call ID映射</li><li>序列化和反序列化</li><li>网络传输<br> 网络传输层需要把Call ID和序列化后的参数字节流传给服务端，然后在把序列化之后的调用结果传回客户端。因此只要能完成这两者的都可以当作传输层使用，使用的协议是不限的，只要能完成传输就行，尽管大部分RPC框架都使用TCP协议，但其实UDP也可以，而gRPC直接采用了HTTP2</li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机网络 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>redis-string</title>
       <link href="/2024/07/17/redis-string/"/>
       <url>/2024/07/17/redis-string/</url>
@@ -872,12 +910,14 @@
       <link href="/2023/12/19/go-goroutine/"/>
       <url>/2023/12/19/go-goroutine/</url>
       
-        <content type="html"><![CDATA[<h1 id="go的协程"><a href="#go的协程" class="headerlink" title="go的协程"></a>go的协程</h1><h2 id="goroutine"><a href="#goroutine" class="headerlink" title="goroutine"></a>goroutine</h2><p>goroutine是与其他函数或方法同时进行的函数和方法。可以被认为是轻量级的线程，创建goroutine的成本很小，他就是一段代码，一个函数入口。以及在堆上为其分配的一个堆栈（初始大小为4k，会随着程序的执行自动增长删除）。</p><h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><ol><li>与线程相比所占空间小成本低，可以根据应用程序的需要增长和收缩。线程中大小必须指定且固定</li><li>goroutine被多路复用到较少的os线程上。一个程序中可能只有一个线程和数千个goroutines</li><li>当使用goroutines访问共享内存时，通过设计的通道可以防止竞态条件发生。通道可以被认为是goroutines通信的管道</li></ol>]]></content>
+        <content type="html"><![CDATA[<h1 id="go的协程"><a href="#go的协程" class="headerlink" title="go的协程"></a>go的协程</h1><h2 id="goroutine"><a href="#goroutine" class="headerlink" title="goroutine"></a>goroutine</h2><p>goroutine是与其他函数或方法同时进行的函数和方法。可以被认为是轻量级的线程，创建goroutine的成本很小，他就是一段代码，一个函数入口。以及在堆上为其分配的一个堆栈（初始大小为4k，会随着程序的执行自动增长删除）。</p><h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><ol><li>与线程相比所占空间小成本低，可以根据应用程序的需要增长和收缩。线程中大小必须指定且固定</li><li>goroutine被多路复用到较少的os线程上。一个程序中可能只有一个线程和数千个goroutines</li><li>当使用goroutines访问共享内存时，通过设计的通道可以防止竞态条件发生。通道可以被认为是goroutines通信的管道</li></ol><h2 id="goroutine并发控制和通信"><a href="#goroutine并发控制和通信" class="headerlink" title="goroutine并发控制和通信"></a>goroutine并发控制和通信</h2><ul><li>全局共享变量<br>所有子goroutine共享这个变量，并不断轮询这个变量的变化，主进程更新该全局变量</li><li>channel通信（csp模型）</li><li>context包</li></ul>]]></content>
       
       
       <categories>
           
           <category> golang </category>
+          
+          <category> 协程 </category>
           
       </categories>
       

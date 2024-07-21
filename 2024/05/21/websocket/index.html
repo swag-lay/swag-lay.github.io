@@ -6,20 +6,19 @@
   <meta name="keywords" content="">
   <meta name="description" content="websocket | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="SPDYgoogle开发的基于tcp的应用层协议，在于通过压缩，多路复用和优先级来缩短网页的加载时间和提高安全性。 在性能上对http进行优化，核心在于尽量减少连接个数，对于http头部并没有太大的修改。具体，spdy使用http的方法和页眉，但是删除了一些头并重写了http中管理连接和数据转移格式的部分，所以基本上是兼容http的。 目前google只是在ssl之上增加会话层来实现spdy，ht">
+<meta name="description" content="Kube-scheduler起承上启下的作用，首先负责接收controller manager创建新的pod，为其安排node，其次安排工作结束之后，目标node上的kubelet服务进程接管后续工作。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="network-spdy">
-<meta property="og:url" content="http://example.com/2024/07/11/network-spdy/index.html">
+<meta property="og:title" content="k8s-scheduler">
+<meta property="og:url" content="http://example.com/2024/07/21/k8s-scheduler/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="SPDYgoogle开发的基于tcp的应用层协议，在于通过压缩，多路复用和优先级来缩短网页的加载时间和提高安全性。 在性能上对http进行优化，核心在于尽量减少连接个数，对于http头部并没有太大的修改。具体，spdy使用http的方法和页眉，但是删除了一些头并重写了http中管理连接和数据转移格式的部分，所以基本上是兼容http的。 目前google只是在ssl之上增加会话层来实现spdy，ht">
+<meta property="og:description" content="Kube-scheduler起承上启下的作用，首先负责接收controller manager创建新的pod，为其安排node，其次安排工作结束之后，目标node上的kubelet服务进程接管后续工作。">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240711151904587.png">
-<meta property="og:image" content="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/spdy_session.png">
-<meta property="article:published_time" content="2024-07-11T07:17:09.000Z">
-<meta property="article:modified_time" content="2024-07-11T07:42:42.951Z">
+<meta property="og:image" content="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240721165644256.png">
+<meta property="article:published_time" content="2024-07-21T08:54:18.000Z">
+<meta property="article:modified_time" content="2024-07-21T09:00:20.579Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240711151904587.png">
+<meta name="twitter:image" content="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240721165644256.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -93,7 +92,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(77)</small>
+                <small>(79)</small>
             
         </div>
     </li>
@@ -412,7 +411,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         计算机网络
-                        <small>(8)</small>
+                        <small>(9)</small>
                         
                     </div>
                     
@@ -620,12 +619,16 @@
     
         
             
+        
+    
+        
+            
                 <li>
                     <div data-rel="云原生">
                         <i class="fold iconfont icon-right"></i>
                         
                         云原生
-                        <small>(3)</small>
+                        <small>(4)</small>
                         
                     </div>
                     
@@ -710,6 +713,18 @@
                                     <div data-rel="golang<--->并发编程">
                                         
                                         并发编程
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="golang<--->协程">
+                                        
+                                        协程
                                         
                                             <small>(1
                                                 )</small>
@@ -1025,8 +1040,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="77">
-<input type="hidden" id="yelog_site_word_count" value="51.2k">
+<input type="hidden" id="yelog_site_posts_number" value="79">
+<input type="hidden" id="yelog_site_word_count" value="51.5k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1123,6 +1138,24 @@
     </div>
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="All 云原生 "
+           href="/2024/07/21/k8s-scheduler/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="k8s-scheduler">k8s-scheduler</span>
+            <span class="post-date" title="2024-07-21 16:54:18">2024/07/21</span>
+        </a>
+        
+        
+        <a  class="All 计算机网络 "
+           href="/2024/07/21/rpc/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="rpc">rpc</span>
+            <span class="post-date" title="2024-07-21 16:29:13">2024/07/21</span>
+        </a>
         
         
         <a  class="All redis "
@@ -1503,7 +1536,7 @@
         </a>
         
         
-        <a  class="All golang "
+        <a  class="All golang 协程 "
            href="/2023/12/19/go-goroutine/"
            data-tag=""
            data-author="" >
