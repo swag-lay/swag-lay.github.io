@@ -4,6 +4,27 @@
   
     
     <entry>
+      <title>k8s-StatefulSet</title>
+      <link href="/2024/07/22/k8s-StatefulSet/"/>
+      <url>/2024/07/22/k8s-StatefulSet/</url>
+      
+        <content type="html"><![CDATA[<h1 id="工作负载StatefulSet"><a href="#工作负载StatefulSet" class="headerlink" title="工作负载StatefulSet"></a>工作负载StatefulSet</h1><p>主要用来管理有状态应用的工作负载API对象<br>管理某Pod集合的部署和扩缩，为这些Pod提供持久化存储和持久标识符。在StatefulSet中，为每个Pod维护一个由粘性的ID，每个Pod都是基于相同的规约来创建的，但是不能相互替换，无论怎么调度，每个Pod都有一个永久不变的ID</p><p>主要针对一下应用程序更好：</p><ul><li>稳定的，唯一的网络标识符</li><li>稳定的，持久的存储</li><li>有序的，更好的部署和扩缩</li><li>有序的，自动的滚动更新</li></ul><p>在生产环境中，加载卷建议采用ReadWriteOncePod，该卷可以被单个pod以读写模式挂载，不能被其他pod挂载<br>其他访问模式：</p><ul><li>ReadWriteOnce：可以被单个Pod以读写模式挂载</li><li>ReadWriteMany：可以被多个Pod以读写模式挂载</li><li>ReadOnlyMany：可以被多个Pod以只读模式挂载</li></ul><h2 id="样例：-96-96-96-yamlapiVersion-v1kind-Servicemetadata-name-nginx-labels-app-nginxspec-ports-port-80-name-web-clusterIP-None-selector-app-nginx"><a href="#样例：-96-96-96-yamlapiVersion-v1kind-Servicemetadata-name-nginx-labels-app-nginxspec-ports-port-80-name-web-clusterIP-None-selector-app-nginx" class="headerlink" title="样例：&#96;&#96;&#96;yamlapiVersion: v1kind: Servicemetadata:  name: nginx  labels:    app: nginxspec:  ports:  - port: 80    name: web  clusterIP: None  selector:    app: nginx"></a>样例：<br>&#96;&#96;&#96;yaml<br>apiVersion: v1<br>kind: Service<br>metadata:<br>  name: nginx<br>  labels:<br>    app: nginx<br>spec:<br>  ports:<br>  - port: 80<br>    name: web<br>  clusterIP: None<br>  selector:<br>    app: nginx</h2><p>apiVersion: apps&#x2F;v1<br>kind: StatefulSet<br>metadata:<br>  name: web<br>spec:<br>  selector:<br>    matchLabels:<br>      app: nginx # 必须匹配 .spec.template.metadata.labels<br>  serviceName: “nginx”<br>  replicas: 3 # 默认值是 1<br>  minReadySeconds: 10 # 默认值是 0<br>  template:<br>    metadata:<br>      labels:<br>        app: nginx # 必须匹配 .spec.selector.matchLabels<br>    spec:<br>      terminationGracePeriodSeconds: 10<br>      containers:<br>      - name: nginx<br>        image: registry.k8s.io&#x2F;nginx-slim:0.24<br>        ports:<br>        - containerPort: 80<br>          name: web<br>        volumeMounts:<br>        - name: www<br>          mountPath: &#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html<br>  volumeClaimTemplates:</p><ul><li>metadata:<br>  name: www<br>spec:<br>  accessModes: [ “ReadWriteOnce” ]<br>  storageClassName: “my-storage-class”<br>  resources:<br>requests:<br>  storage: 1Gi</li></ul><pre><code>## 部署和扩缩部署顺序是顺序依次的0-N-1删除顺序是逆序的当进行扩缩的时候，在该pod之前的pod必须是running和ready一个pod终止之前，所有的继承者必须完全关闭更新策略.spec.updateStrategy- OnDelete- RollingUpdate 默认的滚动更新PersistentVolumeClaim保留spec.persistentVolumeClaimRetentionPolicy控制是否删除以及如何删除PVC使用该字段必须在API服务器和控制器管理器启用StatefulSetAutoDeletePVC- whenDeleted- whenScaled这两个策略可以配置下面两个值- Delete- Retain 默认```shkubectl scale sts xxx --replicas=4 -n xxx</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 云原生 </category>
+          
+          <category> k8s </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>k8s-scheduler</title>
       <link href="/2024/07/21/k8s-scheduler/"/>
       <url>/2024/07/21/k8s-scheduler/</url>
@@ -237,7 +258,7 @@
       <link href="/2024/05/21/websocket/"/>
       <url>/2024/05/21/websocket/</url>
       
-        <content type="html"><![CDATA[<h1 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h1><p>一次握手就能使客户端和服务端建立长连接，并进行双向传输<br>与http相比websocket协议每次数据传输的头信息都比较小，节约带宽</p><p>在springboot项目中，一般采用@ServerEndPoint+@Component<br>@ServerEndpoint 该注解可以将类定义成一个WebSocket服务器端<br>@OnOpen 表示有浏览器链接过来的时候被调用<br>一般将建立的session信息存入会话对象中进行保存。<br>@OnClose 表示浏览器发出关闭请求的时候被调用<br>@OnMessage 表示浏览器发消息的时候被调用<br>@OnError 表示报错了</p>]]></content>
+        <content type="html"><![CDATA[<h1 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h1><p>一次握手就能使客户端和服务端建立长连接，并进行双向传输<br>与http相比websocket协议每次数据传输的头信息都比较小，节约带宽</p><p>在springboot项目中，一般采用@ServerEndPoint+@Component<br>@ServerEndpoint 该注解可以将类定义成一个WebSocket服务器端<br>@OnOpen 表示有浏览器链接过来的时候被调用<br>一般将建立的session信息存入会话对象中进行保存。<br>@OnClose 表示浏览器发出关闭请求的时候被调用<br>@OnMessage 表示浏览器发消息的时候被调用<br>@OnError 表示报错了</p><h2 id="主要特性"><a href="#主要特性" class="headerlink" title="主要特性"></a>主要特性</h2><ul><li>互动性</li><li>即时更新</li><li>低延迟</li><li>高兼容性</li><li>加密传输</li><li>跨平台</li></ul><h2 id="websocket和tcp的区别和关联"><a href="#websocket和tcp的区别和关联" class="headerlink" title="websocket和tcp的区别和关联"></a>websocket和tcp的区别和关联</h2><p>websocket作为运行在tcp之上的高效的通信协议，提供了长期开启客户端和服务器之间双向通信通道，与tcp三次握手过程类似。websocket的握手通过http完成，建立后，通道保持开放以进行数据交换，确保了tcp协议的可靠传输和流量控制</p><p>核心区别：</p><ul><li>建立连接：除了经典的tcp三次握手之外，需要http协议头中的upgrade字段以升级至websocket连接</li><li>数据传输单位：倾向与以消息为单位传输数据，tcp是字节流</li><li>数据处理：websocket相对于tcp，添加了数据压缩和消息分片的额外处理</li><li>实时性：实时交互能力</li></ul><h2 id="websocket怎么保证安全性"><a href="#websocket怎么保证安全性" class="headerlink" title="websocket怎么保证安全性"></a>websocket怎么保证安全性</h2><ul><li>使用CSRF token，请求令牌等方案保护websocket握手过程，防止websocket握手过程被CSRF攻击所利用</li><li>使用wss协议，基于tls的websocket</li><li>硬编码的websocket的url接口，以保证用户的输入无法篡改此url</li></ul>]]></content>
       
       
       <categories>
@@ -1361,6 +1382,19 @@
           <category> mysql </category>
           
       </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>mysql-log</title>
+      <link href="/2023/07/22/mysql-log/"/>
+      <url>/2023/07/22/mysql-log/</url>
+      
+        <content type="html"><![CDATA[<h1 id="undo-log"><a href="#undo-log" class="headerlink" title="undo log"></a>undo log</h1><p>回滚日志 保证原子性<br>在每次执行事物的时候记录undo log，当事务崩溃或者回滚的时候执行回滚事务</p><p>每一次参数的undo log格式都有一个roll_pointer和一个trx_id事务id<br>通过trx_id直到该记录被哪个事务修改<br>通过roll_pointer将undo log连成链表</p><p>undo log+read view可以实现mvcc</p><p>刷盘：<br>buffer pool中由undo页，对undo页的修改也都会记录到redo log中，redo log每秒会刷盘，提交事务也会刷盘，数据页和undo页都是靠这个机制保证持久化的。</p><h1 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h1><p>重做日志 保证持久性<br>防止机器断电导致数据丢失，当一条记录需要更新时，innodb就会先更新内存（同时标记为脏页），（为了减少磁盘io，不会立即将脏页写入磁盘，后续由后台线程选择合适的时机将脏页写入磁盘），然后对这个页的修改会以redo log形式记录下来，<strong>这个时候更新完成</strong><br>前面提到的由后台线程写入磁盘就是WAL技术</p><p>当事务提交之后，只要直接将redo log持久化到磁盘，就不用等脏页持久化了。<br>当修改undo页面的时候，也需要记录redo log，例如在开启事务后，innodb更新记录前，首先要记录相应的undo log，如果是更新操作，需要把被更新的列的旧值记录下来，生成undo log，undo log 写入undo页面，在内存修改undo 页面后，记录redo log</p><p>redo log也有redo log buffer（默认16mb），<br>刷盘时机：</p><ul><li>mysql正常关闭</li><li>当redo log buffer中记录的写入量大于一半时，发生落盘</li><li>后台线程每隔1s，持久化一次</li><li>事务提交时</li></ul><p>redo log采用循环写的方式，write pos要写的位置，check point要擦除的位置。<br>当write pos追上check point意味着redo log满了，这个时候mysql会被阻塞，此时会停下来将buffer pool中的脏页刷新到磁盘，然后标记哪些redo log记录会被擦除，当擦除完，checkpoint往后移动 mysql恢复正常</p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240722164924965.png" alt="image-20240722164924965"></p><h1 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h1><p>二进制日志，server层生成<br>当完成一条更新操作后，server层生成一条binlog，当事务提交，统一将binlog写入binlog文件<br>记录了所有数据库表结构变更和表结构修改的日志，不会记录查询类的操作，比如select和show操作<br>binlog是追加写，写完一个文件，创建一个新文件继续写，不会覆盖之前的日志。<br>主要用于备份，主从复制</p>]]></content>
+      
       
       
     </entry>

@@ -6,19 +6,17 @@
   <meta name="keywords" content="">
   <meta name="description" content="websocket | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="Kube-scheduler起承上启下的作用，首先负责接收controller manager创建新的pod，为其安排node，其次安排工作结束之后，目标node上的kubelet服务进程接管后续工作。">
+<meta name="description" content="工作负载StatefulSet主要用来管理有状态应用的工作负载API对象管理某Pod集合的部署和扩缩，为这些Pod提供持久化存储和持久标识符。在StatefulSet中，为每个Pod维护一个由粘性的ID，每个Pod都是基于相同的规约来创建的，但是不能相互替换，无论怎么调度，每个Pod都有一个永久不变的ID 主要针对一下应用程序更好：  稳定的，唯一的网络标识符 稳定的，持久的存储 有序的，更好的部">
 <meta property="og:type" content="article">
-<meta property="og:title" content="k8s-scheduler">
-<meta property="og:url" content="http://example.com/2024/07/21/k8s-scheduler/index.html">
+<meta property="og:title" content="k8s-StatefulSet">
+<meta property="og:url" content="http://example.com/2024/07/22/k8s-StatefulSet/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="Kube-scheduler起承上启下的作用，首先负责接收controller manager创建新的pod，为其安排node，其次安排工作结束之后，目标node上的kubelet服务进程接管后续工作。">
+<meta property="og:description" content="工作负载StatefulSet主要用来管理有状态应用的工作负载API对象管理某Pod集合的部署和扩缩，为这些Pod提供持久化存储和持久标识符。在StatefulSet中，为每个Pod维护一个由粘性的ID，每个Pod都是基于相同的规约来创建的，但是不能相互替换，无论怎么调度，每个Pod都有一个永久不变的ID 主要针对一下应用程序更好：  稳定的，唯一的网络标识符 稳定的，持久的存储 有序的，更好的部">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240721165644256.png">
-<meta property="article:published_time" content="2024-07-21T08:54:18.000Z">
-<meta property="article:modified_time" content="2024-07-21T09:00:20.579Z">
+<meta property="article:published_time" content="2024-07-22T01:17:03.000Z">
+<meta property="article:modified_time" content="2024-07-22T02:50:19.861Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240721165644256.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -92,7 +90,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(79)</small>
+                <small>(81)</small>
             
         </div>
     </li>
@@ -628,7 +626,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         云原生
-                        <small>(4)</small>
+                        <small>(5)</small>
                         
                     </div>
                     
@@ -638,6 +636,18 @@
                                     <div data-rel="云原生<--->docker">
                                         
                                         docker
+                                        
+                                            <small>(1
+                                                )</small>
+                                        
+                                    </div>
+                                    
+                                </li>
+                            
+                                <li>
+                                    <div data-rel="云原生<--->k8s">
+                                        
+                                        k8s
                                         
                                             <small>(1
                                                 )</small>
@@ -884,6 +894,10 @@
     
         
             
+        
+    
+        
+            
                 <li>
                     <div data-rel="leetcode">
                         
@@ -1040,8 +1054,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="79">
-<input type="hidden" id="yelog_site_word_count" value="51.5k">
+<input type="hidden" id="yelog_site_posts_number" value="81">
+<input type="hidden" id="yelog_site_word_count" value="53k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1138,6 +1152,15 @@
     </div>
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="All 云原生 k8s "
+           href="/2024/07/22/k8s-StatefulSet/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="k8s-StatefulSet">k8s-StatefulSet</span>
+            <span class="post-date" title="2024-07-22 09:17:03">2024/07/22</span>
+        </a>
         
         
         <a  class="All 云原生 "
@@ -1734,6 +1757,15 @@
         </a>
         
         
+        <a  class="All "
+           href="/2023/07/22/mysql-log/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="mysql-log">mysql-log</span>
+            <span class="post-date" title="2023-07-22 16:14:25">2023/07/22</span>
+        </a>
+        
+        
         <a  class="All 云原生 docker "
            href="/2023/07/16/docker/"
            data-tag=""
@@ -1890,12 +1922,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-05-21 11:42:48'>2024-05-21 11:13</time>
+            Created At : <time class="date" title='Updated At: 2024-07-22 13:38:46'>2024-05-21 11:13</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:156</span>
+        <span>Count:440</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1914,7 +1946,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#WebSocket"><span class="toc-text">WebSocket</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#WebSocket"><span class="toc-text">WebSocket</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%89%B9%E6%80%A7"><span class="toc-text">主要特性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#websocket%E5%92%8Ctcp%E7%9A%84%E5%8C%BA%E5%88%AB%E5%92%8C%E5%85%B3%E8%81%94"><span class="toc-text">websocket和tcp的区别和关联</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#websocket%E6%80%8E%E4%B9%88%E4%BF%9D%E8%AF%81%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-text">websocket怎么保证安全性</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1932,6 +1964,27 @@
       
         <h1 id="WebSocket"><a href="#WebSocket" class="headerlink" title="WebSocket"></a>WebSocket</h1><p>一次握手就能使客户端和服务端建立长连接，并进行双向传输<br>与http相比websocket协议每次数据传输的头信息都比较小，节约带宽</p>
 <p>在springboot项目中，一般采用@ServerEndPoint+@Component<br>@ServerEndpoint 该注解可以将类定义成一个WebSocket服务器端<br>@OnOpen 表示有浏览器链接过来的时候被调用<br>一般将建立的session信息存入会话对象中进行保存。<br>@OnClose 表示浏览器发出关闭请求的时候被调用<br>@OnMessage 表示浏览器发消息的时候被调用<br>@OnError 表示报错了</p>
+<h2 id="主要特性"><a href="#主要特性" class="headerlink" title="主要特性"></a>主要特性</h2><ul>
+<li>互动性</li>
+<li>即时更新</li>
+<li>低延迟</li>
+<li>高兼容性</li>
+<li>加密传输</li>
+<li>跨平台</li>
+</ul>
+<h2 id="websocket和tcp的区别和关联"><a href="#websocket和tcp的区别和关联" class="headerlink" title="websocket和tcp的区别和关联"></a>websocket和tcp的区别和关联</h2><p>websocket作为运行在tcp之上的高效的通信协议，提供了长期开启客户端和服务器之间双向通信通道，与tcp三次握手过程类似。websocket的握手通过http完成，建立后，通道保持开放以进行数据交换，确保了tcp协议的可靠传输和流量控制</p>
+<p>核心区别：</p>
+<ul>
+<li>建立连接：除了经典的tcp三次握手之外，需要http协议头中的upgrade字段以升级至websocket连接</li>
+<li>数据传输单位：倾向与以消息为单位传输数据，tcp是字节流</li>
+<li>数据处理：websocket相对于tcp，添加了数据压缩和消息分片的额外处理</li>
+<li>实时性：实时交互能力</li>
+</ul>
+<h2 id="websocket怎么保证安全性"><a href="#websocket怎么保证安全性" class="headerlink" title="websocket怎么保证安全性"></a>websocket怎么保证安全性</h2><ul>
+<li>使用CSRF token，请求令牌等方案保护websocket握手过程，防止websocket握手过程被CSRF攻击所利用</li>
+<li>使用wss协议，基于tls的websocket</li>
+<li>硬编码的websocket的url接口，以保证用户的输入无法篡改此url</li>
+</ul>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>
