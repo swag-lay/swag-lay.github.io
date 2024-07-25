@@ -27,6 +27,18 @@ redis写入aof日志的过程：
 
 redis的重写aof过程是由后台子程序bgrewriteaof来完成，
 
+## AOF太大
+因为aof会按一定频率（no，always，every seconds）写入到日志文件中 ，随着aof文件越来越大，里面会有大部分是重复命令或者可以合并的命令，我们需要对aof日志进行重写，减少aof日志的尺寸。
+```bash
+redis-cli BGREWRITEAOF
+```
+从以下方面对减少aof日志
+- 过期的数据不写入
+- 重复设置的不写入，删除的不写入
+- 可以合并的进行合并，比如sadd
+
+在重写的过程中，并不会对之前的aof文件进行任意的读取，写入，分析等，这个功能是通过读取服务器当前数据库状态来实现的
+
 # RDB快照
 rdb快照记录某一瞬间的内存数据
 redis提供两个命令来生成rdb文件，save和bgsave，
