@@ -6,19 +6,17 @@
   <meta name="keywords" content="">
   <meta name="description" content="mysql-storage-engine | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="Kube-scheduler起承上启下的作用，首先负责接收controller manager创建新的pod，为其安排node，其次安排工作结束之后，目标node上的kubelet服务进程接管后续工作。">
+<meta name="description" content="kubenetes探针通过三种探针对pod资源对象进行健康检测机制  livenessProbe（存活探针）是否为running ReadinessProbe（就绪探针） 是否为ready startupProbe 启动检测机制">
 <meta property="og:type" content="article">
-<meta property="og:title" content="k8s-scheduler">
-<meta property="og:url" content="http://example.com/2024/07/21/k8s-scheduler/index.html">
+<meta property="og:title" content="k8s-probe">
+<meta property="og:url" content="http://example.com/2024/07/31/k8s-probe/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="Kube-scheduler起承上启下的作用，首先负责接收controller manager创建新的pod，为其安排node，其次安排工作结束之后，目标node上的kubelet服务进程接管后续工作。">
+<meta property="og:description" content="kubenetes探针通过三种探针对pod资源对象进行健康检测机制  livenessProbe（存活探针）是否为running ReadinessProbe（就绪探针） 是否为ready startupProbe 启动检测机制">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240721165644256.png">
-<meta property="article:published_time" content="2024-07-21T08:54:18.000Z">
-<meta property="article:modified_time" content="2024-07-21T09:00:20.579Z">
+<meta property="article:published_time" content="2024-07-31T06:31:04.000Z">
+<meta property="article:modified_time" content="2024-07-31T06:35:52.012Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240721165644256.png">
 
 
 <link rel="icon" href="/img/avatar.jpg">
@@ -92,7 +90,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(81)</small>
+                <small>(82)</small>
             
         </div>
     </li>
@@ -628,7 +626,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         云原生
-                        <small>(5)</small>
+                        <small>(6)</small>
                         
                     </div>
                     
@@ -651,7 +649,7 @@
                                         
                                         k8s
                                         
-                                            <small>(1
+                                            <small>(2
                                                 )</small>
                                         
                                     </div>
@@ -1056,8 +1054,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="81">
-<input type="hidden" id="yelog_site_word_count" value="53k">
+<input type="hidden" id="yelog_site_posts_number" value="82">
+<input type="hidden" id="yelog_site_word_count" value="54.2k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1154,6 +1152,15 @@
     </div>
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="All 云原生 k8s "
+           href="/2024/07/31/k8s-probe/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="k8s-probe">k8s-probe</span>
+            <span class="post-date" title="2024-07-31 14:31:04">2024/07/31</span>
+        </a>
         
         
         <a  class="All 云原生 k8s "
@@ -1924,12 +1931,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-05-22 17:01:10'>2023-08-29 09:37</time>
+            Created At : <time class="date" title='Updated At: 2024-07-30 16:54:18'>2023-08-29 09:37</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:2.1k</span>
+        <span>Count:2.2k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1948,7 +1955,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql-%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-text">mysql-存储引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-text">mysql体系结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-text">存储引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#InnoDB"><span class="toc-text">InnoDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MyISM"><span class="toc-text">MyISM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Memory"><span class="toc-text">Memory</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InnoDB-1"><span class="toc-text">InnoDB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84"><span class="toc-text">架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E5%8F%B0%E7%BA%BF%E7%A8%8B"><span class="toc-text">后台线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86"><span class="toc-text">事务原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MVCC"><span class="toc-text">MVCC</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BD%93%E5%89%8D%E8%AF%BB"><span class="toc-text">当前读</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BF%AB%E7%85%A7%E8%AF%BB"><span class="toc-text">快照读</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mvcc"><span class="toc-text">mvcc</span></a></li></ol></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql-%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-text">mysql-存储引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84"><span class="toc-text">mysql体系结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="toc-text">存储引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#InnoDB"><span class="toc-text">InnoDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MyISM"><span class="toc-text">MyISM</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Memory"><span class="toc-text">Memory</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#InnoDB-1"><span class="toc-text">InnoDB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84"><span class="toc-text">架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E5%8F%B0%E7%BA%BF%E7%A8%8B"><span class="toc-text">后台线程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86"><span class="toc-text">事务原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%BB%98%E8%AE%A4%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="toc-text">默认隔离级别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MVCC"><span class="toc-text">MVCC</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BD%93%E5%89%8D%E8%AF%BB"><span class="toc-text">当前读</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%BF%AB%E7%85%A7%E8%AF%BB"><span class="toc-text">快照读</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mvcc"><span class="toc-text">mvcc</span></a></li></ol></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -2054,6 +2061,11 @@
 <p>当insert的时候,产生的undo log日志只在回滚时需要,在事务提交后,可被立即删除.</p>
 <p>而update,delete的时候,产生的undo log日志不仅在回滚时需要,在快照时也需要,不会立即被删除</p>
 <p>undo log版本链:不同事务或相同事务对同一条记录进行修改,会导致该记录的undolog生成一条记录版本链表,链表的头部是最新的旧记录,链表尾部是最早的旧记录.</p>
+<h3 id="默认隔离级别"><a href="#默认隔离级别" class="headerlink" title="默认隔离级别"></a>默认隔离级别</h3><p>在可重复读下对于快照读（select。。。）用mvcc解决幻读，对于当前读（selelct 。。。for update）用next-key解决幻读，但是在极限情况下还是会出现幻读</p>
+<ol>
+<li>事务Aselect一条不存在的记录（快照读），事务B加入那条不存在的记录，事务A此时再次读取出现幻读</li>
+<li>事务Aselect 。。。 &gt; xxx（用快照读），事务B往后面加入记录，事务A采用当前读出现幻读<br>所以一般在事务开启的时候查询最好用快照读</li>
+</ol>
 <h3 id="MVCC"><a href="#MVCC" class="headerlink" title="MVCC"></a>MVCC</h3><h4 id="当前读"><a href="#当前读" class="headerlink" title="当前读"></a>当前读</h4><p>读取的是记录的最新版本，读取时还要保证其他并发事务不能修改当前记录，会对读取的记录进行加锁。对于我们日常的操作，如：select…lock in share mode(共享锁)，select…for update,update,insert,delete(排他锁)都是一种当前读</p>
 <h4 id="快照读"><a href="#快照读" class="headerlink" title="快照读"></a>快照读</h4><p>简单的select（不加锁）就是快照读，快照读，读取的是记录数据的可见版本，有可能是历史数据，不加锁，是非阻塞读</p>
 <p>read committed：每次select，都生成一个快照读</p>
