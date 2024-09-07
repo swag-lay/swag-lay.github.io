@@ -4,6 +4,44 @@
   
     
     <entry>
+      <title>go-map</title>
+      <link href="/2024/09/07/go-map/"/>
+      <url>/2024/09/07/go-map/</url>
+      
+        <content type="html"><![CDATA[<h1 id="golang"><a href="#golang" class="headerlink" title="golang"></a>golang</h1><p>因为golang中map访问的时候每次是乱序的，怎么设计一个有序的。注意map不是线程安全的，sync.map是线程安全的。</p><pre><code class="golang">// 设计一个map顺序打印// 使用切片（slice）保存键的顺序：为了保持插入键的顺序，我们可以使用一个切片保存 map 中的键。在写入 map 时，将键按照插入顺序放入该切片中，这样在读取时就可以按照插入顺序读取。//// 使用 sync.RWMutex 实现并发安全：Go 的 map 本身不是线程安全的，若在多个 goroutine 中读写，需要加锁。我们可以使用 sync.RWMutex 来实现读写锁，保证顺序读写时的并发安全。type OrderedMap struct &#123;    data  map[string]interface&#123;&#125;    keys  []string    mutex sync.RWMutex&#125;// NewOrderedMap 创建一个有序的 mapfunc NewOrderedMap() *OrderedMap &#123;    return &amp;OrderedMap&#123;        data: make(map[string]interface&#123;&#125;),        keys: make([]string, 0),    &#125;&#125;// Set 插入键值对，保持顺序func (om *OrderedMap) Set(key string, value interface&#123;&#125;) &#123;    om.mutex.Lock()    defer om.mutex.Unlock()    // 检查是否是新键    if _, exists := om.data[key]; !exists &#123;        om.keys = append(om.keys, key)    &#125;    om.data[key] = value&#125;// Get 获取键的值func (om *OrderedMap) Get(key string) (interface&#123;&#125;, bool) &#123;    om.mutex.RLock()    defer om.mutex.RUnlock()    value, exists := om.data[key]    return value, exists&#125;// Delete 删除键func (om *OrderedMap) Delete(key string) &#123;    om.mutex.Lock()    defer om.mutex.Unlock()    // 删除数据    if _, exists := om.data[key]; exists &#123;        delete(om.data, key)        // 删除顺序中的键        for i, k := range om.keys &#123;            if k == key &#123;                om.keys = append(om.keys[:i], om.keys[i+1:]...)                break            &#125;        &#125;    &#125;&#125;// Keys 返回所有键的顺序func (om *OrderedMap) Keys() []string &#123;    om.mutex.RLock()    defer om.mutex.RUnlock()    // 返回键的副本，防止外部修改    return append([]string&#123;&#125;, om.keys...)&#125;// Iterate 顺序遍历所有键值对func (om *OrderedMap) Iterate() &#123;    om.mutex.RLock()    defer om.mutex.RUnlock()    for _, key := range om.keys &#123;        fmt.Printf(&quot;Key: %s, Value: %v\n&quot;, key, om.data[key])    &#125;&#125;func main() &#123;    // 创建有序 map    orderedMap := NewOrderedMap()    // 顺序写入    orderedMap.Set(&quot;a&quot;, 1)    orderedMap.Set(&quot;b&quot;, 2)    orderedMap.Set(&quot;c&quot;, 3)    // 顺序读取    orderedMap.Iterate()    // 获取单个值    if val, ok := orderedMap.Get(&quot;b&quot;); ok &#123;        fmt.Printf(&quot;Get b: %v\n&quot;, val)    &#125;    // 删除一个键    orderedMap.Delete(&quot;b&quot;)    // 顺序读取    orderedMap.Iterate()    // 打印所有键    fmt.Println(&quot;Keys:&quot;, orderedMap.Keys())&#125;</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> golang </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>go-交替打印</title>
+      <link href="/2024/09/07/go-%E4%BA%A4%E6%9B%BF%E6%89%93%E5%8D%B0/"/>
+      <url>/2024/09/07/go-%E4%BA%A4%E6%9B%BF%E6%89%93%E5%8D%B0/</url>
+      
+        <content type="html"><![CDATA[<pre><code class="golang">//交替打印func main() &#123;    letterC := make(chan bool)    numberC := make(chan bool)    wg.Add(2)    go func() &#123;        defer wg.Done()        letters := []rune&#123;&#39;a&#39;, &#39;b&#39;, &#39;c&#39;&#125;        for _, letter := range letters &#123;            &lt;-letterC            fmt.Printf(&quot;%c &quot;, letter)            numberC &lt;- true            if letter == &#39;c&#39; &#123;                break            &#125;        &#125;        close(letterC)    &#125;()    go func() &#123;        defer wg.Done()        numbers := []int&#123;1, 2, 3&#125;        for _, number := range numbers &#123;            &lt;-numberC            fmt.Printf(&quot;%d &quot;, number)            if number == 3 &#123;                break            &#125;            letterC &lt;- true        &#125;        close(numberC)    &#125;()    letterC &lt;- true    wg.Wait()&#125;</code></pre><pre><code class="golang">//我的方案func main() &#123;    one := make(chan int)    two := make(chan int)    wg.Add(2)    go func() &#123;        defer wg.Done()        for i := 1; i &lt;= 5; i += 2 &#123;            //把1从one中取出来            &lt;-one            println(i)            //把2放入two中            two &lt;- (i + 1)            if i == 5 &#123;                break            &#125;        &#125;        close(one)    &#125;()    go func() &#123;        defer wg.Done()        for i := 2; i &lt;= 6; i += 2 &#123;            //把2从two中取出来            &lt;-two            println(i)            if i == 6 &#123;                break            &#125;            //把1放入one中            one &lt;- (i + 1)        &#125;        close(two)    &#125;()    //把1放入one中    one &lt;- 1    wg.Wait()&#125;//https://dbwu.tech/posts/goroutine_alternate_print/</code></pre><p>这里一定把关闭有阻塞的channel，不然会死锁</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> golang </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>spring</title>
       <link href="/2024/08/07/spring/"/>
       <url>/2024/08/07/spring/</url>
