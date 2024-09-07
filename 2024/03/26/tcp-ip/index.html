@@ -6,15 +6,15 @@
   <meta name="keywords" content="">
   <meta name="description" content="tcp/ip | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="IOC和AOPioc：ioc容器复制对象的创建和管理依赖，将对象的创建和依赖关系的管理交给容器。spring中通过di去实现iocaop：将一个业务逻辑功能抽取出来，然后动态的切入到需要的方法中，比如安全检验，日志操作">
+<meta name="description" content="kubenetes探针通过三种探针对pod资源对象进行健康检测机制  livenessProbe（存活探针）是否为running ReadinessProbe（就绪探针） 是否为ready startupProbe 启动检测机制">
 <meta property="og:type" content="article">
-<meta property="og:title" content="spring">
-<meta property="og:url" content="http://example.com/2024/08/07/spring/index.html">
+<meta property="og:title" content="k8s-probe">
+<meta property="og:url" content="http://example.com/2024/07/31/k8s-probe/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="IOC和AOPioc：ioc容器复制对象的创建和管理依赖，将对象的创建和依赖关系的管理交给容器。spring中通过di去实现iocaop：将一个业务逻辑功能抽取出来，然后动态的切入到需要的方法中，比如安全检验，日志操作">
+<meta property="og:description" content="kubenetes探针通过三种探针对pod资源对象进行健康检测机制  livenessProbe（存活探针）是否为running ReadinessProbe（就绪探针） 是否为ready startupProbe 启动检测机制">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-08-07T06:56:04.000Z">
-<meta property="article:modified_time" content="2024-08-07T07:09:08.825Z">
+<meta property="article:published_time" content="2024-07-31T06:31:04.000Z">
+<meta property="article:modified_time" content="2024-07-31T06:35:52.012Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
 
@@ -90,7 +90,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(83)</small>
+                <small>(84)</small>
             
         </div>
     </li>
@@ -713,7 +713,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         golang
-                        <small>(6)</small>
+                        <small>(7)</small>
                         
                     </div>
                     
@@ -1070,8 +1070,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="83">
-<input type="hidden" id="yelog_site_word_count" value="54.4k">
+<input type="hidden" id="yelog_site_posts_number" value="84">
+<input type="hidden" id="yelog_site_word_count" value="55k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1665,6 +1665,15 @@
         </a>
         
         
+        <a  class="All golang "
+           href="/2023/09/05/go-%E5%86%85%E5%AD%98/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="go-内存">go-内存</span>
+            <span class="post-date" title="2023-09-05 11:31:29">2023/09/05</span>
+        </a>
+        
+        
         <a  class="All 数据库 mysql "
            href="/2023/09/05/sql-trigger/"
            data-tag=""
@@ -1956,12 +1965,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-03-26 13:50:34'>2024-03-26 13:26</time>
+            Created At : <time class="date" title='Updated At: 2024-09-06 17:17:37'>2024-03-26 13:26</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:445</span>
+        <span>Count:613</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1980,7 +1989,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="toc-text">tcp三次握手</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tcp%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="toc-text">tcp四次挥手</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#tcp%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="toc-text">tcp三次握手</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#tcp%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="toc-text">tcp四次挥手</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%8C%85%E5%9C%A8%E6%9C%BA%E5%99%A8%E4%B8%8A%E7%9A%84%E6%8E%A5%E6%94%B6%E8%BF%87%E7%A8%8B"><span class="toc-text">网络包在机器上的接收过程</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1999,6 +2008,8 @@
         <h1 id="tcp三次握手"><a href="#tcp三次握手" class="headerlink" title="tcp三次握手"></a>tcp三次握手</h1><p><strong>刚开始客户端处于closed的状态，服务端处于listen状态</strong><br>第一次握手，客户端发送syn报文，指明序列号为lsn，此时客户端处于syn_send状态<br>第二次握手，服务器收到syn报文，发送syn报文给客户端，序列号为lsn，将客户端你的lsn+1作为ack，此时服务器处于syn_recv状态<br>第三次握手，客户端收到syn报文，将lsn+1作为ack发送给服务端，此时客户端处于establised状态<br>服务器收到ack报文，处于establised状态，双方建立连接</p>
 <h1 id="tcp四次挥手"><a href="#tcp四次挥手" class="headerlink" title="tcp四次挥手"></a>tcp四次挥手</h1><p><strong>刚开始双方都处于establised状态</strong><br>第一次挥手，客户端发送fin报文，指定序列号，此时客户端处于fin_wait1状态<br>第二次挥手，服务端接收fin之后，发送ack报文，序列号为客户端序列号+1，此时服务端处于close_wait状态<br>第三次挥手，此时服务端也想要断开连接，发送fin报文，指定序列号，此时服务端处于last_ack状态<br>第四次挥手，客户端收到fin之后，将序列号+1作为ack发送给服务端，客户端此时处于time_wait状态，需要过2msl之后确保服务端收到ack报文才进入closed状态<br>服务端接收ack报文之后关闭连接进入closed状态</p>
 <p>其中第四次挥手为什么要等待2msl<br>第四次挥手时，客户端发送给服务器的ack有可能丢失，如果服务端因为某些原因而没有收到ack的话，服务端就会重发fin，如果客户端在2msl时间内收到了fin，就会重新发送ack并再次等待2msl，防止server没有收到ack而不断重发fin</p>
+<h2 id="网络包在机器上的接收过程"><a href="#网络包在机器上的接收过程" class="headerlink" title="网络包在机器上的接收过程"></a>网络包在机器上的接收过程</h2><p>在机器中都是通过网卡接收和发送数据包的，当网卡收到网络包后，通过DMA技术，写入网络包到指定内存地址，内存地址是一个环形缓存，接着告诉操作系统网络包到达</p>
+<p>最简单的就是通过中断。为了解决不断中断的文件，linux采用NAPI机制，混合中断和轮询的方式接收网络包，核心是<strong>不采用中断的方式读取数据，而是首先采用中断唤醒数据接收的服务程序，然后通过 poll的方式轮询数据。</strong></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。 </span>

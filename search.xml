@@ -580,7 +580,7 @@
       <link href="/2024/03/26/tcp-ip/"/>
       <url>/2024/03/26/tcp-ip/</url>
       
-        <content type="html"><![CDATA[<h1 id="tcp三次握手"><a href="#tcp三次握手" class="headerlink" title="tcp三次握手"></a>tcp三次握手</h1><p><strong>刚开始客户端处于closed的状态，服务端处于listen状态</strong><br>第一次握手，客户端发送syn报文，指明序列号为lsn，此时客户端处于syn_send状态<br>第二次握手，服务器收到syn报文，发送syn报文给客户端，序列号为lsn，将客户端你的lsn+1作为ack，此时服务器处于syn_recv状态<br>第三次握手，客户端收到syn报文，将lsn+1作为ack发送给服务端，此时客户端处于establised状态<br>服务器收到ack报文，处于establised状态，双方建立连接</p><h1 id="tcp四次挥手"><a href="#tcp四次挥手" class="headerlink" title="tcp四次挥手"></a>tcp四次挥手</h1><p><strong>刚开始双方都处于establised状态</strong><br>第一次挥手，客户端发送fin报文，指定序列号，此时客户端处于fin_wait1状态<br>第二次挥手，服务端接收fin之后，发送ack报文，序列号为客户端序列号+1，此时服务端处于close_wait状态<br>第三次挥手，此时服务端也想要断开连接，发送fin报文，指定序列号，此时服务端处于last_ack状态<br>第四次挥手，客户端收到fin之后，将序列号+1作为ack发送给服务端，客户端此时处于time_wait状态，需要过2msl之后确保服务端收到ack报文才进入closed状态<br>服务端接收ack报文之后关闭连接进入closed状态</p><p>其中第四次挥手为什么要等待2msl<br>第四次挥手时，客户端发送给服务器的ack有可能丢失，如果服务端因为某些原因而没有收到ack的话，服务端就会重发fin，如果客户端在2msl时间内收到了fin，就会重新发送ack并再次等待2msl，防止server没有收到ack而不断重发fin</p>]]></content>
+        <content type="html"><![CDATA[<h1 id="tcp三次握手"><a href="#tcp三次握手" class="headerlink" title="tcp三次握手"></a>tcp三次握手</h1><p><strong>刚开始客户端处于closed的状态，服务端处于listen状态</strong><br>第一次握手，客户端发送syn报文，指明序列号为lsn，此时客户端处于syn_send状态<br>第二次握手，服务器收到syn报文，发送syn报文给客户端，序列号为lsn，将客户端你的lsn+1作为ack，此时服务器处于syn_recv状态<br>第三次握手，客户端收到syn报文，将lsn+1作为ack发送给服务端，此时客户端处于establised状态<br>服务器收到ack报文，处于establised状态，双方建立连接</p><h1 id="tcp四次挥手"><a href="#tcp四次挥手" class="headerlink" title="tcp四次挥手"></a>tcp四次挥手</h1><p><strong>刚开始双方都处于establised状态</strong><br>第一次挥手，客户端发送fin报文，指定序列号，此时客户端处于fin_wait1状态<br>第二次挥手，服务端接收fin之后，发送ack报文，序列号为客户端序列号+1，此时服务端处于close_wait状态<br>第三次挥手，此时服务端也想要断开连接，发送fin报文，指定序列号，此时服务端处于last_ack状态<br>第四次挥手，客户端收到fin之后，将序列号+1作为ack发送给服务端，客户端此时处于time_wait状态，需要过2msl之后确保服务端收到ack报文才进入closed状态<br>服务端接收ack报文之后关闭连接进入closed状态</p><p>其中第四次挥手为什么要等待2msl<br>第四次挥手时，客户端发送给服务器的ack有可能丢失，如果服务端因为某些原因而没有收到ack的话，服务端就会重发fin，如果客户端在2msl时间内收到了fin，就会重新发送ack并再次等待2msl，防止server没有收到ack而不断重发fin</p><h2 id="网络包在机器上的接收过程"><a href="#网络包在机器上的接收过程" class="headerlink" title="网络包在机器上的接收过程"></a>网络包在机器上的接收过程</h2><p>在机器中都是通过网卡接收和发送数据包的，当网卡收到网络包后，通过DMA技术，写入网络包到指定内存地址，内存地址是一个环形缓存，接着告诉操作系统网络包到达</p><p>最简单的就是通过中断。为了解决不断中断的文件，linux采用NAPI机制，混合中断和轮询的方式接收网络包，核心是<strong>不采用中断的方式读取数据，而是首先采用中断唤醒数据接收的服务程序，然后通过 poll的方式轮询数据。</strong></p>]]></content>
       
       
       <categories>
@@ -973,7 +973,7 @@
       <link href="/2023/12/19/go-goroutine/"/>
       <url>/2023/12/19/go-goroutine/</url>
       
-        <content type="html"><![CDATA[<h1 id="go的协程"><a href="#go的协程" class="headerlink" title="go的协程"></a>go的协程</h1><h2 id="goroutine"><a href="#goroutine" class="headerlink" title="goroutine"></a>goroutine</h2><p>goroutine是与其他函数或方法同时进行的函数和方法。可以被认为是轻量级的线程，创建goroutine的成本很小，他就是一段代码，一个函数入口。以及在堆上为其分配的一个堆栈（初始大小为4k，会随着程序的执行自动增长删除）。</p><h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><ol><li>与线程相比所占空间小成本低，可以根据应用程序的需要增长和收缩。线程中大小必须指定且固定</li><li>goroutine被多路复用到较少的os线程上。一个程序中可能只有一个线程和数千个goroutines</li><li>当使用goroutines访问共享内存时，通过设计的通道可以防止竞态条件发生。通道可以被认为是goroutines通信的管道</li></ol><h2 id="goroutine并发控制和通信"><a href="#goroutine并发控制和通信" class="headerlink" title="goroutine并发控制和通信"></a>goroutine并发控制和通信</h2><ul><li>全局共享变量<br>所有子goroutine共享这个变量，并不断轮询这个变量的变化，主进程更新该全局变量</li><li>channel通信（csp模型）</li><li>context包</li></ul>]]></content>
+        <content type="html"><![CDATA[<h1 id="go的协程"><a href="#go的协程" class="headerlink" title="go的协程"></a>go的协程</h1><h2 id="goroutine"><a href="#goroutine" class="headerlink" title="goroutine"></a>goroutine</h2><p>goroutine是与其他函数或方法同时进行的函数和方法。可以被认为是轻量级的线程，创建goroutine的成本很小，他就是一段代码，一个函数入口。以及在堆上为其分配的一个堆栈（初始大小为4k，会随着程序的执行自动增长删除）。</p><p>在golang中m默认设置为10000，在初始化的时候在runtime.schedinit()中设置了最大数。<br>p也有限制，默认是cpu的核心数，在启动时由环境变量$GOMAXPROCS或者是由runtime.GOMAXPROCS()决定，</p><p>在任何情况下，go运行时并行执行（不是并发）的goroutinues数量是小于等于P的。<br>常规项目直接使用默认的核心数就好了，GOMAXPROCS 开太多的时候，针对计算密集型的处理性能提升反而没那么大，IO 密集(或者 syscall 较多)的 Go 程序，至少应该配置到CPU核心数目的5倍以上, 最大1024。</p><h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><ol><li>与线程相比所占空间小成本低，可以根据应用程序的需要增长和收缩。线程中大小必须指定且固定</li><li>goroutine被多路复用到较少的os线程上。一个程序中可能只有一个线程和数千个goroutines</li><li>当使用goroutines访问共享内存时，通过设计的通道可以防止竞态条件发生。通道可以被认为是goroutines通信的管道</li></ol><h2 id="goroutine并发控制和通信"><a href="#goroutine并发控制和通信" class="headerlink" title="goroutine并发控制和通信"></a>goroutine并发控制和通信</h2><ul><li>全局共享变量<br>所有子goroutine共享这个变量，并不断轮询这个变量的变化，主进程更新该全局变量</li><li>channel通信（csp模型）</li><li>context包</li></ul>]]></content>
       
       
       <categories>
@@ -1124,6 +1124,25 @@
           <category> 数据库 </category>
           
           <category> mysql </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>go-内存</title>
+      <link href="/2023/09/05/go-%E5%86%85%E5%AD%98/"/>
+      <url>/2023/09/05/go-%E5%86%85%E5%AD%98/</url>
+      
+        <content type="html"><![CDATA[<h1 id="golang的内存分配"><a href="#golang的内存分配" class="headerlink" title="golang的内存分配"></a>golang的内存分配</h1><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240905135030152.png" alt="image-20240905135030152"></p><p>arena：存放最终的对象，每一块分为8k大小，每一块称为page。同时多个page组合起来叫mspan（golang中内存管理的基本单元）</p><p>bitmap：存放arena中对象的一些信息，包括对象的gc标志位，标识这个对象是否包含指针。这个主要是用于golang在进行垃圾回收的时候根据可达性分析来确定一个对象是否可以被回收，同时采用的是三色标记法进行标记对象。</p><p>spans：保存了mspan的指针。管理大房间</p><h2 id="分配过程"><a href="#分配过程" class="headerlink" title="分配过程"></a>分配过程</h2><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240905135655604.png" alt="image-20240905135655604"></p><p>1.大对象： &gt;32KB 的对象，直接从heap上分配<br>2.小对象： 16B &lt; obj &lt;&#x3D; 32KB 计算规格在mcache中找到合适大小的mspan进行分配（你有多大就住多大的房子竟可能的不要浪费房子的空间）<br>3.微小对象： &lt;&#x3D;16B 的对象使用mcache的tiny分配器分配；（如果将多个微小对象组合起来，用单块内存（object）存储，可有效减少内存浪费。）<br>秉持原则：给到最合适的大小，然后能凑一起的凑一起挤一挤</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> golang </category>
           
       </categories>
       

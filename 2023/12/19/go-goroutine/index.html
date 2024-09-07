@@ -6,15 +6,15 @@
   <meta name="keywords" content="">
   <meta name="description" content="go_goroutine | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="IOC和AOPioc：ioc容器复制对象的创建和管理依赖，将对象的创建和依赖关系的管理交给容器。spring中通过di去实现iocaop：将一个业务逻辑功能抽取出来，然后动态的切入到需要的方法中，比如安全检验，日志操作">
+<meta name="description" content="kubenetes探针通过三种探针对pod资源对象进行健康检测机制  livenessProbe（存活探针）是否为running ReadinessProbe（就绪探针） 是否为ready startupProbe 启动检测机制">
 <meta property="og:type" content="article">
-<meta property="og:title" content="spring">
-<meta property="og:url" content="http://example.com/2024/08/07/spring/index.html">
+<meta property="og:title" content="k8s-probe">
+<meta property="og:url" content="http://example.com/2024/07/31/k8s-probe/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="IOC和AOPioc：ioc容器复制对象的创建和管理依赖，将对象的创建和依赖关系的管理交给容器。spring中通过di去实现iocaop：将一个业务逻辑功能抽取出来，然后动态的切入到需要的方法中，比如安全检验，日志操作">
+<meta property="og:description" content="kubenetes探针通过三种探针对pod资源对象进行健康检测机制  livenessProbe（存活探针）是否为running ReadinessProbe（就绪探针） 是否为ready startupProbe 启动检测机制">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-08-07T06:56:04.000Z">
-<meta property="article:modified_time" content="2024-08-07T07:09:08.825Z">
+<meta property="article:published_time" content="2024-07-31T06:31:04.000Z">
+<meta property="article:modified_time" content="2024-07-31T06:35:52.012Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
 
@@ -90,7 +90,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(83)</small>
+                <small>(84)</small>
             
         </div>
     </li>
@@ -713,7 +713,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         golang
-                        <small>(6)</small>
+                        <small>(7)</small>
                         
                     </div>
                     
@@ -1070,8 +1070,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="83">
-<input type="hidden" id="yelog_site_word_count" value="54.4k">
+<input type="hidden" id="yelog_site_posts_number" value="84">
+<input type="hidden" id="yelog_site_word_count" value="55k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1665,6 +1665,15 @@
         </a>
         
         
+        <a  class="All golang "
+           href="/2023/09/05/go-%E5%86%85%E5%AD%98/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="go-内存">go-内存</span>
+            <span class="post-date" title="2023-09-05 11:31:29">2023/09/05</span>
+        </a>
+        
+        
         <a  class="All 数据库 mysql "
            href="/2023/09/05/sql-trigger/"
            data-tag=""
@@ -1956,12 +1965,12 @@
     </div>
     <div class="article-meta">
         
-            Created At : <time class="date" title='Updated At: 2024-07-21 16:26:45'>2023-12-19 15:52</time>
+            Created At : <time class="date" title='Updated At: 2024-09-05 11:30:46'>2023-12-19 15:52</time>
         
     </div>
     <div class="article-meta">
         
-        <span>Count:260</span>
+        <span>Count:418</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1997,6 +2006,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="go的协程"><a href="#go的协程" class="headerlink" title="go的协程"></a>go的协程</h1><h2 id="goroutine"><a href="#goroutine" class="headerlink" title="goroutine"></a>goroutine</h2><p>goroutine是与其他函数或方法同时进行的函数和方法。可以被认为是轻量级的线程，创建goroutine的成本很小，他就是一段代码，一个函数入口。以及在堆上为其分配的一个堆栈（初始大小为4k，会随着程序的执行自动增长删除）。</p>
+<p>在golang中m默认设置为10000，在初始化的时候在runtime.schedinit()中设置了最大数。<br>p也有限制，默认是cpu的核心数，在启动时由环境变量$GOMAXPROCS或者是由runtime.GOMAXPROCS()决定，</p>
+<p>在任何情况下，go运行时并行执行（不是并发）的goroutinues数量是小于等于P的。<br>常规项目直接使用默认的核心数就好了，GOMAXPROCS 开太多的时候，针对计算密集型的处理性能提升反而没那么大，IO 密集(或者 syscall 较多)的 Go 程序，至少应该配置到CPU核心数目的5倍以上, 最大1024。</p>
 <h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><ol>
 <li>与线程相比所占空间小成本低，可以根据应用程序的需要增长和收缩。线程中大小必须指定且固定</li>
 <li>goroutine被多路复用到较少的os线程上。一个程序中可能只有一个线程和数千个goroutines</li>
