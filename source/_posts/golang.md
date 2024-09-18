@@ -133,3 +133,19 @@ var s []type=make([]type,len)
 s:=make([]type,len)
 ```
 
+slice底层包含
+
+```golang
+type slice struct {
+    array unsafe.Pointer // 数组指针
+    len   int // slice长度,len函数
+    cap   int // slice容量
+}
+```
+
+slice的扩容
+
+在1.18之后，growslice函数改为当大小小于256，双倍扩容，当大于256，扩容后容量=1.25倍容量+192
+
+这样为了使得内存扩容更平滑 比如256*1.5+192=512 临界处更平滑，这样内存扩容就是单调递增的。
+
