@@ -6,15 +6,15 @@
   <meta name="keywords" content="">
   <meta name="description" content="服务治理 | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="grpc-负载均衡这里我们首先看一下dnsResolver内置的是如何实现的负载均衡 type dnsResolver struct &amp;#123;     host     string     port     string     resolver internal.NetResolver     ctx      context.Context     cancel   context.Ca">
+<meta name="description" content="map底层结构底层hash表，map实际就是一个指针，指向hmap结构体 type hmap struct &amp;#123;   count     int              &#x2F;&#x2F; 存储的键值对数目   flags     uint8            &#x2F;&#x2F; 状态标志（是否处于正在写入的状态等）   B         uint8            &#x2F;&#x2F; 桶的数目 2^B   nove">
 <meta property="og:type" content="article">
-<meta property="og:title" content="grpc-负载均衡">
-<meta property="og:url" content="http://example.com/2024/09/23/grpc-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/index.html">
+<meta property="og:title" content="go-map">
+<meta property="og:url" content="http://example.com/2024/09/07/go-map/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="grpc-负载均衡这里我们首先看一下dnsResolver内置的是如何实现的负载均衡 type dnsResolver struct &amp;#123;     host     string     port     string     resolver internal.NetResolver     ctx      context.Context     cancel   context.Ca">
+<meta property="og:description" content="map底层结构底层hash表，map实际就是一个指针，指向hmap结构体 type hmap struct &amp;#123;   count     int              &#x2F;&#x2F; 存储的键值对数目   flags     uint8            &#x2F;&#x2F; 状态标志（是否处于正在写入的状态等）   B         uint8            &#x2F;&#x2F; 桶的数目 2^B   nove">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-09-23T07:54:17.000Z">
-<meta property="article:modified_time" content="2024-09-23T09:01:39.120Z">
+<meta property="article:published_time" content="2024-09-07T10:32:22.000Z">
+<meta property="article:modified_time" content="2024-09-18T07:58:59.612Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
 
@@ -1205,15 +1205,6 @@
     <nav id="title-list-nav">
         
         
-        <a  class="All 中间件源码 grpc "
-           href="/2024/09/23/grpc-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="grpc-负载均衡">grpc-负载均衡</span>
-            <span class="post-date" title="2024-09-23 15:54:17">2024/09/23</span>
-        </a>
-        
-        
         <a  class="All golang "
            href="/2024/09/07/go-map/"
            data-tag=""
@@ -1679,6 +1670,15 @@
            data-author="" >
             <span class="post-title" title="golang">golang</span>
             <span class="post-date" title="2023-10-27 13:13:53">2023/10/27</span>
+        </a>
+        
+        
+        <a  class="All 中间件源码 grpc "
+           href="/2023/09/23/grpc-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="grpc-负载均衡">grpc-负载均衡</span>
+            <span class="post-date" title="2023-09-23 15:54:17">2023/09/23</span>
         </a>
         
         
