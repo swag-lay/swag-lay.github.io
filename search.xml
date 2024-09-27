@@ -105,32 +105,11 @@
     
     
     <entry>
-      <title>k8s-StatefulSet</title>
-      <link href="/2024/07/22/k8s-StatefulSet/"/>
-      <url>/2024/07/22/k8s-StatefulSet/</url>
-      
-        <content type="html"><![CDATA[<h1 id="工作负载StatefulSet"><a href="#工作负载StatefulSet" class="headerlink" title="工作负载StatefulSet"></a>工作负载StatefulSet</h1><p>主要用来管理有状态应用的工作负载API对象<br>管理某Pod集合的部署和扩缩，为这些Pod提供持久化存储和持久标识符。在StatefulSet中，为每个Pod维护一个由粘性的ID，每个Pod都是基于相同的规约来创建的，但是不能相互替换，无论怎么调度，每个Pod都有一个永久不变的ID</p><p>主要针对一下应用程序更好：</p><ul><li>稳定的，唯一的网络标识符</li><li>稳定的，持久的存储</li><li>有序的，更好的部署和扩缩</li><li>有序的，自动的滚动更新</li></ul><p>在生产环境中，加载卷建议采用ReadWriteOncePod，该卷可以被单个pod以读写模式挂载，不能被其他pod挂载<br>其他访问模式：</p><ul><li>ReadWriteOnce：可以被单个Pod以读写模式挂载</li><li>ReadWriteMany：可以被多个Pod以读写模式挂载</li><li>ReadOnlyMany：可以被多个Pod以只读模式挂载</li></ul><h2 id="样例：-96-96-96-yamlapiVersion-v1kind-Servicemetadata-name-nginx-labels-app-nginxspec-ports-port-80-name-web-clusterIP-None-selector-app-nginx"><a href="#样例：-96-96-96-yamlapiVersion-v1kind-Servicemetadata-name-nginx-labels-app-nginxspec-ports-port-80-name-web-clusterIP-None-selector-app-nginx" class="headerlink" title="样例：&#96;&#96;&#96;yamlapiVersion: v1kind: Servicemetadata:  name: nginx  labels:    app: nginxspec:  ports:  - port: 80    name: web  clusterIP: None  selector:    app: nginx"></a>样例：<br>&#96;&#96;&#96;yaml<br>apiVersion: v1<br>kind: Service<br>metadata:<br>  name: nginx<br>  labels:<br>    app: nginx<br>spec:<br>  ports:<br>  - port: 80<br>    name: web<br>  clusterIP: None<br>  selector:<br>    app: nginx</h2><p>apiVersion: apps&#x2F;v1<br>kind: StatefulSet<br>metadata:<br>  name: web<br>spec:<br>  selector:<br>    matchLabels:<br>      app: nginx # 必须匹配 .spec.template.metadata.labels<br>  serviceName: “nginx”<br>  replicas: 3 # 默认值是 1<br>  minReadySeconds: 10 # 默认值是 0<br>  template:<br>    metadata:<br>      labels:<br>        app: nginx # 必须匹配 .spec.selector.matchLabels<br>    spec:<br>      terminationGracePeriodSeconds: 10<br>      containers:<br>      - name: nginx<br>        image: registry.k8s.io&#x2F;nginx-slim:0.24<br>        ports:<br>        - containerPort: 80<br>          name: web<br>        volumeMounts:<br>        - name: www<br>          mountPath: &#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html<br>  volumeClaimTemplates:</p><ul><li>metadata:<br>  name: www<br>spec:<br>  accessModes: [ “ReadWriteOnce” ]<br>  storageClassName: “my-storage-class”<br>  resources:<br>requests:<br>  storage: 1Gi</li></ul><pre><code>## 部署和扩缩部署顺序是顺序依次的0-N-1删除顺序是逆序的当进行扩缩的时候，在该pod之前的pod必须是running和ready一个pod终止之前，所有的继承者必须完全关闭更新策略.spec.updateStrategy- OnDelete- RollingUpdate 默认的滚动更新PersistentVolumeClaim保留spec.persistentVolumeClaimRetentionPolicy控制是否删除以及如何删除PVC使用该字段必须在API服务器和控制器管理器启用StatefulSetAutoDeletePVC- whenDeleted- whenScaled这两个策略可以配置下面两个值- Delete- Retain 默认```shkubectl scale sts xxx --replicas=4 -n xxx</code></pre>]]></content>
-      
-      
-      <categories>
-          
-          <category> 云原生 </category>
-          
-          <category> k8s </category>
-          
-      </categories>
-      
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>k8s-scheduler</title>
       <link href="/2024/07/21/k8s-scheduler/"/>
       <url>/2024/07/21/k8s-scheduler/</url>
       
-        <content type="html"><![CDATA[<h2 id="Kube-scheduler"><a href="#Kube-scheduler" class="headerlink" title="Kube-scheduler"></a>Kube-scheduler</h2><p>起承上启下的作用，首先负责接收controller manager创建新的pod，为其安排node，其次安排工作结束之后，目标node上的kubelet服务进程接管后续工作。</p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240721165644256.png" alt="image-20240721165644256"></p><h2 id="pod的创建"><a href="#pod的创建" class="headerlink" title="pod的创建"></a>pod的创建</h2><p>单独创建一个pod的流程</p><ol><li>用户通过kubectl或者api客户端将创建的pod信息发送给apisever</li><li>apiserver验证客户端的用户权限信息，验证通过开始处理创建请求生成pod对象信息，信息存入etcd，返回确认信息给客户端</li><li>apiserver开始反馈etcd中pod对象的变化，其他组件使用watch机制跟踪apiserver的变动</li><li>scheduler发现有新的pod对象要创建，调用内部算法机制为pod分配最佳的主机，将结果信息更新到apiserver</li><li>node节点上的kubelet通过watch机制跟踪apiserver发现有pod调度到本节点，然后创建容器，结果反馈apiserver</li><li>apiserver将收集到的pod信息存入etcd中</li></ol><p>使用deployment创建pod<br>1、首先，用户使用kubectl create命令或者kubectl apply命令提交了要创建一个deployment资源请求；<br>2、api-server收到创建资源的请求后，会对客户端操作进行身份认证，在客户端的~&#x2F;.kube文件夹下，已经设置好了相关的用户认证信息，这样api-server会知道我是哪个用户，并对此用户进行鉴权，当api-server确定客户端的请求合法后，就会接受本次操作，并把相关的信息保存到etcd中，然后返回确认信息给客户端。<br>3、apiserver开始反馈etcd中过程创建的对象的变化，其他组件使用watch机制跟踪apiserver上的变动。<br>4、controller-manager组件会监听api-server的信息，controller-manager是有多个类型的，比如Deployment Controller, 它的作用就是负责监听Deployment，此时Deployment Controller发现有新的deployment要创建，那么它就会去创建一个ReplicaSet，一个ReplicaSet的产生，又被另一个叫做ReplicaSet Controller监听到了，紧接着它就会去分析ReplicaSet的语义，它了解到是要依照ReplicaSet的template去创建Pod, 它一看这个Pod并不存在，那么就新建此Pod，当Pod刚被创建时，它的nodeName属性值为空，代表着此Pod未被调度。<br>5、调度器Scheduler组件开始介入工作，Scheduler也是通过watch机制跟踪apiserver上的变动，发现有未调度的Pod，则根据内部算法、节点资源情况，pod定义的亲和性反亲和性等等，调度器会综合的选出一批候选节点，在候选节点中选择一个最优的节点，然后将pod绑定该该节点，将信息反馈给api-server。<br>6、kubelet组件布署于Node之上，它也是通过watch机制跟踪apiserver上的变动，监听到有一个Pod应该要被调度到自身所在Node上来，kubelet首先判断本地是否在此Pod，如果不存在，则会进入创建Pod流程，创建Pod有分为几种情况，第一种是容器不需要挂载外部存储，则相当于直接docker run把容器启动，但不会直接挂载docker网络，而是通过CNI调用网络插件配置容器网络，如果需要挂载外部存储，则还要调用CSI来挂载存储。kubelet创建完pod，将信息反馈给api-server，api-servier将pod信息写入etcd。<br>7、Pod建立成功后，ReplicaSet Controller会对其持续进行关注，如果Pod因意外或被我们手动退出，ReplicaSet Controller会知道，并创建新的Pod，以保持replicas数量期望值</p>]]></content>
+        <content type="html"><![CDATA[<h2 id="Kube-scheduler"><a href="#Kube-scheduler" class="headerlink" title="Kube-scheduler"></a>Kube-scheduler</h2><p>起承上启下的作用，首先负责接收controller manager创建新的pod，为其安排node，其次安排工作结束之后，目标node上的kubelet服务进程接管后续工作。</p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240721165644256.png" alt="image-20240721165644256"></p><h2 id="pod的创建"><a href="#pod的创建" class="headerlink" title="pod的创建"></a>pod的创建</h2><p>单独创建一个pod的流程</p><ol><li>用户通过kubectl或者api客户端将创建的pod信息发送给apisever</li><li>apiserver验证客户端的用户权限信息，验证通过开始处理创建请求生成pod对象信息，信息存入etcd，返回确认信息给客户端</li><li>apiserver开始反馈etcd中pod对象的变化，其他组件使用watch机制跟踪apiserver的变动</li><li>scheduler发现有新的pod对象要创建，调用内部算法机制为pod分配最佳的主机，将结果信息更新到apiserver</li><li>node节点上的kubelet通过watch机制跟踪apiserver发现有pod调度到本节点，然后创建容器，结果反馈apiserver</li><li>apiserver将收集到的pod信息存入etcd中</li></ol><p>使用deployment创建pod<br>1、首先，用户使用kubectl create命令或者kubectl apply命令提交了要创建一个deployment资源请求；<br>2、api-server收到创建资源的请求后，会对客户端操作进行身份认证，在客户端的~&#x2F;.kube文件夹下，已经设置好了相关的用户认证信息，这样api-server会知道我是哪个用户，并对此用户进行鉴权，当api-server确定客户端的请求合法后，就会接受本次操作，并把相关的信息保存到etcd中，然后返回确认信息给客户端。<br>3、apiserver开始反馈etcd中过程创建的对象的变化，其他组件使用watch机制跟踪apiserver上的变动。<br>4、controller-manager组件会监听api-server的信息，controller-manager是有多个类型的，比如Deployment Controller, 它的作用就是负责监听Deployment，此时Deployment Controller发现有新的deployment要创建，那么它就会去创建一个ReplicaSet，一个ReplicaSet的产生，又被另一个叫做ReplicaSet Controller监听到了，紧接着它就会去分析ReplicaSet的语义，它了解到是要依照ReplicaSet的template去创建Pod, 它一看这个Pod并不存在，那么就新建此Pod，当Pod刚被创建时，它的nodeName属性值为空，代表着此Pod未被调度。<br>5、调度器Scheduler组件开始介入工作，Scheduler也是通过watch机制跟踪apiserver上的变动，发现有未调度的Pod，则根据内部算法、节点资源情况，pod定义的亲和性反亲和性等等，调度器会综合的选出一批候选节点，在候选节点中选择一个最优的节点，然后将pod绑定该该节点，将信息反馈给api-server。<br>6、kubelet组件布署于Node之上，它也是通过watch机制跟踪apiserver上的变动，监听到有一个Pod应该要被调度到自身所在Node上来，kubelet首先判断本地是否在此Pod，如果不存在，则会进入创建Pod流程，创建Pod有分为几种情况，第一种是容器不需要挂载外部存储，则相当于直接docker run把容器启动，但不会直接挂载docker网络，而是通过CNI调用网络插件配置容器网络，如果需要挂载外部存储，则还要调用CSI来挂载存储。kubelet创建完pod，将信息反馈给api-server，api-servier将pod信息写入etcd。<br>7、Pod建立成功后，ReplicaSet Controller会对其持续进行关注，如果Pod因意外或被我们手动退出，ReplicaSet Controller会知道，并创建新的Pod，以保持replicas数量期望值</p><h1 id="调度"><a href="#调度" class="headerlink" title="调度"></a>调度</h1><p>主要包含两部分调度算法，predicates和priorities，predicates过滤部分不合格的node，priorities为所有node打分，选出最合适的<br>run方法启动<br>1.初始化scheduler 监听10251和10259端口，前一个不需要认证，后一个需要认证<br>2.启动事件广播<br>3.启动http server<br>4.启动所有的informer 这里只找非terminating的pod<br>5.选择leader<br>6.开始run循环，当informer的cache同步完成后执行选择某一个进行调度</p><p>sheduleOne()<br>从 scheduler 调度队列中取出一个 pod，如果该 pod 处于删除状态则跳过<br>执行调度逻辑 sched.schedule() 返回通过预算及优选算法过滤后选出的最佳 node<br>如果过滤算法没有选出合适的 node，则返回 core.FitError<br>若没有合适的 node 会判断是否启用了抢占策略，若启用了则执行抢占机制<br>判断是否需要 VolumeScheduling 特性<br>执行 reserve plugin<br>pod 对应的 spec.NodeName 写上 scheduler 最终选择的 node，更新 scheduler cache<br>请求 apiserver 异步处理最终的绑定操作，写入到 etcd<br>执行 permit plugin<br>执行 prebind plugin<br>执行 postbind plugin</p>]]></content>
       
       
       <categories>
@@ -1087,6 +1066,48 @@
     
     
     <entry>
+      <title>k8s-pod</title>
+      <link href="/2023/09/27/k8s-pod/"/>
+      <url>/2023/09/27/k8s-pod/</url>
+      
+        <content type="html"><![CDATA[<h1 id="创建pod的流程"><a href="#创建pod的流程" class="headerlink" title="创建pod的流程"></a>创建pod的流程</h1><p>新建pod的流程，当一个pod完成调用，需要与一个node绑定，然后pod触发kubelet在循环控制里注册的handler，通过检查pod在kubelet内存中的状态，判断是否为新调度的pod，从而触发add。然后kubelet为这个pod生成对应的podStatus，包括检查volume，然后调用容器。</p><pre><code class="golang">func (kl *Kubelet) HandlePodAdditions(pods []*v1.Pod) &#123;    start := kl.clock.Now()    //日期排序    sort.Sort(sliceutils.PodsByCreationTime(pods))    for _, pod := range pods &#123;        existingPods := kl.podManager.GetPods()        // Always add the pod to the pod manager. Kubelet relies on the pod        // manager as the source of truth for the desired state. If a pod does        // not exist in the pod manager, it means that it has been deleted in        // the apiserver and no action (other than cleanup) is required.        kl.podManager.AddPod(pod)        if kubetypes.IsMirrorPod(pod) &#123;            kl.handleMirrorPod(pod, start)            continue        &#125;        // Only go through the admission process if the pod is not requested        // for termination by another part of the kubelet. If the pod is already        // using resources (previously admitted), the pod worker is going to be        // shutting it down. If the pod hasn&#39;t started yet, we know that when        // the pod worker is invoked it will also avoid setting up the pod, so        // we simply avoid doing any work.        if !kl.podWorkers.IsPodTerminationRequested(pod.UID) &#123;            // We failed pods that we rejected, so activePods include all admitted            // pods that are alive.            activePods := kl.filterOutInactivePods(existingPods)            // Check if we can admit the pod; if not, reject it.            //看是否能在计算机上创建 资源是否足够            if ok, reason, message := kl.canAdmitPod(activePods, pod); !ok &#123;                kl.rejectPod(pod, reason, message)                continue            &#125;        &#125;        mirrorPod, _ := kl.podManager.GetMirrorPodByPod(pod)        //调用dispatchWork 转而调用update        kl.dispatchWork(pod, kubetypes.SyncPodCreate, mirrorPod, start)    &#125;&#125;在1.23版本，将定期检查变到func (kl *Kubelet) syncPod(ctx context.Context, updateType kubetypes.SyncPodType, pod, mirrorPod *v1.Pod, podStatus *kubecontainer.PodStatus) (isTerminal bool, err error)同时在这个函数里面有对容器的创建，判断网络模式等最终的启动容器在startContainer1.拉取镜像 涉及到怎么拉区 从本地 还是远程2.创建container 容器的配置信息等 3.启动-- 启动完涉及到日志管理，如果采用了cni则需要修改日志路径 若该版本本身具有cni 就需要移除日志的符号链接4.做一些预处理 比如生命周期，容器name，容器id设置</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 云原生 </category>
+          
+          <category> k8s </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>k8s-list-watch</title>
+      <link href="/2023/09/27/k8s-list-watch/"/>
+      <url>/2023/09/27/k8s-list-watch/</url>
+      
+        <content type="html"><![CDATA[<p>k8s的内部通信机制，所有组件的通信都采用http协议通信，不依赖中间件。<br>在内部通信中，为了保证消息的实时性，如果采用轮询会大大加大api-server的负担，同时实效性不高。那么如果apiserver发起http请求，怎么保证消息可靠呢，端口又怎么解决大量占用问题呢。归结于k8s的list-watch机制。</p><h1 id="list-watch"><a href="#list-watch" class="headerlink" title="list-watch"></a>list-watch</h1><p>客户端（controller&#x2F;scheduler）通过list-watch监听apiserver中资源的crud，并对事件调用回调函数处理。<br>list部分：罗列资源，基于http短链接<br>watch：监听资源的变更事件，采用http长连接。采用分块传输编码，首次出现在http&#x2F;1.1中，对于动态生成的内容来说，在内容创建完之前是不可知的，使用分块传输编码，数据分解成一系列数据块，并以一个或多个块发送，这样服务器可以发送数据而不需要预先知道发送内容的总大小。</p><h2 id="informer模块"><a href="#informer模块" class="headerlink" title="informer模块"></a>informer模块</h2><p>比如从statefulset的创建中，所有的资源都会放到informer中监控，而informer正好封装了list-watch api，informer会通过list罗列资源，并且调用watch监听资源变更，将结果放入一个fifo队列中，协程会从队列中取出事件，调用注册函数处理。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 云原生 </category>
+          
+          <category> k8s </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>grpc-负载均衡</title>
       <link href="/2023/09/23/grpc-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"/>
       <url>/2023/09/23/grpc-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/</url>
@@ -1557,6 +1578,27 @@
       
         <content type="html"><![CDATA[<h1 id="undo-log"><a href="#undo-log" class="headerlink" title="undo log"></a>undo log</h1><p>回滚日志 保证原子性<br>在每次执行事物的时候记录undo log，当事务崩溃或者回滚的时候执行回滚事务</p><p>每一次参数的undo log格式都有一个roll_pointer和一个trx_id事务id<br>通过trx_id直到该记录被哪个事务修改<br>通过roll_pointer将undo log连成链表</p><p>undo log+read view可以实现mvcc</p><p>刷盘：<br>buffer pool中由undo页，对undo页的修改也都会记录到redo log中，redo log每秒会刷盘，提交事务也会刷盘，数据页和undo页都是靠这个机制保证持久化的。</p><h1 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h1><p>重做日志 保证持久性<br>防止机器断电导致数据丢失，当一条记录需要更新时，innodb就会先更新内存（同时标记为脏页），（为了减少磁盘io，不会立即将脏页写入磁盘，后续由后台线程选择合适的时机将脏页写入磁盘），然后对这个页的修改会以redo log形式记录下来，<strong>这个时候更新完成</strong><br>前面提到的由后台线程写入磁盘就是WAL技术</p><p>当事务提交之后，只要直接将redo log持久化到磁盘，就不用等脏页持久化了。<br>当修改undo页面的时候，也需要记录redo log，例如在开启事务后，innodb更新记录前，首先要记录相应的undo log，如果是更新操作，需要把被更新的列的旧值记录下来，生成undo log，undo log 写入undo页面，在内存修改undo 页面后，记录redo log</p><p>redo log也有redo log buffer（默认16mb），<br>刷盘时机：</p><ul><li>mysql正常关闭</li><li>当redo log buffer中记录的写入量大于一半时，发生落盘</li><li>后台线程每隔1s，持久化一次</li><li>事务提交时</li></ul><p>redo log采用循环写的方式，write pos要写的位置，check point要擦除的位置。<br>当write pos追上check point意味着redo log满了，这个时候mysql会被阻塞，此时会停下来将buffer pool中的脏页刷新到磁盘，然后标记哪些redo log记录会被擦除，当擦除完，checkpoint往后移动 mysql恢复正常</p><p><img src="https://web-mhe.oss-cn-beijing.aliyuncs.com/hexo/image-20240722164924965.png" alt="image-20240722164924965"></p><h1 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h1><p>二进制日志，server层生成<br>当完成一条更新操作后，server层生成一条binlog，当事务提交，统一将binlog写入binlog文件<br>记录了所有数据库表结构变更和表结构修改的日志，不会记录查询类的操作，比如select和show操作<br>binlog是追加写，写完一个文件，创建一个新文件继续写，不会覆盖之前的日志。<br>主要用于备份，主从复制</p>]]></content>
       
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>k8s-StatefulSet</title>
+      <link href="/2023/07/22/k8s-StatefulSet/"/>
+      <url>/2023/07/22/k8s-StatefulSet/</url>
+      
+        <content type="html"><![CDATA[<h1 id="工作负载StatefulSet"><a href="#工作负载StatefulSet" class="headerlink" title="工作负载StatefulSet"></a>工作负载StatefulSet</h1><p>主要用来管理有状态应用的工作负载API对象<br>管理某Pod集合的部署和扩缩，为这些Pod提供持久化存储和持久标识符。在StatefulSet中，为每个Pod维护一个由粘性的ID，每个Pod都是基于相同的规约来创建的，但是不能相互替换，无论怎么调度，每个Pod都有一个永久不变的ID</p><p>主要针对一下应用程序更好：</p><ul><li>稳定的，唯一的网络标识符</li><li>稳定的，持久的存储</li><li>有序的，更好的部署和扩缩</li><li>有序的，自动的滚动更新</li></ul><p>在生产环境中，加载卷建议采用ReadWriteOncePod，该卷可以被单个pod以读写模式挂载，不能被其他pod挂载<br>其他访问模式：</p><ul><li>ReadWriteOnce：可以被单个Pod以读写模式挂载</li><li>ReadWriteMany：可以被多个Pod以读写模式挂载</li><li>ReadOnlyMany：可以被多个Pod以只读模式挂载</li></ul><h2 id="样例：-96-96-96-yamlapiVersion-v1kind-Servicemetadata-name-nginx-labels-app-nginxspec-ports-port-80-name-web-clusterIP-None-selector-app-nginx"><a href="#样例：-96-96-96-yamlapiVersion-v1kind-Servicemetadata-name-nginx-labels-app-nginxspec-ports-port-80-name-web-clusterIP-None-selector-app-nginx" class="headerlink" title="样例：&#96;&#96;&#96;yamlapiVersion: v1kind: Servicemetadata:  name: nginx  labels:    app: nginxspec:  ports:  - port: 80    name: web  clusterIP: None  selector:    app: nginx"></a>样例：<br>&#96;&#96;&#96;yaml<br>apiVersion: v1<br>kind: Service<br>metadata:<br>  name: nginx<br>  labels:<br>    app: nginx<br>spec:<br>  ports:<br>  - port: 80<br>    name: web<br>  clusterIP: None<br>  selector:<br>    app: nginx</h2><p>apiVersion: apps&#x2F;v1<br>kind: StatefulSet<br>metadata:<br>  name: web<br>spec:<br>  selector:<br>    matchLabels:<br>      app: nginx # 必须匹配 .spec.template.metadata.labels<br>  serviceName: “nginx”<br>  replicas: 3 # 默认值是 1<br>  minReadySeconds: 10 # 默认值是 0<br>  template:<br>    metadata:<br>      labels:<br>        app: nginx # 必须匹配 .spec.selector.matchLabels<br>    spec:<br>      terminationGracePeriodSeconds: 10<br>      containers:<br>      - name: nginx<br>        image: registry.k8s.io&#x2F;nginx-slim:0.24<br>        ports:<br>        - containerPort: 80<br>          name: web<br>        volumeMounts:<br>        - name: www<br>          mountPath: &#x2F;usr&#x2F;share&#x2F;nginx&#x2F;html<br>  volumeClaimTemplates:</p><ul><li>metadata:<br>  name: www<br>spec:<br>  accessModes: [ “ReadWriteOnce” ]<br>  storageClassName: “my-storage-class”<br>  resources:<br>requests:<br>  storage: 1Gi</li></ul><pre><code>## 部署和扩缩部署顺序是顺序依次的0-N-1删除顺序是逆序的当进行扩缩的时候，在该pod之前的pod必须是running和ready一个pod终止之前，所有的继承者必须完全关闭更新策略.spec.updateStrategy- OnDelete- RollingUpdate 默认的滚动更新PersistentVolumeClaim保留spec.persistentVolumeClaimRetentionPolicy控制是否删除以及如何删除PVC使用该字段必须在API服务器和控制器管理器启用StatefulSetAutoDeletePVC- whenDeleted- whenScaled这两个策略可以配置下面两个值- Delete- Retain 默认```shkubectl scale sts xxx --replicas=4 -n xxx</code></pre><h3 id="创建源码解析"><a href="#创建源码解析" class="headerlink" title="创建源码解析"></a>创建源码解析</h3><p>将接口注册到controllerContext.InformerFactory中，包括pods，statefulsets，PersistentVolumeClaims，ControllerRevisions<br>informer会同步cache监听pod和statefulset对象的变更事件。最后会进行同步。</p><p>最后进行同步的时候会调用</p><pre><code class="golang">func (ssc *StatefulSetController) sync(ctx context.Context, key string) error &#123;    startTime := time.Now()    defer func() &#123;        klog.V(4).Infof(&quot;Finished syncing statefulset %q (%v)&quot;, key, time.Since(startTime))    &#125;()    //拿到所在的namespace和name    namespace, name, err := cache.SplitMetaNamespaceKey(key)    if err != nil &#123;        return err    &#125;    //获取到他的selector    set, err := ssc.setLister.StatefulSets(namespace).Get(name)    if errors.IsNotFound(err) &#123;        klog.Infof(&quot;StatefulSet has been deleted %v&quot;, key)        return nil    &#125;    if err != nil &#123;        utilruntime.HandleError(fmt.Errorf(&quot;unable to retrieve StatefulSet %v from store: %v&quot;, key, err))        return err    &#125;    selector, err := metav1.LabelSelectorAsSelector(set.Spec.Selector)    if err != nil &#123;        utilruntime.HandleError(fmt.Errorf(&quot;error converting StatefulSet %v selector: %v&quot;, key, err))        // This is a non-transient error, so don&#39;t retry.        return nil    &#125;    //这里的目的是为了检测孤儿资源，使他成为statefulset的一部分。因为有一些快照版本可能没有关联的控制器。 在中间会确认是否有权限关联这个资源，包括是否还存在，uid是否一致    if err := ssc.adoptOrphanRevisions(ctx, set); err != nil &#123;        return err    &#125;    //获取到管理的pod    pods, err := ssc.getPodsForStatefulSet(ctx, set, selector)    if err != nil &#123;        return err    &#125;    //真正的同步    return ssc.syncStatefulSet(ctx, set, pods)&#125;func (ssc *StatefulSetController) syncStatefulSet(ctx context.Context, set *apps.StatefulSet, pods []*v1.Pod) error &#123;    klog.V(4).Infof(&quot;Syncing StatefulSet %v/%v with %d pods&quot;, set.Namespace, set.Name, len(pods))    var status *apps.StatefulSetStatus    var err error    status, err = ssc.control.UpdateStatefulSet(ctx, set, pods)    if err != nil &#123;        return err    &#125;    klog.V(4).Infof(&quot;Successfully synced StatefulSet %s/%s successful&quot;, set.Namespace, set.Name)    // One more sync to handle the clock skew. This is also helping in requeuing right after status update    if utilfeature.DefaultFeatureGate.Enabled(features.StatefulSetMinReadySeconds) &amp;&amp; set.Spec.MinReadySeconds &gt; 0 &amp;&amp; status != nil &amp;&amp; status.AvailableReplicas != *set.Spec.Replicas &#123;        ssc.enqueueSSAfter(set, time.Duration(set.Spec.MinReadySeconds)*time.Second)    &#125;    return nil&#125;//在1.23版本中默认的并没有去更新了 需要用户去重写 包括对创建，更新，删除等操作 比如是是否处于删除状态。包括扩容对replicas的删除和重建func (ssc *defaultStatefulSetControl) UpdateStatefulSet(ctx context.Context, set *apps.StatefulSet, pods []*v1.Pod) (*apps.StatefulSetStatus, error) &#123;    set = set.DeepCopy() // set is modified when a new revision is created in performUpdate. Make a copy now to avoid mutation errors.    // list all revisions and sort them    revisions, err := ssc.ListRevisions(set)    if err != nil &#123;        return nil, err    &#125;    history.SortControllerRevisions(revisions)    currentRevision, updateRevision, status, err := ssc.performUpdate(ctx, set, pods, revisions)    if err != nil &#123;        return nil, utilerrors.NewAggregate([]error&#123;err, ssc.truncateHistory(set, pods, revisions, currentRevision, updateRevision)&#125;)    &#125;    // maintain the set&#39;s revision history limit    return status, ssc.truncateHistory(set, pods, revisions, currentRevision, updateRevision)&#125;</code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> 云原生 </category>
+          
+          <category> k8s </category>
+          
+      </categories>
       
       
     </entry>

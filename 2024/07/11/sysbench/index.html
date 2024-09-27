@@ -6,15 +6,15 @@
   <meta name="keywords" content="">
   <meta name="description" content="sysbench | mhen">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="map底层结构底层hash表，map实际就是一个指针，指向hmap结构体 type hmap struct &amp;#123;   count     int              &#x2F;&#x2F; 存储的键值对数目   flags     uint8            &#x2F;&#x2F; 状态标志（是否处于正在写入的状态等）   B         uint8            &#x2F;&#x2F; 桶的数目 2^B   nove">
+<meta name="description" content="k8s-apiserver的设计core groups会调用&#x2F;api下面的接口，name groups会调用&#x2F;apis&#x2F;$NAME&#x2F;$VERSION还有一些暴露系统状态的 &#x2F;metrics &#x2F;healthz 当一个post请求到达apiserver之后，kube-apisever会手下能执行在http filter chain中注册的过滤">
 <meta property="og:type" content="article">
-<meta property="og:title" content="go-map">
-<meta property="og:url" content="http://example.com/2024/09/07/go-map/index.html">
+<meta property="og:title" content="k8s-apiserver">
+<meta property="og:url" content="http://example.com/2024/09/27/k8s-apiserver/index.html">
 <meta property="og:site_name" content="mhen">
-<meta property="og:description" content="map底层结构底层hash表，map实际就是一个指针，指向hmap结构体 type hmap struct &amp;#123;   count     int              &#x2F;&#x2F; 存储的键值对数目   flags     uint8            &#x2F;&#x2F; 状态标志（是否处于正在写入的状态等）   B         uint8            &#x2F;&#x2F; 桶的数目 2^B   nove">
+<meta property="og:description" content="k8s-apiserver的设计core groups会调用&#x2F;api下面的接口，name groups会调用&#x2F;apis&#x2F;$NAME&#x2F;$VERSION还有一些暴露系统状态的 &#x2F;metrics &#x2F;healthz 当一个post请求到达apiserver之后，kube-apisever会手下能执行在http filter chain中注册的过滤">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2024-09-07T10:32:22.000Z">
-<meta property="article:modified_time" content="2024-09-18T07:58:59.612Z">
+<meta property="article:published_time" content="2024-09-27T07:38:53.000Z">
+<meta property="article:modified_time" content="2024-09-27T07:49:01.302Z">
 <meta property="article:author" content="mhen">
 <meta name="twitter:card" content="summary">
 
@@ -90,7 +90,7 @@
     <li>
         <div class="all active" data-rel="All">All
             
-                <small>(89)</small>
+                <small>(91)</small>
             
         </div>
     </li>
@@ -626,7 +626,7 @@
                         <i class="fold iconfont icon-right"></i>
                         
                         云原生
-                        <small>(7)</small>
+                        <small>(9)</small>
                         
                     </div>
                     
@@ -649,7 +649,7 @@
                                         
                                         k8s
                                         
-                                            <small>(3
+                                            <small>(5
                                                 )</small>
                                         
                                     </div>
@@ -1105,8 +1105,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="89">
-<input type="hidden" id="yelog_site_word_count" value="59.4k">
+<input type="hidden" id="yelog_site_posts_number" value="91">
+<input type="hidden" id="yelog_site_word_count" value="61.1k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1247,15 +1247,6 @@
            data-author="" >
             <span class="post-title" title="k8s-probe">k8s-probe</span>
             <span class="post-date" title="2024-07-31 14:31:04">2024/07/31</span>
-        </a>
-        
-        
-        <a  class="All 云原生 k8s "
-           href="/2024/07/22/k8s-StatefulSet/"
-           data-tag=""
-           data-author="" >
-            <span class="post-title" title="k8s-StatefulSet">k8s-StatefulSet</span>
-            <span class="post-date" title="2024-07-22 09:17:03">2024/07/22</span>
         </a>
         
         
@@ -1682,6 +1673,24 @@
         </a>
         
         
+        <a  class="All 云原生 k8s "
+           href="/2023/09/27/k8s-pod/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="k8s-pod">k8s-pod</span>
+            <span class="post-date" title="2023-09-27 17:17:20">2023/09/27</span>
+        </a>
+        
+        
+        <a  class="All 云原生 k8s "
+           href="/2023/09/27/k8s-list-watch/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="k8s-list-watch">k8s-list-watch</span>
+            <span class="post-date" title="2023-09-27 16:37:52">2023/09/27</span>
+        </a>
+        
+        
         <a  class="All 中间件源码 grpc "
            href="/2023/09/23/grpc-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1/"
            data-tag=""
@@ -1886,6 +1895,15 @@
            data-author="" >
             <span class="post-title" title="mysql-log">mysql-log</span>
             <span class="post-date" title="2023-07-22 16:14:25">2023/07/22</span>
+        </a>
+        
+        
+        <a  class="All 云原生 k8s "
+           href="/2023/07/22/k8s-StatefulSet/"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title="k8s-StatefulSet">k8s-StatefulSet</span>
+            <span class="post-date" title="2023-07-22 09:17:03">2023/07/22</span>
         </a>
         
         
