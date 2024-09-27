@@ -28,3 +28,29 @@ tags:
 5、调度器Scheduler组件开始介入工作，Scheduler也是通过watch机制跟踪apiserver上的变动，发现有未调度的Pod，则根据内部算法、节点资源情况，pod定义的亲和性反亲和性等等，调度器会综合的选出一批候选节点，在候选节点中选择一个最优的节点，然后将pod绑定该该节点，将信息反馈给api-server。
 6、kubelet组件布署于Node之上，它也是通过watch机制跟踪apiserver上的变动，监听到有一个Pod应该要被调度到自身所在Node上来，kubelet首先判断本地是否在此Pod，如果不存在，则会进入创建Pod流程，创建Pod有分为几种情况，第一种是容器不需要挂载外部存储，则相当于直接docker run把容器启动，但不会直接挂载docker网络，而是通过CNI调用网络插件配置容器网络，如果需要挂载外部存储，则还要调用CSI来挂载存储。kubelet创建完pod，将信息反馈给api-server，api-servier将pod信息写入etcd。
 7、Pod建立成功后，ReplicaSet Controller会对其持续进行关注，如果Pod因意外或被我们手动退出，ReplicaSet Controller会知道，并创建新的Pod，以保持replicas数量期望值
+
+
+# 调度
+主要包含两部分调度算法，predicates和priorities，predicates过滤部分不合格的node，priorities为所有node打分，选出最合适的
+run方法启动
+1.初始化scheduler 监听10251和10259端口，前一个不需要认证，后一个需要认证
+2.启动事件广播
+3.启动http server
+4.启动所有的informer 这里只找非terminating的pod
+5.选择leader
+6.开始run循环，当informer的cache同步完成后执行选择某一个进行调度
+
+sheduleOne()
+从 scheduler 调度队列中取出一个 pod，如果该 pod 处于删除状态则跳过
+执行调度逻辑 sched.schedule() 返回通过预算及优选算法过滤后选出的最佳 node
+如果过滤算法没有选出合适的 node，则返回 core.FitError
+若没有合适的 node 会判断是否启用了抢占策略，若启用了则执行抢占机制
+判断是否需要 VolumeScheduling 特性
+执行 reserve plugin
+pod 对应的 spec.NodeName 写上 scheduler 最终选择的 node，更新 scheduler cache
+请求 apiserver 异步处理最终的绑定操作，写入到 etcd
+执行 permit plugin
+执行 prebind plugin
+执行 postbind plugin
+
+
