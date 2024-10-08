@@ -4,6 +4,25 @@
   
     
     <entry>
+      <title>golang-net</title>
+      <link href="/2024/10/08/golang-net/"/>
+      <url>/2024/10/08/golang-net/</url>
+      
+        <content type="html"><![CDATA[<h1 id="golang中的网络编程"><a href="#golang中的网络编程" class="headerlink" title="golang中的网络编程"></a>golang中的网络编程</h1><p>当大量的连接同时到达服务器，怎么进行网络编程<br>方案：<br>1.异步io编程 非阻塞 io多路复用<br>2.多线程&#x2F;多进程&#x2F;多协程</p><p>优化：<br>tcp参数，keep alive，连接数目，<br>传输的文件协议 压缩<br>减少心跳时间</p><h2 id="golang内置包net"><a href="#golang内置包net" class="headerlink" title="golang内置包net"></a>golang内置包net</h2><p>当我们监听一个socket之后，传输数据采用conn.Write(buffer []byte)的时候，底层代码</p><pre><code class="golang">func (fd *FD) Write(p []byte) (int, error) &#123;    ...    var nn int    for &#123;        max := len(p)        if fd.IsStream &amp;&amp; max-nn &gt; maxRW &#123;            max = nn + maxRW        &#125;        n, err := syscall.Write(fd.Sysfd, p[nn:max])        if n &gt; 0 &#123;            nn += n        &#125;        // 如果全部写入kernel了，返回成功        if nn == len(p) &#123;            return nn, err        &#125;        // 重点：还没写完，挂起goroutine等待通知        if err == syscall.EAGAIN &amp;&amp; fd.pd.pollable() &#123;            if err = fd.pd.waitWrite(fd.isFile); err == nil &#123;                continue            &#125;        &#125;        if err != nil &#123;            return nn, err        &#125;        if n == 0 &#123;            return nn, io.ErrUnexpectedEOF        &#125;    &#125;&#125;//每次创建完新连接之后，该连接都会被注册到事件列表，runtime包调度协程底层依然采用epoll/select等底层接口进行io多路复用。也就是说协程并不会阻塞系统线程，对于用户来说代码依然是同步的。</code></pre><p>golang官网推崇使用goroutinue-per-connection，对于数据一个负责写，一个负责读。但是这样创建的goroutinue一旦太多依然会影响性能。</p><h3 id="造轮子解决-gnet"><a href="#造轮子解决-gnet" class="headerlink" title="造轮子解决-gnet"></a>造轮子解决-gnet</h3><p>直接使用epool和kqueue系统调用，不用net包，类似netty</p><p>同样的主从多reactors模型</p><p>注意使用gnet的原则：永远不能把业务逻辑写入EventHandler.React中，调度是调度，业务是业务，才不会阻塞event-loop线程</p><p>通过我们可以基于gnet加入协程池进一步改善，把阻塞的业务代码放入协程池中执行<br><a href="https://zhuanlan.zhihu.com/p/82758065">https://zhuanlan.zhihu.com/p/82758065</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 计算机网络 </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>k8s-apiserver</title>
       <link href="/2024/09/27/k8s-apiserver/"/>
       <url>/2024/09/27/k8s-apiserver/</url>
